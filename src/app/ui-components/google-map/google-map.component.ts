@@ -1,5 +1,4 @@
-import { Component, OnInit, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
-
+import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-google-map',
@@ -7,12 +6,19 @@ import { Component, OnInit, AfterViewInit, ViewChild, ElementRef } from '@angula
   styleUrls: ['./google-map.component.scss']
 })
 export class GoogleMapComponent implements OnInit {
-
+  latitude = 32.183894;
+  longitude = 34.871544;
+  mapType = 'roadmap';
+  zoom = 14;
   constructor() { }
 
   ngOnInit(): void {
   }
-  ngAfterViewInit() {
-  }
 
+}
+export enum MapTypeIdEnum{
+  HYBRID='hybrid',
+  ROADMAP = 'ROADMAP',
+  SATELLITE = 'SATELLITE',
+  TERRAIN = 'TERRAIN'
 }

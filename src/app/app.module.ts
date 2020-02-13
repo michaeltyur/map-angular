@@ -5,19 +5,23 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import {SidebarModule} from 'primeng/sidebar';
 import { AgmCoreModule } from '@agm/core';
+import { GoogleMapComponent } from './ui-components/google-map/google-map.component';
+import { FormsModule } from '@angular/forms';
  
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    GoogleMapComponent
   ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
     AppRoutingModule,
+    FormsModule,
     SidebarModule,
     AgmCoreModule.forRoot({
-      apiKey: 'AIzaSyCiX1imd32VwCLDtX_PpSRee7HIeYI3_3g'
+      apiKey: 'AIzaSyDvyuhFJ-zjFXFa_JmaHfpURfPnEO9HY8c'
       /* apiKey is required, unless you are a 
       premium customer, in which case you can 
       use clientId 

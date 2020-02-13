@@ -1,0 +1,16 @@
+<div class="row m-0 p-0" style="height: 80%;">
+    <div class="col m-0 p-0">
+        <agm-map style="height: 100%;" [latitude]='latitude' [longitude]='longitude' [mapTypeId]='mapType' [zoom]='zoom'>
+        </agm-map>
+    </div>
+</div>
+<div class="row mt-3">
+    <div class="col text-center">
+        <select style="width: 150px" class="form-control" name="selectmapTypeId" id="" [(ngModel)]="mapType">
+            <option value="roadmap">ROADMAP</option>
+            <option value="hybrid">HYBRID</option>
+            <option value="satellite">SATELLITE</option>
+            <option value="terrain">TERRAIN</option>
+        </select>
+    </div>
+</div>
