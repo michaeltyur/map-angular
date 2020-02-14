@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { MapNavigationService } from 'src/app/models/services/map-navigation.service';
+import { Place } from 'src/app/models/coordinates';
 
 @Component({
   selector: 'app-google-map',
@@ -9,10 +11,16 @@ export class GoogleMapComponent implements OnInit {
   latitude = 32.183894;
   longitude = 34.871544;
   mapType = 'roadmap';
-  zoom = 14;
-  constructor() { }
+  zoom = 12;
+  constructor(
+    private mapNavigationService:MapNavigationService
+    ) { }
 
   ngOnInit(): void {
+    this.mapNavigationService.coordinatEmitter$.subscribe((res:Place)=>{
+      this.latitude = res.latitude;
+      this.longitude = res.longitude;
+    })
   }
 
 }
@@ -22,3 +30,4 @@ export enum MapTypeIdEnum{
   SATELLITE = 'SATELLITE',
   TERRAIN = 'TERRAIN'
 }
+

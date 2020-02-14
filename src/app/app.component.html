@@ -1,7 +1,25 @@
-<div class="container h-100">
-  <div class="row h-100">
-    <div class="col text-center">
-      <app-google-map></app-google-map>
+<nb-layout>
+
+  <nb-layout-header fixed>
+  <h3 class="header-title">Tedious literature it can be interesting !!!</h3>
+  </nb-layout-header>
+
+  <nb-sidebar>
+    <app-sidebar></app-sidebar>
+  </nb-sidebar>
+
+  <nb-layout-column>
+
+    <div class="container-fluid h-100">
+      <div class="row h-100">
+        <div class="col text-center">
+          <app-google-map></app-google-map>
+        </div>
+      </div>
     </div>
-  </div>
-</div>
+  </nb-layout-column>
+
+  <!-- <nb-layout-footer fixed>
+  </nb-layout-footer> -->
+
+</nb-layout>

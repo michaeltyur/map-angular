@@ -1,10 +1,10 @@
-<div class="row m-0 p-0" style="height: 80%;">
-    <div class="col m-0 p-0">
-        <agm-map style="height: 100%;" [latitude]='latitude' [longitude]='longitude' [mapTypeId]='mapType' [zoom]='zoom'>
+<nb-card class="h-100 mb-0">
+   <nb-card-body>
+     <agm-map style="height: 100%;background-origin: 10px;" [latitude]='latitude' [longitude]='longitude' [mapTypeId]='mapType' [zoom]='zoom'>
         </agm-map>
-    </div>
-</div>
-<div class="row mt-3">
+   </nb-card-body>
+   <nb-card-footer>
+     <div class="row mt-3">
     <div class="col text-center">
         <select style="width: 150px" class="form-control" name="selectmapTypeId" id="" [(ngModel)]="mapType">
             <option value="roadmap">ROADMAP</option>
@@ -14,3 +14,5 @@
         </select>
     </div>
 </div>
+   </nb-card-footer>
+ </nb-card>

@@ -7,26 +7,32 @@ import {SidebarModule} from 'primeng/sidebar';
 import { AgmCoreModule } from '@agm/core';
 import { GoogleMapComponent } from './ui-components/google-map/google-map.component';
 import { FormsModule } from '@angular/forms';
- 
+import { NbThemeModule, NbLayoutModule, NbButtonModule, NbAccordionModule, NbCardModule, NbSidebarModule } from '@nebular/theme';
+import { NbEvaIconsModule } from '@nebular/eva-icons';
+import { SidebarComponent } from './ui-components/sidebar/sidebar.component';
+
 
 @NgModule({
   declarations: [
     AppComponent,
-    GoogleMapComponent
+    GoogleMapComponent,
+    SidebarComponent
   ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
     AppRoutingModule,
     FormsModule,
-    SidebarModule,
+    NbCardModule,
+    NbSidebarModule.forRoot(),
+    NbButtonModule,
+    NbAccordionModule,
     AgmCoreModule.forRoot({
       apiKey: 'AIzaSyDvyuhFJ-zjFXFa_JmaHfpURfPnEO9HY8c'
-      /* apiKey is required, unless you are a 
-      premium customer, in which case you can 
-      use clientId 
-      */
-    })
+    }),
+    NbThemeModule.forRoot({ name: 'cosmic' }),
+    NbLayoutModule,
+    NbEvaIconsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
