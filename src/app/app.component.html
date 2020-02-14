@@ -1,7 +1,18 @@
 <nb-layout>
 
   <nb-layout-header fixed>
-  <h3 class="header-title">Tedious literature it can be interesting !!!</h3>
+    <div class="row w-100">
+      <div class="col text-center">
+        <h3 class="header-title">Tedious literature it can be interesting !!!</h3>
+      </div>
+      <div class="col-1 text-center">
+        <button nbButton hero status="success" (click)="navigateTo('/google-map')">Map</button>
+      </div>
+      <div class="col-1 text-center">
+        <button nbButton hero status="info" (click)="navigateTo('/admin')">Admin</button>
+      </div>
+    </div>
+
   </nb-layout-header>
 
   <nb-sidebar>
@@ -13,7 +24,9 @@
     <div class="container-fluid h-100">
       <div class="row h-100">
         <div class="col text-center">
-          <app-google-map></app-google-map>
+          <router-outlet></router-outlet>
+          <!-- <app-root></app-root> -->
+          <!-- <app-google-map></app-google-map> -->
         </div>
       </div>
     </div>

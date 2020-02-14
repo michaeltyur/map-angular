@@ -1,9 +1,9 @@
 
 export class Place {
   name: string;
+  text:string;
   latitude: number;
   longitude: number;
-  text:string;
   constructor(name: string,text:string, latitude: number, longitude: number) {
     this.name = name;
     this.text = text;
@@ -28,4 +28,9 @@ export const Places = [
    "Дыра в заднице",
    64.58911,
    30.603766),
+   new Place(
+    "Кижи",
+    "Кижи – змеиный остров: гораздо змей много, змеи здесь злые",
+    64.58911,
+    30.603766),
 ]

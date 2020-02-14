@@ -1,0 +1,25 @@
+Document ID = kUkuM6htcFpMCNK7ncra
+
+<!-- The core Firebase JS SDK is always required and must be listed first -->
+<script src="https://www.gstatic.com/firebasejs/7.8.2/firebase-app.js"></script>
+
+<!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#available-libraries -->
+<script src="https://www.gstatic.com/firebasejs/7.8.2/firebase-analytics.js"></script>
+
+<script>
+  // Your web app's Firebase configuration
+  var firebaseConfig = {
+    apiKey: "AIzaSyARjfmQyOJwxaAux2TzYuCgMICx5ArJTqY",
+    authDomain: "tedious-literature.firebaseapp.com",
+    databaseURL: "https://tedious-literature.firebaseio.com",
+    projectId: "tedious-literature",
+    storageBucket: "tedious-literature.appspot.com",
+    messagingSenderId: "849156894232",
+    appId: "1:849156894232:web:0a5bcb5eb9e7695fd91d6d",
+    measurementId: "G-X7X46XND9J"
+  };
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+  firebase.analytics();
+</script>
