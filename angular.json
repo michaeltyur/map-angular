@@ -28,12 +28,12 @@
               "src/assets"
             ],
             "styles": [
-              "./node_modules/@nebular/theme/styles/prebuilt/cosmic.css",
+              "node_modules/@nebular/theme/styles/prebuilt/cosmic.css",
+              "node_modules/@nebular/theme/styles/prebuilt/default.css",
+              "node_modules/@nebular/theme/styles/prebuilt/dark.css",
+              "node_modules/@nebular/theme/styles/prebuilt/corporate.css",
               "src/styles.scss",
-              "node_modules/bootstrap/dist/css/bootstrap.min.css",
-              "node_modules/primeicons/primeicons.css",
-              "node_modules/primeng/resources/themes/nova-light/theme.css",
-              "node_modules/primeng/resources/primeng.min.css"
+              "node_modules/bootstrap/dist/css/bootstrap.min.css"
             ],
             "scripts": [
               "node_modules/jquery/dist/jquery.min.js",

@@ -2,34 +2,36 @@
 
   <nb-layout-header fixed>
     <div class="row w-100">
+      <div class="col-2 text-center">
+        <nb-select outline placeholder="Select Theme" (selectedChange)="changeTheme($event)">
+          <nb-option value="corporate">Corporate</nb-option>
+          <nb-option value="default">Light</nb-option>
+          <nb-option value="dark">Dark</nb-option>
+          <nb-option value="cosmic">Cosmic</nb-option>
+        </nb-select>
+      </div>
       <div class="col text-center">
         <h3 class="header-title">Tedious literature it can be interesting !!!</h3>
       </div>
       <div class="col-1 text-center">
-        <button nbButton hero status="success" (click)="navigateTo('/google-map')">Map</button>
+        <button nbButton hero status="info" (click)="navigateTo('/home')"><i class="fa fa-home fa-lg" aria-hidden="true"></i></button>
       </div>
       <div class="col-1 text-center">
-        <button nbButton hero status="info" (click)="navigateTo('/admin')">Admin</button>
+        <button nbButton hero status="success" (click)="navigateTo('/google-map')"><i class="fa fa-map fa-lg" aria-hidden="true"></i></button>
+      </div>
+      <div class="col-1 text-center">
+        <button nbButton hero status="warning" (click)="navigateTo('/admin')"><i class="fas fa-tools fa-lg"></i></button>
       </div>
     </div>
 
   </nb-layout-header>
 
-  <nb-sidebar>
+  <nb-sidebar left="true" [state]="sideBarState">
     <app-sidebar></app-sidebar>
   </nb-sidebar>
 
   <nb-layout-column>
-
-    <div class="container-fluid h-100">
-      <div class="row h-100">
-        <div class="col text-center">
-          <router-outlet></router-outlet>
-          <!-- <app-root></app-root> -->
-          <!-- <app-google-map></app-google-map> -->
-        </div>
-      </div>
-    </div>
+    <router-outlet></router-outlet>
   </nb-layout-column>
 
   <!-- <nb-layout-footer fixed>

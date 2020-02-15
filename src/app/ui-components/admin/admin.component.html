@@ -1,52 +1,91 @@
-<nb-card class="mb-0 h-75 w-75 ml-auto mr-auto">
- <nb-card-body class="pt-5">
+<div class="container d-flex h-100 w-100">
+  <nb-card class="mb-0 h-75 w-75 ml-auto mr-auto align-self-center">
+    <nb-card-header>
+      <div class="row">
+        <div class="col">
+          <h6>
+            Place
+          </h6>
+        </div>
+        <div class="col">
+          <input
+          type="text"
+          [status]="searchStatus"
+          shape="round"
+          [(ngModel)]="searchTerm"
+          (input)="searchPlace()"
+          name="searchInput"
+          nbInput
+          fullWidth
+          placeholder="place name"
+          [nbContextMenu]="placesFiltred"
+          nbContextMenuTrigger="focus"
+          nbContextMenuPlacement="right"
+          nbContextMenuTag="search-context-menu">
+        </div>
+      </div>
+    </nb-card-header>
+    <nb-card-body class="pt-5">
 
-  <!-- Name -->
-  <div class="row form-group">
-   <div class="col-3">
-    <label for="nameInput" class="col-form-label">place name:</label>
-   </div>
-   <div class="col-9">
-     <input type="text" name="nameInput" [(ngModel)]="place.name" nbInput fullWidth status="basic" placeholder="place name">
-   </div>
-  </div>
+      <!-- Name -->
+      <div class="row form-group">
+        <div class="col-3">
+          <label for="nameInput" class="col-form-label">place name:</label>
+        </div>
+        <div class="col-9">
+          <input type="text" name="nameInput" [(ngModel)]="place.name" nbInput fullWidth status="basic" placeholder="place name">
+        </div>
+      </div>
 
-  <!-- Description -->
-  <div class="row form-group">
-    <div class="col-3">
-     <label for="descriptionInput" class="col-form-label">description:</label>
-    </div>
-    <div class="col-9">
-      <textarea type="text" name="descriptionInput" [(ngModel)]="place.text" nbInput fullWidth status="basic" placeholder="description"></textarea>
-    </div>
-   </div>
+      <!-- Description -->
+      <div class="row form-group">
+        <div class="col-3">
+          <label for="descriptionInput" class="col-form-label">description:</label>
+        </div>
+        <div class="col-9">
+          <textarea type="text" name="descriptionInput" [(ngModel)]="place.text" nbInput fullWidth status="basic" placeholder="description"></textarea>
+        </div>
+      </div>
 
-   <!-- Latitude -->
-   <div class="row form-group">
-    <div class="col-3">
-     <label for="latitudeInput" class="col-form-label">latitude:</label>
-    </div>
-    <div class="col-9">
-      <input type="text" name="latitudeInput" [(ngModel)]="place.latitude" nbInput fullWidth status="basic" placeholder="latitude">
-    </div>
-   </div>
+      <!-- Latitude -->
+      <div class="row form-group">
+        <div class="col-3">
+          <label for="latitudeInput" class="col-form-label">latitude:</label>
+        </div>
+        <div class="col-9">
+          <input type="text" name="latitudeInput" [(ngModel)]="place.latitude" nbInput fullWidth status="basic" placeholder="latitude">
+        </div>
+      </div>
 
-   <!-- Longitude -->
-   <div class="row form-group">
-    <div class="col-3">
-     <label for="longitudeInput" class="col-form-label">longitude:</label>
-    </div>
-    <div class="col-9">
-      <input type="text" name="longitudeInput" [(ngModel)]="place.longitude" nbInput fullWidth status="basic" placeholder="longitude">
-    </div>
-   </div>
+      <!-- Longitude -->
+      <div class="row form-group">
+        <div class="col-3">
+          <label for="longitudeInput" class="col-form-label">longitude:</label>
+        </div>
+        <div class="col-9">
+          <input type="text" name="longitudeInput" [(ngModel)]="place.longitude" nbInput fullWidth status="basic" placeholder="longitude">
+        </div>
+      </div>
 
- </nb-card-body>
- <nb-card-footer>
-   <div class="row form-group">
-       <div class="col text-center">
-        <button nbButton hero status="success" (click)="save()">Save</button>
-       </div>
-   </div>
- </nb-card-footer>
-</nb-card>
+      <!-- Zoom -->
+      <div class="row form-group">
+        <div class="col-3">
+          <label for="zoomInput" class="col-form-label">zoom:</label>
+        </div>
+        <div class="col-9">
+          <input type="text" name="zoomInput" [(ngModel)]="place.zoom" nbInput fullWidth status="basic" placeholder="zoom">
+        </div>
+      </div>
+
+    </nb-card-body>
+    <nb-card-footer>
+      <!-- Save Button -->
+      <div class="row form-group">
+        <div class="col text-center">
+          <button nbButton hero status="success" (click)="save()">Save</button>
+        </div>
+      </div>
+    </nb-card-footer>
+  </nb-card>
+
+</div>

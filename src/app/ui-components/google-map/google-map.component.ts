@@ -10,7 +10,7 @@ import { Place } from 'src/app/shared/models/coordinates';
 export class GoogleMapComponent implements OnInit {
   latitude = 32.183894;
   longitude = 34.871544;
-  mapType = 'roadmap';
+  mapType = 'hybrid';
   zoom = 13;
   constructor(
     private mapNavigationService: MapNavigationService

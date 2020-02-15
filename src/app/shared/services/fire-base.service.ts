@@ -8,16 +8,31 @@ import { Observable } from 'rxjs';
 })
 export class FireBaseService {
 
-  constructor(private firestore: AngularFirestore) { }
+  places$:Observable<Place[]>;
+  //places:Place[] = [];
+  constructor(private firestore: AngularFirestore) {
+    this.places$ = this.getPlaces();
+   }
 
   getPlaces():Observable<any> {
     return this.firestore.collection('places').snapshotChanges();
   }
   createPlace(place: Place):Promise<any> {
-    //return this.firestore.collection('places').add({...place});
-    return this.firestore.collection('places').doc(place.name).set({...place});
+    let clearName = place.name.replace(/\s+/g, '').toLowerCase();
+    return this.firestore.collection('places').doc(clearName).set({...place});
   }
   deletePlace(placeID: string) {
     this.firestore.doc('places/' + placeID).delete();
   }
+
+  // setPlacesArray(): void {
+  //   this.getPlaces().subscribe(data => {
+  //     this.places = data.map(e => {
+  //       return {
+  //         id: e.payload.doc.id,
+  //         ...e.payload.doc.data()
+  //       } as Place;
+  //     })
+  //   });
+  // }
 }

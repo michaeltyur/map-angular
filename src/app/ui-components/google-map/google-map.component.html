@@ -1,18 +1,21 @@
-<nb-card class="h-100 mb-0">
-   <nb-card-body>
-     <agm-map style="height: 100%;background-origin: 10px;" [latitude]='latitude' [longitude]='longitude' [mapTypeId]='mapType' [zoom]='zoom'>
-        </agm-map>
-   </nb-card-body>
-   <nb-card-footer>
-     <div class="row mt-3">
-    <div class="col text-center">
-        <select style="width: 150px" class="form-control" name="selectmapTypeId" id="" [(ngModel)]="mapType">
-            <option value="roadmap">ROADMAP</option>
-            <option value="hybrid">HYBRID</option>
-            <option value="satellite">SATELLITE</option>
-            <option value="terrain">TERRAIN</option>
-        </select>
+<nb-card class="h-100 w-100">
+  <!-- <nb-card-header>
+
+  </nb-card-header> -->
+  <nb-card-body>
+    <agm-map style="height: 100%;background-origin: 10px;" [latitude]='latitude' [longitude]='longitude' [mapTypeId]='mapType' [zoom]='zoom'>
+    </agm-map>
+  </nb-card-body>
+  <nb-card-footer>
+    <div class="row">
+      <div class="col text-center">
+        <nb-select placeholder="Select Map Type" name="selectmapType" [(ngModel)]="mapType">
+          <nb-option value="roadmap">ROADMAP</nb-option>
+          <nb-option value="hybrid">HYBRID</nb-option>
+          <nb-option value="satellite">SATELLITE</nb-option>
+          <nb-option value="terrain">TERRAIN</nb-option>
+        </nb-select>
+      </div>
     </div>
-</div>
-   </nb-card-footer>
- </nb-card>
+  </nb-card-footer>
+</nb-card>
