@@ -7,7 +7,7 @@ import { SidebarModule } from 'primeng/sidebar';
 import { AgmCoreModule } from '@agm/core';
 import { GoogleMapComponent } from './ui-components/google-map/google-map.component';
 import { FormsModule } from '@angular/forms';
-import { NbThemeModule, NbLayoutModule, NbButtonModule, NbAccordionModule, NbCardModule, NbSidebarModule, NbInputModule, NbToastrModule, NbSelectModule, NbListModule, NbContextMenuModule, NbMenuModule } from '@nebular/theme';
+import { NbThemeModule, NbLayoutModule, NbButtonModule, NbAccordionModule, NbCardModule, NbSidebarModule, NbInputModule, NbToastrModule, NbSelectModule, NbListModule, NbContextMenuModule, NbMenuModule, NbTabsetModule } from '@nebular/theme';
 import { NbEvaIconsModule } from '@nebular/eva-icons';
 import { SidebarComponent } from './ui-components/sidebar/sidebar.component';
 import { AngularFireModule } from '@angular/fire';
@@ -47,6 +47,7 @@ import { HomeComponent } from './ui-components/home/home.component';
     NbSelectModule,
     NbListModule,
     NbContextMenuModule,
+    NbTabsetModule,
     // firebase
     AngularFireModule.initializeApp(environment.firebaseConfig),
     AngularFirestoreModule,

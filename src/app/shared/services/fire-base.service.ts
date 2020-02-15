@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { AngularFirestore, DocumentReference } from '@angular/fire/firestore';
 import { Place } from '../models/coordinates';
 import { Observable } from 'rxjs';
+import { Book } from '../models/book-model';
 
 @Injectable({
   providedIn: 'root'
@@ -24,7 +25,13 @@ export class FireBaseService {
   deletePlace(placeID: string) {
     this.firestore.doc('places/' + placeID).delete();
   }
-
+  getBooks():Observable<any> {
+    return this.firestore.collection('books').snapshotChanges();
+  }
+  createBook(book: Book):Promise<any> {
+    let clearName = book.name.replace(/\s+/g, '').toLowerCase();
+    return this.firestore.collection('books').doc(clearName).set({...book});
+  }
   // setPlacesArray(): void {
   //   this.getPlaces().subscribe(data => {
   //     this.places = data.map(e => {

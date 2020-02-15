@@ -5,7 +5,7 @@
         Выберете тип поиска и введите данные
       </h6>
     </nb-card-header>
-    <nb-card-body>
+    <nb-card-body class="overflow-hidden">
 
       <div class="row m-0 p-0 h-100">
 
@@ -29,20 +29,22 @@
           </nb-card>
         </div>
 
+        <!-- Books -->
         <div class="col">
-          <nb-card>
+          <nb-card class="h-75 align-self-center">
 
             <nb-card-header>
-              выберете произведение
+              <input type="text" name="bookSearchInput" nbInput fullWidth status="basic" placeholder="произведение">
             </nb-card-header>
 
             <nb-card-body>
 
-              <div class="row form-group">
-                <div class="col">
-                  <input type="text" name="bookInput" nbInput fullWidth status="basic" placeholder="произведение">
-                </div>
-              </div>
+              <nb-list >
+                <nb-list-item *ngFor="let book of books">
+                  {{ book.name }}
+                </nb-list-item>
+              </nb-list>
+
             </nb-card-body>
           </nb-card>
         </div>
