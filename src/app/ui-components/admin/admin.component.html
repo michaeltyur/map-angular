@@ -1,9 +1,52 @@
-<nb-card class="mb-0 h-50 w-50 ml-auto mr-auto">
- <nb-card-body>
-  <div class="row h-100">
-   <div class="col form-group">
-    <input type="text" nbInput fullWidth status="basic" placeholder="Default">
+<nb-card class="mb-0 h-75 w-75 ml-auto mr-auto">
+ <nb-card-body class="pt-5">
+
+  <!-- Name -->
+  <div class="row form-group">
+   <div class="col-3">
+    <label for="nameInput" class="col-form-label">place name:</label>
+   </div>
+   <div class="col-9">
+     <input type="text" name="nameInput" [(ngModel)]="place.name" nbInput fullWidth status="basic" placeholder="place name">
    </div>
   </div>
+
+  <!-- Description -->
+  <div class="row form-group">
+    <div class="col-3">
+     <label for="descriptionInput" class="col-form-label">description:</label>
+    </div>
+    <div class="col-9">
+      <textarea type="text" name="descriptionInput" [(ngModel)]="place.text" nbInput fullWidth status="basic" placeholder="description"></textarea>
+    </div>
+   </div>
+
+   <!-- Latitude -->
+   <div class="row form-group">
+    <div class="col-3">
+     <label for="latitudeInput" class="col-form-label">latitude:</label>
+    </div>
+    <div class="col-9">
+      <input type="text" name="latitudeInput" [(ngModel)]="place.latitude" nbInput fullWidth status="basic" placeholder="latitude">
+    </div>
+   </div>
+
+   <!-- Longitude -->
+   <div class="row form-group">
+    <div class="col-3">
+     <label for="longitudeInput" class="col-form-label">longitude:</label>
+    </div>
+    <div class="col-9">
+      <input type="text" name="longitudeInput" [(ngModel)]="place.longitude" nbInput fullWidth status="basic" placeholder="longitude">
+    </div>
+   </div>
+
  </nb-card-body>
+ <nb-card-footer>
+   <div class="row form-group">
+       <div class="col text-center">
+        <button nbButton hero status="success" (click)="save()">Save</button>
+       </div>
+   </div>
+ </nb-card-footer>
 </nb-card>

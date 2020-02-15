@@ -11,23 +11,19 @@ export class GoogleMapComponent implements OnInit {
   latitude = 32.183894;
   longitude = 34.871544;
   mapType = 'roadmap';
-  zoom = 12;
+  zoom = 13;
   constructor(
-    private mapNavigationService:MapNavigationService
-    ) { }
+    private mapNavigationService: MapNavigationService
+  ) { }
 
   ngOnInit(): void {
-    this.mapNavigationService.coordinatEmitter$.subscribe((res:Place)=>{
-      this.latitude = res.latitude;
-      this.longitude = res.longitude;
+    this.mapNavigationService.coordinatEmitter$.subscribe((res: Place) => {
+      this.latitude = +res.latitude;
+      this.longitude = +res.longitude;
+
+      this.zoom = res.zoom ? res.zoom : this.zoom;
     })
   }
 
-}
-export enum MapTypeIdEnum{
-  HYBRID='hybrid',
-  ROADMAP = 'ROADMAP',
-  SATELLITE = 'SATELLITE',
-  TERRAIN = 'TERRAIN'
 }
 
