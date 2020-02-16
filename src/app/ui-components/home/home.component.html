@@ -20,7 +20,10 @@
             <nb-card-body>
 
               <nb-list >
-                <nb-list-item *ngFor="let place of places">
+                <nb-list-item
+                *ngFor="let place of places"
+                style="cursor: pointer;"
+                (click)="goToMap(place)">
                   {{ place.name }}
                 </nb-list-item>
               </nb-list>

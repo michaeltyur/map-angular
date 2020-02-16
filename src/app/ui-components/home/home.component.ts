@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Place } from 'src/app/shared/models/coordinates';
 import { FireBaseService } from 'src/app/shared/services/fire-base.service';
 import { Book } from 'src/app/shared/models/book-model';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -12,7 +13,8 @@ export class HomeComponent implements OnInit {
   places: Place[];
   books:Book[];
   constructor(
-    private fireBaseService: FireBaseService
+    private fireBaseService: FireBaseService,
+    private router:Router
     ) { }
 
   ngOnInit(): void {
@@ -40,6 +42,12 @@ export class HomeComponent implements OnInit {
         } as Book;
       })
     });
+  }
+
+  goToMap(place:Place):void{
+   // this.router.navigate(['/google-map'],{queryParams:{latitude:place.latitude,longitude:place.longitude}});
+
+    this.router.navigate(['/google-map',place.latitude,place.longitude]);
   }
 
 }

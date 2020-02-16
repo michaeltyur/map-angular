@@ -8,7 +8,7 @@ import { HomeComponent } from './ui-components/home/home.component';
 
 const routes: Routes = [
   { path: 'home', component: HomeComponent },
-  { path: 'google-map', component: GoogleMapComponent },
+  { path: 'google-map/:latitude/:longitude', component: GoogleMapComponent },
   { path: 'admin', component: AdminComponent },
   {path: '', redirectTo: '/home', pathMatch: 'full' }
 ];
