@@ -1,6 +1,6 @@
 <div class="container d-flex h-100 w-100">
 
-  <nb-card class="mb-0 h-75 w-75 ml-auto mr-auto align-self-center">
+  <nb-card class="mb-0 ml-auto mr-auto align-self-center" style="width: 85%;height: 80%;">
     <nb-card-header>
       <div class="row">
         <div class="col">
@@ -37,7 +37,7 @@
               <label for="descriptionInput" class="col-form-label">description:</label>
             </div>
             <div class="col-9">
-              <textarea type="text" name="descriptionInput" [(ngModel)]="place.text" nbInput fullWidth status="basic" placeholder="description"></textarea>
+              <textarea rows="4" type="text" name="descriptionInput" [(ngModel)]="place.text" nbInput fullWidth status="basic" placeholder="description"></textarea>
             </div>
           </div>
 
