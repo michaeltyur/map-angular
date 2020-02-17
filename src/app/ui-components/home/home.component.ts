@@ -3,6 +3,7 @@ import { Place } from 'src/app/shared/models/coordinates';
 import { FireBaseService } from 'src/app/shared/services/fire-base.service';
 import { Book } from 'src/app/shared/models/book-model';
 import { Router } from '@angular/router';
+import { NbSidebarService } from '@nebular/theme';
 
 @Component({
   selector: 'app-home',
@@ -14,12 +15,14 @@ export class HomeComponent implements OnInit {
   books:Book[];
   constructor(
     private fireBaseService: FireBaseService,
+    private sidebarService: NbSidebarService,
     private router:Router
     ) { }
 
   ngOnInit(): void {
     this.getPlaces();
     this.getBooks();
+    this.sidebarService.collapse();
   }
 
   getPlaces(): void {

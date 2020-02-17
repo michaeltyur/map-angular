@@ -4,6 +4,7 @@ import { Place } from 'src/app/shared/models/coordinates';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { filter, switchMap } from 'rxjs/operators';
 import { NbSidebarService } from '@nebular/theme';
+import { FireBaseService } from 'src/app/shared/services/fire-base.service';
 
 @Component({
   selector: 'app-google-map',
@@ -11,34 +12,54 @@ import { NbSidebarService } from '@nebular/theme';
   styleUrls: ['./google-map.component.scss']
 })
 export class GoogleMapComponent implements OnInit {
-  latitude = 32.183894;
-  longitude = 34.871544;
+  places: Place[] = [];
+  latitude = 62.20565;
+  longitude = 34.26138;
   mapType = 'hybrid';
   zoom = 13;
   constructor(
+    private fireBaseService: FireBaseService,
     private mapNavigationService: MapNavigationService,
     private route: ActivatedRoute,
     private sidebarService: NbSidebarService
   ) { }
 
   ngOnInit(): void {
-  //   this.mapNavigationService.coordinatEmitter$.subscribe((res: Place) => {
-  //     this.latitude = +res.latitude;
-  //     this.longitude = +res.longitude;
 
-  //     this.zoom = res.zoom ? res.zoom : this.zoom;
-  //   })
-  // }
+    if (this.fireBaseService.places.length) {
+      this.places = this.fireBaseService.places
+    }
+    else {
+      this.getPlaces();
+    }
 
-  this.latitude = +this.route.snapshot.paramMap.get('latitude');
-  this.longitude = +this.route.snapshot.paramMap.get('longitude');
-  this.toggle();
+    this.mapNavigationService.coordinatEmitter$.subscribe((res: Place) => {
+      this.latitude = +res.latitude;
+      this.longitude = +res.longitude;
 
-}
+      this.zoom = res.zoom ? res.zoom : this.zoom;
+    })
 
-toggle() {
-  this.sidebarService.toggle();
-}
+    this.latitude = +this.route.snapshot.paramMap.get('latitude') ? +this.route.snapshot.paramMap.get('latitude') : this.latitude;
+    this.longitude = +this.route.snapshot.paramMap.get('longitude') ? +this.route.snapshot.paramMap.get('longitude') : this.longitude;
+    this.sidebarService.expand();
+
+  }
+
+  getPlaces(): void {
+    this.fireBaseService.getPlaces().subscribe(data => {
+      this.places = data.map(e => {
+        return {
+          id: e.payload.doc.id,
+          ...e.payload.doc.data()
+        } as Place;
+      })
+    });
+  }
+
+  toggle() {
+    this.sidebarService.toggle();
+  }
 
 }
 

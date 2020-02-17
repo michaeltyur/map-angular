@@ -9,6 +9,9 @@
     [longitude]='longitude'
     [mapTypeId]='mapType'
     [zoom]='zoom'>
+
+    <agm-marker *ngFor="let place of places" [latitude]="place.latitude" [longitude]="place.longitude"></agm-marker>
+
     </agm-map>
   </nb-card-body>
   <nb-card-footer>

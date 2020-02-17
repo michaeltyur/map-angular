@@ -3,6 +3,7 @@ import { AngularFirestore, DocumentReference } from '@angular/fire/firestore';
 import { Place } from '../models/coordinates';
 import { Observable } from 'rxjs';
 import { Book } from '../models/book-model';
+import { tap,filter, map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -10,13 +11,23 @@ import { Book } from '../models/book-model';
 export class FireBaseService {
 
   places$:Observable<Place[]>;
+  places:Place[] = [];
   //places:Place[] = [];
   constructor(private firestore: AngularFirestore) {
     this.places$ = this.getPlaces();
    }
 
   getPlaces():Observable<any> {
-    return this.firestore.collection('places').snapshotChanges();
+    return this.firestore.collection('places').snapshotChanges().pipe(
+      tap(data=>this.places = data.map(e => {
+        return {
+          id: e.payload.doc.id,
+          ...e.payload.doc.data()
+               } as Place;
+     })));
+  }
+  updatePlace(place:Place):Promise<any>{
+    return this.firestore.doc('places/' + place.name).update(place);
   }
   createPlace(place: Place):Promise<any> {
     let clearName = place.name.replace(/\s+/g, '').toLowerCase();

@@ -1,15 +1,21 @@
 <nb-card class="mb-0 h-100">
-  <nb-card-body>
-    <nb-accordion>
-      <nb-accordion-item *ngFor="let item of places">
-       <nb-accordion-item-header>{{item.name}}</nb-accordion-item-header>
-       <nb-accordion-item-body>
-         <p>
-           {{item.text}}
-         </p>
-        <p style="cursor: pointer;" (click)="mapNavigateTo(item)">go to</p>
-       </nb-accordion-item-body>
-      </nb-accordion-item>
-     </nb-accordion>
-  </nb-card-body>
+  <!-- <nb-card-body>
+
+  </nb-card-body> -->
+  <nb-accordion>
+        <nb-accordion-item *ngFor="let item of places">
+         <nb-accordion-item-header>{{item.name}}</nb-accordion-item-header>
+         <nb-accordion-item-body>
+
+           <p>
+             {{item.text}}
+           </p>
+
+           <div style="cursor: pointer;color: crimson;" (click)="mapNavigateTo(item)">
+              <i class="far fa-map fa-lg"></i>
+           </div>
+
+         </nb-accordion-item-body>
+        </nb-accordion-item>
+  </nb-accordion>
 </nb-card>

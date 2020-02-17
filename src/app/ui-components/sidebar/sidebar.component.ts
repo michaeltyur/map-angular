@@ -25,7 +25,7 @@ export class SidebarComponent implements OnInit {
 
   mapNavigateTo(place: Place): void {
     if (!window.location.href.match("google-map")) {
-      this.router.navigate(["/google-map"]).then(() => {
+      this.router.navigate(["/google-map",place.latitude,place.longitude]).then(() => {
         this.mapNavigationService.mapNavigateTo(place);
       })
     }
