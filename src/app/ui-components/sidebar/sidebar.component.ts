@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { MapNavigationService } from 'src/app/shared/services/map-navigation.service';
 import { Place } from 'src/app/shared/models/coordinates';
 import { FireBaseService } from 'src/app/shared/services/fire-base.service';
@@ -12,6 +12,9 @@ import { Router } from '@angular/router';
 export class SidebarComponent implements OnInit {
 
   places: Place[] = [];
+  @Input() placeSearchTerm: string = "";
+  @Input() bookSearchTerm: string = "";
+
   constructor(
     private mapNavigationService: MapNavigationService,
     private fireBaseService: FireBaseService,

@@ -1,56 +1,18 @@
 <div class="container d-flex h-100 w-100">
-  <nb-card class="mb-0 w-75 h-75 ml-auto mr-auto align-self-center">
+  <nb-card class="mb-0 ml-auto mr-auto align-self-center" style="width: 90%;">
     <nb-card-header>
       <h6>
-        Выберете тип поиска и введите данные
+        Кижские Рассказы
       </h6>
     </nb-card-header>
-    <nb-card-body class="overflow-hidden">
+    <nb-card-body style="height: 45rem;">
 
-      <div class="row m-0 p-0 h-100">
-
-        <!-- Places -->
+      <div class="row h-100">
         <div class="col">
-          <nb-card class="h-75 align-self-center">
-
-            <nb-card-header>
-              <input type="text" name="placeInput" nbInput fullWidth status="basic" placeholder="топографический объект">
-            </nb-card-header>
-
-            <nb-card-body>
-
-              <nb-list >
-                <nb-list-item
-                *ngFor="let place of places"
-                style="cursor: pointer;"
-                (click)="goToMap(place)">
-                  {{ place.name }}
-                </nb-list-item>
-              </nb-list>
-
-            </nb-card-body>
-          </nb-card>
+          <app-book></app-book>
         </div>
 
-        <!-- Books -->
-        <div class="col">
-          <nb-card class="h-75 align-self-center">
 
-            <nb-card-header>
-              <input type="text" name="bookSearchInput" nbInput fullWidth status="basic" placeholder="произведение">
-            </nb-card-header>
-
-            <nb-card-body>
-
-              <nb-list >
-                <nb-list-item *ngFor="let book of books">
-                  {{ book.name }}
-                </nb-list-item>
-              </nb-list>
-
-            </nb-card-body>
-          </nb-card>
-        </div>
 
       </div>
 

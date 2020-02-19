@@ -11,7 +11,29 @@
         </nb-select>
       </div>
       <div class="col text-center">
-        <h3 class="header-title">Tedious literature it can be interesting !!!</h3>
+        <!-- <h3 class="header-title">Tedious literature it can be interesting !!!</h3> -->
+        <div class="row">
+          <div class="col text-right">
+            <input
+            type="text"
+            shape="round"
+            name="searchPlaceInput"
+            nbInput
+            fullWidth
+            placeholder="Поиск по географическому названию"
+            [(ngModel)]="placeSearchTerm">
+          </div>
+          <div class="col text-left">
+            <input
+            type="text"
+            shape="round"
+            name="searchInput"
+            nbInput
+            fullWidth
+            placeholder="Поиск по произведению"
+            [(ngModel)]="bookSearchTerm">
+          </div>
+        </div>
       </div>
       <div class="col-1 text-center">
         <button nbButton hero status="info" (click)="navigateTo('/home')"><i class="fa fa-home fa-lg" aria-hidden="true"></i></button>
@@ -26,8 +48,8 @@
 
   </nb-layout-header>
 
-  <nb-sidebar left="true" [state]="sideBarState">
-    <app-sidebar></app-sidebar>
+  <nb-sidebar left="true">
+    <app-sidebar [placeSearchTerm]="placeSearchTerm"></app-sidebar>
   </nb-sidebar>
 
   <nb-layout-column>

@@ -3,7 +3,8 @@
 
   </nb-card-body> -->
   <nb-accordion>
-        <nb-accordion-item *ngFor="let item of places">
+
+    <nb-accordion-item *ngFor="let item of places | SearchBookFilter: placeSearchTerm">
          <nb-accordion-item-header>{{item.name}}</nb-accordion-item-header>
          <nb-accordion-item-body>
 

@@ -16,7 +16,8 @@ import { environment } from '../environments/environment';
 import { AngularFirestore, AngularFirestoreModule } from '@angular/fire/firestore';
 import { AdminComponent } from './ui-components/admin/admin.component';
 import { HomeComponent } from './ui-components/home/home.component';
-
+import { BookComponent } from './ui-components/book/book.component';
+import { SearchBookPipe } from './shared/pipe/book-search-pipe';
 
 @NgModule({
   declarations: [
@@ -24,7 +25,9 @@ import { HomeComponent } from './ui-components/home/home.component';
     GoogleMapComponent,
     SidebarComponent,
     AdminComponent,
-    HomeComponent
+    HomeComponent,
+    BookComponent,
+    SearchBookPipe
   ],
   imports: [
     AgmCoreModule.forRoot({

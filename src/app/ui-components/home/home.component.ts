@@ -22,7 +22,7 @@ export class HomeComponent implements OnInit {
   ngOnInit(): void {
     this.getPlaces();
     this.getBooks();
-    this.sidebarService.collapse();
+   // this.sidebarService.collapse();
   }
 
   getPlaces(): void {

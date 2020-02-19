@@ -5,6 +5,7 @@ import { NbSidebarService, NbThemeService } from '@nebular/theme';
 import { Observable } from 'rxjs';
 import { Place } from './shared/models/coordinates';
 import { FireBaseService } from './shared/services/fire-base.service';
+import { SearchService } from './shared/services/search.service';
 
 @Component({
   selector: 'app-root',
@@ -14,15 +15,18 @@ import { FireBaseService } from './shared/services/fire-base.service';
 export class AppComponent implements OnInit {
   display;
   title = 'map';
-  sideBarState = 'collapsed';
+  placeSearchTerm: string = "";
+  bookSearchTerm: string = "";
+
   plases$: Observable<Place>;
   constructor(
     private router: Router,
     private sidebarService: NbSidebarService,
     private fireBaseService: FireBaseService,
-    private themeService: NbThemeService
+    private themeService: NbThemeService,
+    private searchService:SearchService
   ) {
-
+    sidebarService.expand();
   }
   ngOnInit() {
     this.plases$ = this.fireBaseService.getPlaces();
