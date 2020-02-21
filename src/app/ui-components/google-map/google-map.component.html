@@ -3,14 +3,19 @@
 
   </nb-card-header> -->
   <nb-card-body>
-    <agm-map
-    style="height: 100%;background-origin: 10px;"
-    [latitude]='latitude'
-    [longitude]='longitude'
-    [mapTypeId]='mapType'
-    [zoom]='zoom'>
+    <agm-map style="height: 100%;background-origin: 10px;" [latitude]='latitude' [longitude]='longitude' [mapTypeId]='mapType' [zoom]='zoom'>
 
-    <agm-marker *ngFor="let place of places" [latitude]="place.latitude" [longitude]="place.longitude"></agm-marker>
+      <agm-marker *ngFor="let place of places" [latitude]="place.latitude" [longitude]="place.longitude" (mouseOver)="onMouseOver(infoWindow,$event)" (mouseOut)="onMouseOut(infoWindow, $event)">
+
+        <agm-info-window [disableAutoPan]="false" #infoWindow>
+          <div class="agm-info-window-text text-dark">
+            {{place.text | BookTextConcater : place.text }}
+          </div>
+          <div>
+            <!-- <a (click)="onClickInfoView({id:place.id})" class="btn btn-attention pull-right">Daje <i class="fa fa-angle-double-right"></i></a> -->
+          </div>
+        </agm-info-window>
+      </agm-marker>
 
     </agm-map>
   </nb-card-body>

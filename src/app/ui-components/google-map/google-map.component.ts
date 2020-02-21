@@ -16,7 +16,7 @@ export class GoogleMapComponent implements OnInit {
   latitude = 62.20565;
   longitude = 34.26138;
   mapType = 'hybrid';
-  zoom = 13;
+  zoom = 12;
   constructor(
     private fireBaseService: FireBaseService,
     private mapNavigationService: MapNavigationService,
@@ -60,6 +60,14 @@ export class GoogleMapComponent implements OnInit {
   toggle() {
     this.sidebarService.toggle();
   }
+
+onMouseOver(infoWindow, $event: MouseEvent) {
+    infoWindow.open();
+}
+
+onMouseOut(infoWindow, $event: MouseEvent) {
+    infoWindow.close();
+}
 
 }
 

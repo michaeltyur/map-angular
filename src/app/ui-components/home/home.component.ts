@@ -13,11 +13,14 @@ import { NbSidebarService } from '@nebular/theme';
 export class HomeComponent implements OnInit {
   places: Place[];
   books:Book[];
+  book:Book;
   constructor(
     private fireBaseService: FireBaseService,
     private sidebarService: NbSidebarService,
     private router:Router
-    ) { }
+    ) {
+      this.book = new Book();
+     }
 
   ngOnInit(): void {
     this.getPlaces();
@@ -33,6 +36,7 @@ export class HomeComponent implements OnInit {
           ...e.payload.doc.data()
         } as Place;
       })
+
     });
   }
 
@@ -43,7 +47,8 @@ export class HomeComponent implements OnInit {
           id: e.payload.doc.id,
           ...e.payload.doc.data()
         } as Book;
-      })
+      });
+      this.book = this.books[0];
     });
   }
 

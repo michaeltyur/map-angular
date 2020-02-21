@@ -2,14 +2,14 @@
   <nb-card class="mb-0 ml-auto mr-auto align-self-center" style="width: 90%;">
     <nb-card-header>
       <h6>
-        Кижские Рассказы
+        {{book.name}}
       </h6>
     </nb-card-header>
     <nb-card-body style="height: 45rem;">
 
       <div class="row h-100">
         <div class="col">
-          <app-book></app-book>
+          <app-book [text]="book.text"></app-book>
         </div>
 
 

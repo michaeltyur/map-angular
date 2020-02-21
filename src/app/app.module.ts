@@ -7,7 +7,7 @@ import { SidebarModule } from 'primeng/sidebar';
 import { AgmCoreModule } from '@agm/core';
 import { GoogleMapComponent } from './ui-components/google-map/google-map.component';
 import { FormsModule } from '@angular/forms';
-import { NbThemeModule, NbLayoutModule, NbButtonModule, NbAccordionModule, NbCardModule, NbSidebarModule, NbInputModule, NbToastrModule, NbSelectModule, NbListModule, NbContextMenuModule, NbMenuModule, NbTabsetModule } from '@nebular/theme';
+import { NbThemeModule, NbLayoutModule, NbButtonModule, NbAccordionModule, NbCardModule, NbSidebarModule, NbInputModule, NbToastrModule, NbSelectModule, NbListModule, NbContextMenuModule, NbMenuModule, NbTabsetModule, NbTooltipModule } from '@nebular/theme';
 import { NbEvaIconsModule } from '@nebular/eva-icons';
 import { SidebarComponent } from './ui-components/sidebar/sidebar.component';
 import { AngularFireModule } from '@angular/fire';
@@ -18,6 +18,8 @@ import { AdminComponent } from './ui-components/admin/admin.component';
 import { HomeComponent } from './ui-components/home/home.component';
 import { BookComponent } from './ui-components/book/book.component';
 import { SearchBookPipe } from './shared/pipe/book-search-pipe';
+import { BookTextConcaterPipe } from './shared/pipe/book-text-pipe';
+import { TextFormatPipe } from './shared/pipe/text-format-pipe';
 
 @NgModule({
   declarations: [
@@ -27,7 +29,10 @@ import { SearchBookPipe } from './shared/pipe/book-search-pipe';
     AdminComponent,
     HomeComponent,
     BookComponent,
-    SearchBookPipe
+    SearchBookPipe,
+    BookTextConcaterPipe,
+    TextFormatPipe
+
   ],
   imports: [
     AgmCoreModule.forRoot({
@@ -51,6 +56,7 @@ import { SearchBookPipe } from './shared/pipe/book-search-pipe';
     NbListModule,
     NbContextMenuModule,
     NbTabsetModule,
+    NbTooltipModule,
     // firebase
     AngularFireModule.initializeApp(environment.firebaseConfig),
     AngularFirestoreModule,

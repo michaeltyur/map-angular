@@ -4,12 +4,12 @@
   </nb-card-body> -->
   <nb-accordion>
 
-    <nb-accordion-item *ngFor="let item of places | SearchBookFilter: placeSearchTerm">
+    <nb-accordion-item *ngFor="let item of places | SearchBookFilter: placeSearchTerm" (collapsedChange)="collapsedChange(item)">
          <nb-accordion-item-header>{{item.name}}</nb-accordion-item-header>
          <nb-accordion-item-body>
 
            <p style="cursor: pointer;">
-             {{item.text}}
+             {{item.text | BookTextConcater : item.text}}
            </p>
 
            <div style="cursor: pointer;color: crimson;" (click)="mapNavigateTo(item)">

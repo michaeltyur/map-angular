@@ -4,6 +4,7 @@ import { FireBaseService } from 'src/app/shared/services/fire-base.service';
 import { NbToastrService, NbMenuService, NB_WINDOW, NbSidebarService } from '@nebular/theme';
 import { filter, map } from 'rxjs/operators';
 import { Book } from 'src/app/shared/models/book-model';
+import { SearchService } from 'src/app/shared/services/search.service';
 
 @Component({
   selector: 'app-admin',
@@ -32,7 +33,8 @@ export class AdminComponent implements OnInit {
     private nbToastrService: NbToastrService,
     private nbMenuService: NbMenuService,
     private sidebarService: NbSidebarService,
-    @Inject(NB_WINDOW) private window
+    @Inject(NB_WINDOW) private window,
+    private searchService: SearchService
   ) {
     this.place = new Place();
     this.book = new Book();
@@ -51,6 +53,12 @@ export class AdminComponent implements OnInit {
         this.searchTerm = title;
         this.searchPlace();
       });
+
+    this.searchService.sideBarSelectItemEmitter$.subscribe(res => {
+      if (res) {
+        this.place = res;
+      }
+    })
 
   }
 
@@ -73,7 +81,7 @@ export class AdminComponent implements OnInit {
   saveBook(): void {
     if (this.book.name) {
 
-      if ( this.isPlaceExist(this.place)) {
+      if (this.isPlaceExist(this.place)) {
         this.nbToastrService.warning("", "The place exists already");
         return;
       }
@@ -133,7 +141,19 @@ export class AdminComponent implements OnInit {
   updatePlace(): void {
 
     if (this.isValid()) {
-      this.fireBaseService.createPlace(this.place).then(() => {
+      this.fireBaseService.updatePlace(this.place).then(() => {
+        this.nbToastrService.success("", "Updated");
+      }).catch((error) => {
+        console.error(error);
+        this.nbToastrService.danger("", "Error")
+      })
+    }
+  }
+
+  updateBook(): void {
+
+    if (true) {
+      this.fireBaseService.updateBook(this.book).then(() => {
         this.nbToastrService.success("", "Updated");
       }).catch((error) => {
         console.error(error);
@@ -154,6 +174,7 @@ export class AdminComponent implements OnInit {
           ...e.payload.doc.data()
         } as Book;
       })
+      this.book = this.books[0];
     });
   }
 

@@ -3,6 +3,7 @@ import { MapNavigationService } from 'src/app/shared/services/map-navigation.ser
 import { Place } from 'src/app/shared/models/coordinates';
 import { FireBaseService } from 'src/app/shared/services/fire-base.service';
 import { Router } from '@angular/router';
+import { SearchService } from 'src/app/shared/services/search.service';
 
 @Component({
   selector: 'app-sidebar',
@@ -18,7 +19,8 @@ export class SidebarComponent implements OnInit {
   constructor(
     private mapNavigationService: MapNavigationService,
     private fireBaseService: FireBaseService,
-    private router: Router
+    private router: Router,
+    private searchService: SearchService
   ) { }
 
   ngOnInit(): void {
@@ -41,11 +43,13 @@ export class SidebarComponent implements OnInit {
     this.fireBaseService.getPlaces().subscribe(data => {
       this.places = data.map(e => {
         return {
-          id: e.payload.doc.id,
-          ...e.payload.doc.data()
-        } as Place;
-      })
+                 id: e.payload.doc.id,
+                 ...e.payload.doc.data()
+               } as Place;
+                            })
     });
   }
-
+  collapsedChange(item:Place):void{
+    this. searchService.sideBarSelectItemEmitter$.emit(item);
+  }
 }
