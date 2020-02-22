@@ -4,6 +4,7 @@ import { FireBaseService } from 'src/app/shared/services/fire-base.service';
 import { Book } from 'src/app/shared/models/book-model';
 import { Router } from '@angular/router';
 import { NbSidebarService } from '@nebular/theme';
+import { SearchService } from 'src/app/shared/services/search.service';
 
 @Component({
   selector: 'app-home',
@@ -11,13 +12,17 @@ import { NbSidebarService } from '@nebular/theme';
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit {
+
   places: Place[];
   books:Book[];
   book:Book;
+  searchTerm:string;
+
   constructor(
     private fireBaseService: FireBaseService,
     private sidebarService: NbSidebarService,
-    private router:Router
+    private router:Router,
+    private searchService:SearchService
     ) {
       this.book = new Book();
      }
@@ -25,7 +30,9 @@ export class HomeComponent implements OnInit {
   ngOnInit(): void {
     this.getPlaces();
     this.getBooks();
-   // this.sidebarService.collapse();
+    this.searchService.searchTextInBookTermEmitter$.subscribe((data)=>{
+      this.searchTerm = data;
+    })
   }
 
   getPlaces(): void {

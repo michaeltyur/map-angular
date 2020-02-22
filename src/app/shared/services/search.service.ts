@@ -5,7 +5,8 @@ import { Injectable, EventEmitter } from '@angular/core';
 })
 export class SearchService {
 
-sideBarSelectItemEmitter$ = new EventEmitter();
+  sideBarSelectItemEmitter$ = new EventEmitter();
+  searchTextInBookTermEmitter$ = new EventEmitter();
 
   constructor() { }
 }

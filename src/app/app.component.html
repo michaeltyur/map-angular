@@ -27,11 +27,12 @@
             <input
             type="text"
             shape="round"
-            name="searchInput"
+            name="searchBookInput"
             nbInput
             fullWidth
             placeholder="Поиск по произведению"
-            [(ngModel)]="bookSearchTerm">
+            [(ngModel)]="bookSearchTerm"
+            (input)="bookSearchInput()">
           </div>
         </div>
       </div>

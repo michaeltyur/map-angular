@@ -8,10 +8,13 @@ import { Component, OnInit, Input } from '@angular/core';
 export class BookComponent implements OnInit {
 
   @Input() text;
+  @Input() searchTerm;
+
 
   constructor() { }
 
   ngOnInit(): void {
+    this.searchTerm;
   }
 
 }

@@ -40,4 +40,7 @@ export class AppComponent implements OnInit {
   changeTheme(event): void {
     this.themeService.changeTheme(event);
   }
+  bookSearchInput():void{
+    this.searchService.searchTextInBookTermEmitter$.emit(this.bookSearchTerm);
+  }
 }

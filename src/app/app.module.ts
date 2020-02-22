@@ -20,6 +20,7 @@ import { BookComponent } from './ui-components/book/book.component';
 import { SearchBookPipe } from './shared/pipe/book-search-pipe';
 import { BookTextConcaterPipe } from './shared/pipe/book-text-pipe';
 import { TextFormatPipe } from './shared/pipe/text-format-pipe';
+import { ColorTextSearchPipe } from './shared/pipe/color-text-search-pipe';
 
 @NgModule({
   declarations: [
@@ -31,7 +32,8 @@ import { TextFormatPipe } from './shared/pipe/text-format-pipe';
     BookComponent,
     SearchBookPipe,
     BookTextConcaterPipe,
-    TextFormatPipe
+    TextFormatPipe,
+    ColorTextSearchPipe
 
   ],
   imports: [
