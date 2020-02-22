@@ -21,7 +21,7 @@ export class AdminComponent implements OnInit {
   book: Book;
   books: Book[] = [];
   booksFiltred: Book;
-
+  imageDownloadPath:string;
   searchTerm: string;
   placesFiltred: NbContextMenuItem[] = [{ title: "" }];
   searchStatus: string = "basic";
@@ -215,6 +215,24 @@ export class AdminComponent implements OnInit {
       }).catch(err=>console.error(err))
      }
   }
+
+   getBase64Image() {
+    debugger;
+
+    let img = document.createElement("img");
+    img.id = 'imageid';
+    img.src = this.imageDownloadPath;
+   // let img =  document.getElementById('imageid') as HTMLImageElement;
+    var canvas = document.createElement("canvas");
+    canvas.width = img.width;
+    canvas.height = img.height;
+    var ctx = canvas.getContext("2d");
+    ctx.drawImage(img, 0, 0);
+    var dataURL = canvas.toDataURL("image/png");
+    let imageString = dataURL.replace(/^data:image\/(png|jpg);base64,/, "");
+    return imageString;
+  }
+
 
 }
 
