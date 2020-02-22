@@ -28,11 +28,16 @@ export class HomeComponent implements OnInit {
      }
 
   ngOnInit(): void {
+    this.sidebarService.expand();
     this.getPlaces();
     this.getBooks();
+
+    this.searchService.placeDetailsEmitter$.emit(null);
+
     this.searchService.searchTextInBookTermEmitter$.subscribe((data)=>{
       this.searchTerm = data;
     })
+    this.fireBaseService.addImagesArray();
   }
 
   getPlaces(): void {

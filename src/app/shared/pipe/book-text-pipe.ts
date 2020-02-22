@@ -6,13 +6,14 @@ import { Place } from '../models/coordinates';
 })
 
 export class BookTextConcaterPipe implements PipeTransform {
-  transform(value: string, args?: any): any {
+  transform(value: string, lehgth?: number): any {
 
     if (!value) return null;
-    if (!args) return value;
 
-    args = args.toLowerCase();
+    if(!lehgth)lehgth = 50;
 
-    return value.substr(value.indexOf(":") + 1, 50) + " ...";
+    if(value.length<=lehgth)return value;
+
+    return value.substr(value.indexOf(":") + 1, lehgth) + " ...";
   }
 }

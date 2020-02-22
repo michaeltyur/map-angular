@@ -2,21 +2,39 @@
   <!-- <nb-card-body>
 
   </nb-card-body> -->
-  <nb-accordion>
+  <nb-accordion *ngIf="!place">
 
     <nb-accordion-item *ngFor="let item of places | SearchBookFilter: placeSearchTerm" (collapsedChange)="collapsedChange(item)">
-         <nb-accordion-item-header>{{item.name}}</nb-accordion-item-header>
-         <nb-accordion-item-body>
+      <nb-accordion-item-header>{{item.name}}</nb-accordion-item-header>
+      <nb-accordion-item-body>
 
-           <p style="cursor: pointer;">
-             {{item.text | BookTextConcater : item.text}}
-           </p>
+        <p style="cursor: pointer;">
+          {{item.text | BookTextConcater}}
+        </p>
 
-           <div style="cursor: pointer;color: crimson;" (click)="mapNavigateTo(item)">
-              <i class="far fa-map fa-lg"></i>
-           </div>
+        <p style="cursor: pointer;color: lime;" (click)="openDetails(item)">
+          <i class="fas fa-info-circle fa-lg"></i>
+        </p>
 
-         </nb-accordion-item-body>
-        </nb-accordion-item>
+        <div style="cursor: pointer;color: crimson;" (click)="mapNavigateTo(item)">
+          <i class="far fa-map fa-lg"></i>
+        </div>
+
+      </nb-accordion-item-body>
+    </nb-accordion-item>
   </nb-accordion>
+
+  <div *ngIf="place">
+    <div
+    (click)="place=null"
+    style="color: crimson;position: absolute;right: 27px;top: 32px;cursor: pointer;"><i class="fas fa-times-circle fa-2x"></i></div>
+    <app-place-detail class="h-100" [place]="place">
+    </app-place-detail>
+  </div>
+
+  <!-- <div class="row place-detail m-0 p-0" *ngIf="place">
+    <div class="col m-0 p-0">
+    </div>
+  </div> -->
+
 </nb-card>

@@ -1,3 +1,7 @@
-agm-map { 
-    height: 80%; /* height is required */ 
+agm-map {
+    height: 80%; /* height is required */
+}
+agm-map agm-marker
+{
+ background-color: darkorange;
 }

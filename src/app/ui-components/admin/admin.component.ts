@@ -54,6 +54,9 @@ export class AdminComponent implements OnInit {
         this.searchPlace();
       });
 
+      // Close Details Menu
+      this.searchService.placeDetailsEmitter$.emit(null);
+
     this.searchService.sideBarSelectItemEmitter$.subscribe(res => {
       if (res) {
         this.place = res;
@@ -201,6 +204,18 @@ export class AdminComponent implements OnInit {
       this.saveBook();
     }
   }
+
+
+
+  deletePlace():void{
+     if (this.place) {
+      this.fireBaseService.deletePlace(this.place.id).then(()=>{
+        this.place = new Place();
+        this.nbToastrService.success("", "Deleted");
+      }).catch(err=>console.error(err))
+     }
+  }
+
 }
 
 

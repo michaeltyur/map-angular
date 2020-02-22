@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore, DocumentReference } from '@angular/fire/firestore';
-import { Place } from '../models/coordinates';
+import { Place, GeoPoint } from '../models/coordinates';
 import { Observable } from 'rxjs';
 import { Book } from '../models/book-model';
 import { tap, filter, map } from 'rxjs/operators';
@@ -32,6 +32,16 @@ export class FireBaseService {
 
   }
 
+  addImagesArray():void{
+    this.places.forEach(el=>{
+      if (!el.images) {
+        el.images = [];
+        el.images.push("")
+      }
+      this.updatePlace(el).then();
+    })
+  }
+
   updatePlace(place: Place): Promise<any> {
     return this.firestore.collection('places').doc(place.id).set({ ...place });
   }
@@ -42,8 +52,8 @@ export class FireBaseService {
     let clearName = place.name.replace(/\s+/g, '').toLowerCase();
     return this.firestore.collection('places').doc(clearName).set({ ...place });
   }
-  deletePlace(placeID: string) {
-    this.firestore.doc('places/' + placeID).delete();
+  deletePlace(placeID: string):Promise<any> {
+   return this.firestore.doc('places/' + placeID).delete();
   }
   getBooks(): Observable<any> {
     return this.firestore.collection('books').snapshotChanges();

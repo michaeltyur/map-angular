@@ -1,0 +1,15 @@
+<nb-card *ngIf="place" class="h-100">
+  <nb-card-header>
+    {{place.name}}
+  </nb-card-header>
+  <nb-card-body class="">
+    <div class="row h-100 d-flex flex-column justify-content-center">
+      <div class="col mb-1 text-center">
+        {{place.text | BookTextConcater : 70}}
+      </div>
+      <div *ngFor="let  image of place.images;let i = index" class="col text-center mt-2">
+         <img style="width: 100%;height: auto;" [src]="image" (error)="imageLoadError($event)" alt="place.name" >
+      </div>
+    </div>
+  </nb-card-body>
+</nb-card>

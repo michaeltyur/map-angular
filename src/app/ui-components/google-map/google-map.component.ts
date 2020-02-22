@@ -5,6 +5,7 @@ import { ActivatedRoute, ParamMap } from '@angular/router';
 import { filter, switchMap } from 'rxjs/operators';
 import { NbSidebarService } from '@nebular/theme';
 import { FireBaseService } from 'src/app/shared/services/fire-base.service';
+import { SearchService } from 'src/app/shared/services/search.service';
 
 @Component({
   selector: 'app-google-map',
@@ -13,25 +14,28 @@ import { FireBaseService } from 'src/app/shared/services/fire-base.service';
 })
 export class GoogleMapComponent implements OnInit {
   places: Place[] = [];
-  latitude = 62.20565;
-  longitude = 34.26138;
+  latitude = 62.0833;
+  longitude = 35.2148;
   mapType = 'hybrid';
-  zoom = 12;
+  zoom = 8;
   constructor(
     private fireBaseService: FireBaseService,
     private mapNavigationService: MapNavigationService,
     private route: ActivatedRoute,
-    private sidebarService: NbSidebarService
+    private sidebarService: NbSidebarService,
+    private searchService:SearchService
   ) { }
 
   ngOnInit(): void {
-
+    this.sidebarService.expand();
     if (this.fireBaseService.places.length) {
       this.places = this.fireBaseService.places
     }
     else {
       this.getPlaces();
     }
+
+    this.searchService.placeDetailsEmitter$.emit(null);
 
     this.mapNavigationService.coordinatEmitter$.subscribe((res: Place) => {
       this.latitude = +res.latitude;
@@ -67,6 +71,12 @@ onMouseOver(infoWindow, $event: MouseEvent) {
 
 onMouseOut(infoWindow, $event: MouseEvent) {
     infoWindow.close();
+}
+
+onMapMarkerClick(place:Place):void{
+  this.sidebarService.collapse();
+  this.searchService.placeDetailsEmitter$.emit(place);
+  this.sidebarService.expand();
 }
 
 }

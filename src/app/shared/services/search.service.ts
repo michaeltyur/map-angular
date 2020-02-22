@@ -7,6 +7,7 @@ export class SearchService {
 
   sideBarSelectItemEmitter$ = new EventEmitter();
   searchTextInBookTermEmitter$ = new EventEmitter();
+  placeDetailsEmitter$ = new EventEmitter();
 
   constructor() { }
 }

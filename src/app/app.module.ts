@@ -21,6 +21,7 @@ import { SearchBookPipe } from './shared/pipe/book-search-pipe';
 import { BookTextConcaterPipe } from './shared/pipe/book-text-pipe';
 import { TextFormatPipe } from './shared/pipe/text-format-pipe';
 import { ColorTextSearchPipe } from './shared/pipe/color-text-search-pipe';
+import { PlaceDetailComponent } from './ui-components/place-detail/place-detail.component';
 
 @NgModule({
   declarations: [
@@ -33,7 +34,8 @@ import { ColorTextSearchPipe } from './shared/pipe/color-text-search-pipe';
     SearchBookPipe,
     BookTextConcaterPipe,
     TextFormatPipe,
-    ColorTextSearchPipe
+    ColorTextSearchPipe,
+    PlaceDetailComponent
 
   ],
   imports: [

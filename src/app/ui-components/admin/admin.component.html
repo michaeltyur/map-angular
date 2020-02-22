@@ -18,9 +18,7 @@
 
 
       <nb-tabset (changeTab)="tabChanged($event)">
-        <nb-tab tabTitle="Place"
-        [badgeText]="places.length"
-        badgeStatus="success">
+        <nb-tab tabTitle="Place" [badgeText]="places.length" badgeStatus="success">
           <!-- Name -->
           <div class="row form-group">
             <div class="col-3">
@@ -47,7 +45,7 @@
               <label for="latitudeInput" class="col-form-label">latitude:</label>
             </div>
             <div class="col-9">
-              <input type="text" name="latitudeInput" [(ngModel)]="place.latitude" nbInput fullWidth status="basic" placeholder="latitude">
+              <input type="number" name="latitudeInput" [(ngModel)]="place.latitude" nbInput fullWidth status="basic" placeholder="latitude">
             </div>
           </div>
 
@@ -57,7 +55,7 @@
               <label for="longitudeInput" class="col-form-label">longitude:</label>
             </div>
             <div class="col-9">
-              <input type="text" name="longitudeInput" [(ngModel)]="place.longitude" nbInput fullWidth status="basic" placeholder="longitude">
+              <input type="number" name="longitudeInput" [(ngModel)]="place.longitude" nbInput fullWidth status="basic" placeholder="longitude">
             </div>
           </div>
 
@@ -70,13 +68,27 @@
               <input type="text" name="zoomInput" [(ngModel)]="place.zoom" nbInput fullWidth status="basic" placeholder="zoom">
             </div>
           </div>
+          <!-- Images -->
+          <div class="row form-group">
+            <div class="col-3">
+
+                <label for="imagesInput" class="col-form-label">images:</label>
+                <button style="width: 2rem;" class="ml-2" nbButton ghost  status="success" (click)="place.images.push('/assets/photo/')"><i class="fas fa-plus-circle fa-lg"></i></button>
+            </div>
+            <div class="col-9">
+              <div  class="row d-flex flex-column">
+                <div class="col" *ngFor="let image of place.images; let i = index">
+                  <input type="text" name="latitudeInput_{{i}}" [(ngModel)]="place.images[i]" nbInput fullWidth placeholder="path">
+                </div>
+              </div>
+            </div>
+          </div>
+
+
         </nb-tab>
 
         <!-- Book -->
-        <nb-tab
-        tabTitle="Book"
-        [badgeText]="books.length"
-        badgeStatus="success">
+        <nb-tab tabTitle="Book" [badgeText]="books.length" badgeStatus="success">
           <!-- Name -->
           <div class="row form-group">
             <div class="col-3">
@@ -87,15 +99,15 @@
             </div>
           </div>
 
-            <!-- Autor -->
-            <div class="row form-group">
-              <div class="col-3">
-                <label for="bookNAutorInput" class="col-form-label">book autor:</label>
-              </div>
-              <div class="col-9">
-                <input type="text" name="bookNAutorInput" [(ngModel)]="book.autor" nbInput fullWidth status="basic" placeholder="book autor">
-              </div>
+          <!-- Autor -->
+          <div class="row form-group">
+            <div class="col-3">
+              <label for="bookNAutorInput" class="col-form-label">book autor:</label>
             </div>
+            <div class="col-9">
+              <input type="text" name="bookNAutorInput" [(ngModel)]="book.autor" nbInput fullWidth status="basic" placeholder="book autor">
+            </div>
+          </div>
 
           <!-- Description -->
           <div class="row form-group">
@@ -103,7 +115,7 @@
               <label for="bookDescriptionInput" class="col-form-label">text:</label>
             </div>
             <div class="col-11">
-              <textarea type="text" rows = "12" name="bookDescriptionInput" [(ngModel)]="book.text" nbInput fullWidth status="basic" placeholder="description"></textarea>
+              <textarea type="text" rows="12" name="bookDescriptionInput" [(ngModel)]="book.text" nbInput fullWidth status="basic" placeholder="description"></textarea>
             </div>
           </div>
 
@@ -114,6 +126,9 @@
     <nb-card-footer>
       <!-- Save Button -->
       <div class="row form-group">
+        <div class="col text-center">
+          <button [disabled]="!place.id" *ngIf="isPlaceTab" nbButton hero status="danger" (click)="deletePlace()">Delete</button>
+        </div>
         <div class="col text-center">
           <button nbButton hero status="success" (click)="actionSaveSelect()">Save</button>
         </div>
