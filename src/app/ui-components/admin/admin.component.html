@@ -78,7 +78,14 @@
             <div class="col-9">
               <div  class="row d-flex flex-column">
                 <div class="col">
-                  <input type="file" name="imagePathInput" [(ngModel)]="imageDownloadPath" nbInput fullWidth placeholder="path">
+                  <input type="file" name="imagePathInput" [(ngModel)]="filesToUpload" (change)="handleFileSelect($event)" nbInput fullWidth placeholder="path">
+                </div>
+                <div class="col m-2" *ngFor="let image64 of place.images">
+                  <img
+                  [src]="image64 | String64ToImage"
+                  alt="image"
+                  style="width: 80%;
+                  height: auto;">
                 </div>
               </div>
             </div>
@@ -132,13 +139,9 @@
         <div class="col text-center">
           <button nbButton hero status="success" (click)="actionSaveSelect()">Save</button>
         </div>
-        <div class="col text-center">
-          <button nbButton hero status="success" (click)="getBase64Image()">getBase64Image</button>
-        </div>
       </div>
     </nb-card-footer>
   </nb-card>
 
 </div>
 
-<img id=imageid hidden [src]="imageDownloadPath">

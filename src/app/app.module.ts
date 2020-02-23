@@ -22,6 +22,7 @@ import { BookTextConcaterPipe } from './shared/pipe/book-text-pipe';
 import { TextFormatPipe } from './shared/pipe/text-format-pipe';
 import { ColorTextSearchPipe } from './shared/pipe/color-text-search-pipe';
 import { PlaceDetailComponent } from './ui-components/place-detail/place-detail.component';
+import { String64ToImagePipe } from './shared/pipe/string64-to-image-pipe';
 
 @NgModule({
   declarations: [
@@ -35,7 +36,8 @@ import { PlaceDetailComponent } from './ui-components/place-detail/place-detail.
     BookTextConcaterPipe,
     TextFormatPipe,
     ColorTextSearchPipe,
-    PlaceDetailComponent
+    PlaceDetailComponent,
+    String64ToImagePipe
 
   ],
   imports: [
