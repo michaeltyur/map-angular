@@ -5,7 +5,7 @@
       <div class="row">
         <div class="col">
           <h6>
-            Search
+            Details
           </h6>
         </div>
         <!-- <div class="col">
@@ -65,32 +65,38 @@
               <label for="zoomInput" class="col-form-label">zoom:</label>
             </div>
             <div class="col-9">
-              <input type="text" name="zoomInput"   [(ngModel)]="place.zoom" nbInput fullWidth status="basic" placeholder="zoom">
+              <input type="text" name="zoomInput" [(ngModel)]="place.zoom" nbInput fullWidth status="basic" placeholder="zoom">
             </div>
           </div>
-          <!-- Images -->
+          <!-- Images Input -->
           <div class="row form-group">
             <div class="col-3">
 
-                <label for="imagesInput" class="col-form-label">images:</label>
-                <!-- <button style="width: 2rem;" class="ml-2" nbButton ghost  status="success" (click)="place.images.push('/assets/photo/')"><i class="fas fa-plus-circle fa-lg"></i></button> -->
+              <label for="imagesInput" class="col-form-label">images:</label>
+              <!-- <button style="width: 2rem;" class="ml-2" nbButton ghost  status="success" (click)="place.images.push('/assets/photo/')"><i class="fas fa-plus-circle fa-lg"></i></button> -->
             </div>
             <div class="col-9">
-              <div  class="row d-flex flex-column">
+              <div class="row d-flex flex-column">
                 <div class="col">
                   <input type="file" name="imagePathInput" [(ngModel)]="filesToUpload" (change)="handleFileSelect($event)" nbInput fullWidth placeholder="path">
-                </div>
-                <div class="col m-2" *ngFor="let image64 of place.images">
-                  <img
-                  [src]="image64 | String64ToImage"
-                  alt="image"
-                  style="width: 80%;
-                  height: auto;">
                 </div>
               </div>
             </div>
           </div>
 
+          <div class="row form-group d-flex">
+            <div class="col-5 m-2 ml-auto mr-auto" *ngFor="let image64 of place.images; let i = index">
+              <!-- Delete Button -->
+              <div
+              (click)="place=null"
+              style="color: crimson;position: absolute;right: 0px;top: -11px;cursor: pointer;"
+              (click)="deleteFromImageArray(i)" >
+                <i class="fas fa-times-circle fa-2x"></i>
+              </div>
+              <img [src]="image64 | String64ToImage" alt="image" style="width: 100%;
+                  height: auto;">
+            </div>
+          </div>
 
         </nb-tab>
 
@@ -144,4 +150,3 @@
   </nb-card>
 
 </div>
-

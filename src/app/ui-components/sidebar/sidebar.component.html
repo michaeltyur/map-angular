@@ -25,9 +25,12 @@
   </nb-accordion>
 
   <div *ngIf="place">
+    <!-- Delete Button -->
     <div
-    (click)="place=null"
-    style="color: crimson;position: absolute;right: 27px;top: 32px;cursor: pointer;"><i class="fas fa-times-circle fa-2x"></i></div>
+      (click)="place=null"
+      style="color: crimson;position: absolute;right: 27px;top: 32px;cursor: pointer;">
+      <i class="fas fa-times-circle fa-2x"></i>
+   </div>
     <app-place-detail class="h-100" [place]="place">
     </app-place-detail>
   </div>

@@ -26,7 +26,6 @@ export class AdminComponent implements OnInit {
   booksFiltred: Book;
   imageDownloadPath: string;
   searchTerm: string;
-  placesFiltred: NbContextMenuItem[] = [{ title: "" }];
   searchStatus: string = "basic";
   isPlaceTab: boolean = true;
 
@@ -120,7 +119,6 @@ export class AdminComponent implements OnInit {
 
   searchPlace(): void {
     this.placeFiltred = this.places.filter(el => el.name.toLowerCase() === this.searchTerm.toLowerCase())[0];
-    this.placesFiltred = this.places.filter(el => el.name.toLowerCase().match(this.searchTerm.toLowerCase())).map(el => { return new NbContextMenuItem(el.name) });
     if (this.placeFiltred) {
       this.searchStatus = "success";
       this.place = this.placeFiltred;
@@ -251,7 +249,10 @@ export class AdminComponent implements OnInit {
       this.nbToastrService.warning("", "Error loading image");
     }
   }
-
+  deleteFromImageArray(index: number):void{
+    debugger;
+    let test = this.place.images.slice(index,1);
+  }
 
 }
 
