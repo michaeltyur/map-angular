@@ -1,19 +1,60 @@
 <nb-card *ngIf="place" class="h-100">
   <nb-card-header>
-    {{place.name}}
+    {{ place.name }}
   </nb-card-header>
   <nb-card-body class="">
     <div class="row h-100 d-flex flex-column justify-content-center">
       <div class="col mb-1 text-center">
-        {{place.text }}
+        {{ place.text }}
       </div>
-      <div *ngFor="let  image of place.images;let i = index" class="col text-center mt-2">
-         <img
-         style="width: 100%;height: auto;"
-         [src]="image | String64ToImage"
-         (error)="imageLoadError($event)" alt="place.name"
-         style="cursor: pointer;">
+      <div
+        *ngFor="let image of place.images; let i = index"
+        class="col text-center mt-2"
+      >
+        <img
+          style="width: 11rem;height: auto;cursor: pointer;"
+          [src]="image | String64ToImage"
+          (error)="imageLoadError($event)"
+          alt="image"
+          (click)="openImageWindow(place,i, dialog)"
+        />
       </div>
     </div>
   </nb-card-body>
 </nb-card>
+
+<ng-template #dialog let-data let-ref="dialogRef">
+  <nb-card>
+    <nb-card-header>
+      {{ data.name }}
+      <div
+        style="color: crimson;cursor: pointer;"
+        (click)="ref.close()"
+        class="float-right">
+        <i class="fas fa-times-circle fa-2x"></i>
+      </div>
+    </nb-card-header>
+    <nb-card-body>
+      <div class="row">
+        <div class="col">
+          <img
+            style="width: 25rem;height: auto;"
+            [src]="frontImagePath | String64ToImage"
+            (error)="imageLoadError($event)"
+            alt="image"
+          />
+        </div>
+      </div>
+    </nb-card-body>
+    <nb-card-footer>
+      <div class="row">
+        <div class="col text-center" style="cursor: pointer;" (click)="sliceLeft()">
+            <i class="far fa-arrow-alt-circle-left fa-3x"></i>
+        </div>
+        <div class="col text-center" style="cursor: pointer;"(click)="sliceRight()">
+            <i class="far fa-arrow-alt-circle-right fa-3x"></i>
+        </div>
+      </div>
+    </nb-card-footer>
+  </nb-card>
+</ng-template>
