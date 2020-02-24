@@ -242,6 +242,10 @@ export class AdminComponent implements OnInit {
     var binaryString = readerEvt.target.result;
     let base64textString = btoa(binaryString);
     if (base64textString) {
+      if (this.place.images.length>=3) {
+        this.nbToastrService.warning("", "Maximun number of images is 3");
+        return;
+      }
       this.place.images.unshift(base64textString);
       this.nbToastrService.success("", "Image added");
     }
@@ -250,16 +254,10 @@ export class AdminComponent implements OnInit {
     }
   }
   deleteFromImageArray(index: number):void{
-    debugger;
-    let test = this.place.images.slice(index,1);
+
+     this.place.images.splice(index,1);
+
   }
 
 }
 
-
-export class NbContextMenuItem {
-  title: string;
-  constructor(title: string) {
-    this.title = title;
-  }
-}

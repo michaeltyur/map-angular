@@ -88,7 +88,6 @@
             <div class="col-5 m-2 ml-auto mr-auto" *ngFor="let image64 of place.images; let i = index">
               <!-- Delete Button -->
               <div
-              (click)="place=null"
               style="color: crimson;position: absolute;right: 0px;top: -11px;cursor: pointer;"
               (click)="deleteFromImageArray(i)" >
                 <i class="fas fa-times-circle fa-2x"></i>
