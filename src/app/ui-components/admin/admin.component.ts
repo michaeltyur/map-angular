@@ -75,6 +75,12 @@ export class AdminComponent implements OnInit, OnDestroy {
   }
 
   savePlace(): void {
+
+   if(this.isPlaceExist(this.place)){
+    this.nbToastrService.warning("", "The place already exists");
+     return;
+   }
+
     if (this.isPlaceValid()) {
       this.loading = true;
       this.fireBaseService.createPlace(this.place).then(data => {
@@ -117,6 +123,7 @@ export class AdminComponent implements OnInit, OnDestroy {
       this.nbToastrService.warning("", "Please enter book name");
       return false;
     }
+
     return result;
   }
 
@@ -164,11 +171,14 @@ export class AdminComponent implements OnInit, OnDestroy {
   updateBook(): void {
 
     if (this.isBookValid()) {
+      this.loading = true;
       this.fireBaseService.updateBook(this.book).then(() => {
         this.nbToastrService.success("", "Updated");
+        this.loading = false;
       }).catch((error) => {
+        this.loading = false;
         console.error(error);
-        this.nbToastrService.danger("", "Error")
+        this.nbToastrService.danger("", "Error");
       })
     }
   }

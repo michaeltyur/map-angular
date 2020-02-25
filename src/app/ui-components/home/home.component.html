@@ -1,4 +1,15 @@
-<div class="container d-flex h-100 w-100">
+<div class="container d-flex flex-column h-100 w-100">
+  <nb-card style="height: 13rem;">
+    <nb-card-body>
+      <div class="row d-flex flex-row flex-nowrap">
+        <div class="col" *ngFor="let image64 of book.images; let i = index">
+          <img [src]="image64 | String64ToImage" alt="image" style="width: auto;
+                    height: 11rem;">
+        </div>
+      </div>
+
+    </nb-card-body>
+  </nb-card>
   <nb-card class="mb-0 ml-auto mr-auto align-self-center" style="width: 90%;">
     <nb-card-header>
       <h6>
