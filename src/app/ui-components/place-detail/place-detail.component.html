@@ -1,4 +1,4 @@
-<nb-card *ngIf="place" class="h-100">
+<nb-card *ngIf="place">
   <nb-card-header>
     {{ place.name }}
   </nb-card-header>
@@ -11,17 +11,8 @@
         <hr>
         {{ place.comment }}
       </div>
-      <div
-        *ngFor="let image of place.images; let i = index"
-        class="col text-center mt-2"
-      >
-        <img
-          style="width: 11rem;height: auto;cursor: pointer;"
-          [src]="image | String64ToImage"
-          (error)="imageLoadError($event)"
-          alt="image"
-          (click)="openImageWindow(place,i, dialog)"
-        />
+      <div *ngFor="let image of place.images; let i = index" class="col text-center mt-2">
+        <img style="width: 11rem;height: auto;cursor: pointer;" [src]="image | String64ToImage" (error)="imageLoadError($event)" alt="image" (click)="openImageWindow(place,i, dialog)" />
       </div>
     </div>
   </nb-card-body>
@@ -29,34 +20,40 @@
 
 <ng-template #dialog let-data let-ref="dialogRef">
   <nb-card>
-    <nb-card-header>
-      {{ data.name }}
-      <div
-        style="color: crimson;cursor: pointer;"
-        (click)="ref.close()"
-        class="float-right">
-        <i class="fas fa-times-circle fa-2x"></i>
+    <nb-card-header class="pb-2">
+      <div class="row">
+        <div class="col">
+          {{ data.name }}
+        </div>
+        <div class="col text-center">
+          {{selectedImageIndex+1}} из {{place.images.length}}
+        </div>
+        <div class="col">
+          <div style="color: crimson;cursor: pointer;" (click)="ref.close()" class="float-right">
+            <i class="fas fa-times-circle fa-2x"></i>
+          </div>
+        </div>
       </div>
+
     </nb-card-header>
     <nb-card-body>
       <div class="row">
         <div class="col">
-          <img
-            style="width: 25rem;height: auto;"
-            [src]="frontImagePath | String64ToImage"
-            (error)="imageLoadError($event)"
-            alt="image"
-          />
+          <img style="width: 30rem;height: auto;" [src]="frontImagePath | String64ToImage" (error)="imageLoadError($event)" alt="image" />
         </div>
       </div>
     </nb-card-body>
-    <nb-card-footer>
+    <nb-card-footer class="pt-1  pb-1">
       <div class="row">
-        <div class="col text-center" style="cursor: pointer;" (click)="sliceLeft()">
-            <i class="far fa-arrow-alt-circle-left fa-3x"></i>
+        <div class="col text-center">
+          <button nbButton hero shape="round" status="warning" (click)="sliceLeft()">
+            <i class="far fa-arrow-alt-circle-left fa-2x"></i>
+          </button>
         </div>
-        <div class="col text-center" style="cursor: pointer;"(click)="sliceRight()">
-            <i class="far fa-arrow-alt-circle-right fa-3x"></i>
+        <div class="col text-center">
+          <button nbButton hero shape="round" status="success" (click)="sliceRight()">
+            <i class="far fa-arrow-alt-circle-right fa-2x"></i>
+          </button>
         </div>
       </div>
     </nb-card-footer>

@@ -21,7 +21,8 @@ export class AdminComponent implements OnInit, OnDestroy {
   place: Place;
   places: Place[] = [];
   placeFiltred: Place;
-  filesToUpload: File;
+  placeFilesToUpload: File;
+  bookFilesToUpload: File;
 
   // Books
   book: Book;
@@ -74,7 +75,7 @@ export class AdminComponent implements OnInit, OnDestroy {
   }
 
   savePlace(): void {
-    if (this.place.name, this.place.latitude, this.place.longitude) {
+    if (this.isPlaceValid()) {
       this.loading = true;
       this.fireBaseService.createPlace(this.place).then(data => {
         this.nbToastrService.success("", "Added!!!");
@@ -85,41 +86,35 @@ export class AdminComponent implements OnInit, OnDestroy {
         this.nbToastrService.danger("", error);
       });
     }
-    else {
-      this.nbToastrService.warning("", "Please, fill the fields");
-    }
   }
 
   saveBook(): void {
-    if (this.book.name) {
+    if (this.isBookValid()) {
 
-      if (this.isPlaceExist(this.place)) {
-        this.nbToastrService.warning("", "The place exists already");
-        return;
-      }
-
-      if (!this.isValid()) {
-        return;
-      }
       this.loading = true;
       this.fireBaseService.createBook(this.book).then(data => {
         this.nbToastrService.success("", "Added!!!");
         this.loading = false;
-        this.book = new Book();
       }).catch((error) => {
         this.loading = false;
         this.nbToastrService.danger("", error);
       });
     }
-    else {
-      this.nbToastrService.warning("", "Please, fill the fields");
-    }
   }
 
-  isValid(): boolean {
+  isPlaceValid(): boolean {
     let result = true;
-    if (!this.place.latitude || !this.place.longitude) {
-      this.nbToastrService.warning("", "Please enter coordinates");
+    if (!this.place.name) {
+      this.nbToastrService.warning("", "Please enter place name");
+      return false;
+    }
+    return result;
+  }
+
+  isBookValid(): boolean {
+    let result = true;
+    if (!this.book.name) {
+      this.nbToastrService.warning("", "Please enter book name");
       return false;
     }
     return result;
@@ -153,7 +148,7 @@ export class AdminComponent implements OnInit, OnDestroy {
 
   updatePlace(): void {
 
-    if (this.isValid()) {
+    if (this.isPlaceValid()) {
       this.loading = true;
       this.fireBaseService.updatePlace(this.place).then(() => {
         this.nbToastrService.success("", "Updated");
@@ -168,7 +163,7 @@ export class AdminComponent implements OnInit, OnDestroy {
 
   updateBook(): void {
 
-    if (true) {
+    if (this.isBookValid()) {
       this.fireBaseService.updateBook(this.book).then(() => {
         this.nbToastrService.success("", "Updated");
       }).catch((error) => {
@@ -197,9 +192,11 @@ export class AdminComponent implements OnInit, OnDestroy {
   tabChanged(event): void {
     if (event.tabTitle === "Place") {
       this.isPlaceTab = true;
+      this.sidebarService.expand();
     }
     else {
       this.isPlaceTab = false;
+      this.sidebarService.collapse();
     }
   }
 
@@ -228,7 +225,7 @@ export class AdminComponent implements OnInit, OnDestroy {
   }
 
   handleFileSelect(evt) {
-    this.filesToUpload
+
     let files = evt.target.files;
 
     if (!files.length) {
@@ -243,8 +240,18 @@ export class AdminComponent implements OnInit, OnDestroy {
       let sizeKb = file.size / 1024;
 
       if (sizeKb > 500) {
-        this.filesToUpload = null;
+        if (this.isPlaceTab) {
+          this.placeFilesToUpload = null;
+        }
+        else {
+          this.bookFilesToUpload = null;
+        }
         this.nbToastrService.warning("", `File ${file.name} too big`);
+      }
+      else if (this.isPlaceTab && this.place.images.length >= this.maxNumberOfImages
+        || !this.isPlaceTab && this.book.images.length >= this.maxNumberOfImages) {
+        this.nbToastrService.warning("", `Maximun number of images is ${this.maxNumberOfImages}`);
+        return;
       }
       else {
         if (files && file) {
@@ -259,14 +266,16 @@ export class AdminComponent implements OnInit, OnDestroy {
   }
 
   private handleReaderLoaded(readerEvt) {
-    var binaryString = readerEvt.target.result;
+    let binaryString = readerEvt.target.result;
     let base64textString = btoa(binaryString);
     if (base64textString) {
-      if (this.place.images.length >= this.maxNumberOfImages) {
-        this.nbToastrService.warning("", `Maximun number of images is ${this.maxNumberOfImages}`);
-        return;
+
+      if (this.isPlaceTab) {
+        this.place.images.unshift(base64textString);
       }
-      this.place.images.unshift(base64textString);
+      else {
+        this.book.images.unshift(base64textString);
+      }
       this.nbToastrService.success("", "Image added");
     }
     else {
@@ -275,9 +284,17 @@ export class AdminComponent implements OnInit, OnDestroy {
   }
 
   deleteFromImageArray(index: number): void {
-    this.place.images.splice(index, 1);
+    if (this.place.images) {
+      this.place.images.splice(index, 1);
+    }
   }
 
+  deleteFromBookImageArray(index: number): void {
+    if (this.book.images.length) {
+      this.book.images.splice(index, 1);
+    }
+
+  }
 
 
 }
