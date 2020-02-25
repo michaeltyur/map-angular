@@ -23,7 +23,7 @@ export class FireBaseService {
     .orderBy('name','asc'))
     .snapshotChanges()
     .pipe(
-      tap(data=>this.places = data.map(e => {
+      tap(data=> this.places = data.map(e => {
         return {
           id: e.payload.doc.id,
           ...e.payload.doc.data()
@@ -39,6 +39,14 @@ export class FireBaseService {
         el.images.push("")
       }
       this.updatePlace(el).then();
+    })
+  }
+  actionWithFireBase():void{
+    this.places.forEach(el=>{
+      if (el.images && el.images.length && el.images[0]==="") {
+        el.images=[];
+        this.updatePlace(el).then();
+      }
     })
   }
 

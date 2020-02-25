@@ -24,11 +24,11 @@
     </nb-accordion-item>
   </nb-accordion>
 
-  <div *ngIf="place">
+  <div *ngIf="place" class="h-100">
     <!-- Delete Button -->
     <div
       (click)="place=null"
-      style="color: crimson;position: absolute;right: 27px;top: 32px;cursor: pointer;">
+      style="color: crimson;position: absolute;right: 27px;top: 32px;cursor: pointer;z-index: 10000;">
       <i class="fas fa-times-circle fa-2x"></i>
    </div>
     <app-place-detail class="h-100" [place]="place">

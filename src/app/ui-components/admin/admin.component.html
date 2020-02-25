@@ -1,6 +1,6 @@
 <div class="container d-flex h-100 w-100">
 
-  <nb-card class="mb-0 ml-auto mr-auto align-self-center" style="width: 90%;max-height: 90%;">
+  <nb-card [nbSpinner]="loading" nbSpinnerSize="giant" class="mb-0 ml-auto mr-auto align-self-center" style="width: 90%;max-height: 90%;">
     <nb-card-header>
       <div class="row">
         <div class="col">
@@ -8,10 +8,6 @@
             Details
           </h6>
         </div>
-        <!-- <div class="col">
-          <input type="text" [status]="searchStatus" shape="round" [(ngModel)]="searchTerm" (input)="searchPlace()" name="searchInput" nbInput fullWidth placeholder="name" [nbContextMenu]="placesFiltred" nbContextMenuTrigger="focus" nbContextMenuPlacement="right"
-            nbContextMenuTag="search-context-menu">
-        </div> -->
       </div>
     </nb-card-header>
     <nb-card-body class="">
@@ -25,17 +21,27 @@
               <label for="nameInput" class="col-form-label">place name:</label>
             </div>
             <div class="col-9">
-              <input type="text" name="nameInput" [(ngModel)]="place.name" nbInput fullWidth status="basic" placeholder="place name">
+              <input type="text" name="nameInput" [(ngModel)]="place.name" nbInput fullWidth status="basic" placeholder="название географического места">
             </div>
           </div>
 
-          <!-- Description -->
+          <!-- Text -->
           <div class="row form-group">
             <div class="col-3">
-              <label for="descriptionInput" class="col-form-label">description:</label>
+              <label for="descriptionInput" class="col-form-label">text:</label>
             </div>
             <div class="col-9">
-              <textarea rows="4" type="text" name="descriptionInput" [(ngModel)]="place.text" nbInput fullWidth status="basic" placeholder="description"></textarea>
+              <textarea rows="4" type="text" name="descriptionInput" [(ngModel)]="place.text" nbInput fullWidth status="basic" placeholder="текст из произведения"></textarea>
+            </div>
+          </div>
+
+          <!-- Comment  -->
+          <div class="row form-group">
+            <div class="col-3">
+              <label for="commentInput" class="col-form-label">comment:</label>
+            </div>
+            <div class="col-9">
+              <input type="text" name="commentInput" [(ngModel)]="place.comment" nbInput fullWidth status="basic" placeholder="комментарий">
             </div>
           </div>
 
@@ -78,7 +84,7 @@
             <div class="col-9">
               <div class="row d-flex flex-column">
                 <div class="col">
-                  <input type="file" name="imagePathInput" [(ngModel)]="filesToUpload" (change)="handleFileSelect($event)" nbInput fullWidth placeholder="path">
+                  <input type="file" name="imagePathInput" multiple [(ngModel)]="filesToUpload" (change)="handleFileSelect($event)" nbInput fullWidth placeholder="path">
                 </div>
               </div>
             </div>
@@ -127,6 +133,13 @@
               <label for="bookDescriptionInput" class="col-form-label">text:</label>
             </div>
             <div class="col-11">
+              <!-- <textarea type="text" rows="12" name="bookDescriptionInput" [(ngModel)]="book.text" nbInput fullWidth status="basic" placeholder="description"></textarea> -->
+            </div>
+          </div>
+
+          <!-- Text  -->
+          <div class="row form-group">
+            <div class="col">
               <textarea type="text" rows="12" name="bookDescriptionInput" [(ngModel)]="book.text" nbInput fullWidth status="basic" placeholder="description"></textarea>
             </div>
           </div>

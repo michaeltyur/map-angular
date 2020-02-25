@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit, Inject, OnDestroy } from '@angular/core';
 import { Place } from 'src/app/shared/models/coordinates';
 import { FireBaseService } from 'src/app/shared/services/fire-base.service';
 import { NbToastrService, NbMenuService, NB_WINDOW, NbSidebarService } from '@nebular/theme';
@@ -6,14 +6,17 @@ import { filter, map } from 'rxjs/operators';
 import { Book } from 'src/app/shared/models/book-model';
 import { SearchService } from 'src/app/shared/services/search.service';
 import { DomSanitizer } from '@angular/platform-browser';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-admin',
   templateUrl: './admin.component.html',
   styleUrls: ['./admin.component.scss']
 })
-export class AdminComponent implements OnInit {
+export class AdminComponent implements OnInit, OnDestroy {
 
+  subscription = new Subscription();
+  searchInBookTerm: string;
   // Places
   place: Place;
   places: Place[] = [];
@@ -24,20 +27,20 @@ export class AdminComponent implements OnInit {
   book: Book;
   books: Book[] = [];
   booksFiltred: Book;
+
+  loading: boolean = false;
   imageDownloadPath: string;
   searchTerm: string;
   searchStatus: string = "basic";
   isPlaceTab: boolean = true;
-
+  maxNumberOfImages = 5;
 
   constructor(
     private fireBaseService: FireBaseService,
     private nbToastrService: NbToastrService,
-    private nbMenuService: NbMenuService,
     private sidebarService: NbSidebarService,
     @Inject(NB_WINDOW) private window,
     private searchService: SearchService,
-    private _sanitizer: DomSanitizer
   ) {
     this.place = new Place();
     this.book = new Book();
@@ -47,35 +50,38 @@ export class AdminComponent implements OnInit {
     this.getPlaces();
     this.getBooks();
     this.sidebarService.expand();
-    this.nbMenuService.onItemClick()
-      .pipe(
-        filter(({ tag }) => tag === 'search-context-menu'),
-        map(({ item: { title } }) => title),
-      )
-      .subscribe((title: string) => {
-        this.searchTerm = title;
-        this.searchPlace();
-      });
 
     // Close Details Menu
     this.searchService.placeDetailsEmitter$.emit(null);
 
-    this.searchService.sideBarSelectItemEmitter$.subscribe(res => {
+    // Place Selected
+    this.subscription.add(this.searchService.sideBarSelectItemEmitter$.subscribe(res => {
       if (res) {
         this.place = res;
       }
+    }));
+
+    // Search in Book
+    this.subscription.add();
+    this.searchService.searchTextInBookTermEmitter$.subscribe(res => {
+      this.searchInBookTerm = res;
     })
 
   }
 
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
+  }
+
   savePlace(): void {
     if (this.place.name, this.place.latitude, this.place.longitude) {
-
+      this.loading = true;
       this.fireBaseService.createPlace(this.place).then(data => {
         this.nbToastrService.success("", "Added!!!");
+        this.loading = false;
         this.place = new Place();
       }).catch((error) => {
-        debugger;
+        this.loading = false;
         this.nbToastrService.danger("", error);
       });
     }
@@ -95,11 +101,13 @@ export class AdminComponent implements OnInit {
       if (!this.isValid()) {
         return;
       }
-
+      this.loading = true;
       this.fireBaseService.createBook(this.book).then(data => {
         this.nbToastrService.success("", "Added!!!");
+        this.loading = false;
         this.book = new Book();
       }).catch((error) => {
+        this.loading = false;
         this.nbToastrService.danger("", error);
       });
     }
@@ -146,9 +154,12 @@ export class AdminComponent implements OnInit {
   updatePlace(): void {
 
     if (this.isValid()) {
+      this.loading = true;
       this.fireBaseService.updatePlace(this.place).then(() => {
         this.nbToastrService.success("", "Updated");
+        this.loading = false;
       }).catch((error) => {
+        this.loading = false;
         console.error(error);
         this.nbToastrService.danger("", "Error")
       })
@@ -207,8 +218,6 @@ export class AdminComponent implements OnInit {
     }
   }
 
-
-
   deletePlace(): void {
     if (this.place) {
       this.fireBaseService.deletePlace(this.place.id).then(() => {
@@ -221,29 +230,40 @@ export class AdminComponent implements OnInit {
   handleFileSelect(evt) {
     this.filesToUpload
     let files = evt.target.files;
-    let file = files[0];
-    let sizeKb = file.size / 1024;
-    if (sizeKb > 500) {
-      this.filesToUpload = null;
-      this.nbToastrService.warning("", "Image too big");
+
+    if (!files.length) {
+      this.nbToastrService.warning("", "Please select image");
       return;
     }
 
-    if (files && file) {
-      var reader = new FileReader();
+    Object.keys(files).forEach(key => {
 
-      reader.onload = this._handleReaderLoaded.bind(this);
+      const file = files[key];
 
-      reader.readAsBinaryString(file);
-    }
+      let sizeKb = file.size / 1024;
+
+      if (sizeKb > 500) {
+        this.filesToUpload = null;
+        this.nbToastrService.warning("", `File ${file.name} too big`);
+      }
+      else {
+        if (files && file) {
+          var reader = new FileReader();
+          reader.onload = this.handleReaderLoaded.bind(this);
+          reader.readAsBinaryString(file);
+        }
+      }
+
+
+    })
   }
 
-  _handleReaderLoaded(readerEvt) {
+  private handleReaderLoaded(readerEvt) {
     var binaryString = readerEvt.target.result;
     let base64textString = btoa(binaryString);
     if (base64textString) {
-      if (this.place.images.length>=3) {
-        this.nbToastrService.warning("", "Maximun number of images is 3");
+      if (this.place.images.length >= this.maxNumberOfImages) {
+        this.nbToastrService.warning("", `Maximun number of images is ${this.maxNumberOfImages}`);
         return;
       }
       this.place.images.unshift(base64textString);
@@ -253,11 +273,12 @@ export class AdminComponent implements OnInit {
       this.nbToastrService.warning("", "Error loading image");
     }
   }
-  deleteFromImageArray(index: number):void{
 
-     this.place.images.splice(index,1);
-
+  deleteFromImageArray(index: number): void {
+    this.place.images.splice(index, 1);
   }
+
+
 
 }
 

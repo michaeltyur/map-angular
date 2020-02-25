@@ -3,6 +3,7 @@ export class Place {
   id: string;
   name: string;
   text: string;
+  comment:string;
   latitude: number;
   longitude: number;
   zoom: number;

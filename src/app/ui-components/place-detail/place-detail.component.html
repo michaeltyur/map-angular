@@ -3,9 +3,13 @@
     {{ place.name }}
   </nb-card-header>
   <nb-card-body class="">
-    <div class="row h-100 d-flex flex-column justify-content-center">
+    <div class="row h-100 d-flex flex-column justify-content-start">
       <div class="col mb-1 text-center">
         {{ place.text }}
+      </div>
+      <div *ngIf="place.comment" class="col text-center">
+        <hr>
+        {{ place.comment }}
       </div>
       <div
         *ngFor="let image of place.images; let i = index"
