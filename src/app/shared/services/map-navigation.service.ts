@@ -1,5 +1,5 @@
 import { Injectable, EventEmitter } from '@angular/core';
-import { Place } from '../models/coordinates';
+import { Place } from '../models/firebase-collection-models';
 
 
 @Injectable({

@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { Place } from 'src/app/shared/models/coordinates';
 import { FireBaseService } from 'src/app/shared/services/fire-base.service';
-import { Book } from 'src/app/shared/models/book-model';
 import { Router } from '@angular/router';
 import { NbSidebarService } from '@nebular/theme';
 import { SearchService } from 'src/app/shared/services/search.service';
+import { Place, Book, BookImages } from 'src/app/shared/models/firebase-collection-models';
 
 @Component({
   selector: 'app-home',
@@ -14,18 +13,20 @@ import { SearchService } from 'src/app/shared/services/search.service';
 export class HomeComponent implements OnInit {
 
   places: Place[];
-  books:Book[];
-  book:Book;
-  searchTerm:string;
+  books: Book[];
+  bookImages: BookImages;
+  book: Book;
+  searchTerm: string;
 
   constructor(
     private fireBaseService: FireBaseService,
     private sidebarService: NbSidebarService,
-    private router:Router,
-    private searchService:SearchService
-    ) {
-      this.book = new Book();
-     }
+    private router: Router,
+    private searchService: SearchService
+  ) {
+    this.book = new Book();
+    this.bookImages = new BookImages();
+  }
 
   ngOnInit(): void {
     this.sidebarService.expand();
@@ -34,10 +35,15 @@ export class HomeComponent implements OnInit {
 
     this.searchService.placeDetailsEmitter$.emit(null);
 
-    this.searchService.searchTextInBookTermEmitter$.subscribe((data)=>{
+    this.searchService.searchTextInBookTermEmitter$.subscribe((data) => {
       this.searchTerm = data;
     })
-    this.fireBaseService.addImagesArray();
+  }
+
+  getBookImages(docID: string): void {
+    this.fireBaseService.getBookImagesByDocID(docID).subscribe(data => {
+      this.bookImages = data.data();
+    })
   }
 
   getPlaces(): void {
@@ -61,13 +67,14 @@ export class HomeComponent implements OnInit {
         } as Book;
       });
       this.book = this.books[0];
+      this.getBookImages(this.book.id);
     });
   }
 
-  goToMap(place:Place):void{
-   // this.router.navigate(['/google-map'],{queryParams:{latitude:place.latitude,longitude:place.longitude}});
+  goToMap(place: Place): void {
+    // this.router.navigate(['/google-map'],{queryParams:{latitude:place.latitude,longitude:place.longitude}});
 
-    this.router.navigate(['/google-map',place.latitude,place.longitude]);
+    this.router.navigate(['/google-map', place.latitude, place.longitude]);
   }
 
 }

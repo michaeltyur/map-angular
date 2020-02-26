@@ -1,8 +1,8 @@
 <div class="container d-flex flex-column h-100 w-100">
-  <nb-card style="height: 13rem;">
+  <nb-card style="height: 13rem;width: 90%;" class="mb-0 ml-auto mr-auto mb-2">
     <nb-card-body>
-      <div class="row d-flex flex-row flex-nowrap">
-        <div class="col" *ngFor="let image64 of book.images; let i = index">
+      <div class="row d-flex flex-row justify-content-center flex-nowrap">
+        <div class="col text-center" *ngFor="let image64 of bookImages.images; let i = index">
           <img [src]="image64 | String64ToImage" alt="image" style="width: auto;
                     height: 11rem;">
         </div>
@@ -10,7 +10,7 @@
 
     </nb-card-body>
   </nb-card>
-  <nb-card class="mb-0 ml-auto mr-auto align-self-center" style="width: 90%;">
+  <nb-card class="mb-0 ml-auto mr-auto" style="width: 90%;">
     <nb-card-header>
       <h6>
         {{book.name}}

@@ -2,6 +2,17 @@
 
   <nb-layout-header fixed>
     <div class="row w-100">
+      <div *ngIf="false" class="col-1 text-center">
+        <button nbButton hero status="danger" (click)="fireBaseAction()">
+          <i class="fas fa-radiation-alt fa-lg"></i>
+        </button>
+      </div>
+      <div *ngIf="!isSideBarCollapsed" class="col-1 text-center text-danger my-auto" style="cursor: pointer;" (click)="collapseSideBar()">
+        <i class="far fa-window-close fa-2x"></i>
+      </div>
+      <div *ngIf="isSideBarCollapsed" class="col-1 text-center text-warning my-auto" style="cursor: pointer;" (click)="expandSideBar()">
+        <i class="fas fa-bars fa-2x"></i>
+      </div>
       <div class="col-2 text-center">
         <nb-select outline placeholder="Select Theme" (selectedChange)="changeTheme($event)">
           <nb-option value="corporate">Corporate</nb-option>
@@ -14,25 +25,10 @@
         <!-- <h3 class="header-title">Tedious literature it can be interesting !!!</h3> -->
         <div class="row">
           <div class="col text-right">
-            <input
-            type="text"
-            shape="round"
-            name="searchPlaceInput"
-            nbInput
-            fullWidth
-            placeholder="Поиск по географическому названию"
-            [(ngModel)]="placeSearchTerm">
+            <input type="text" shape="round" name="searchPlaceInput" nbInput fullWidth placeholder="Поиск по географическому названию" (input)="placeSearchInput()" [(ngModel)]="placeSearchTerm">
           </div>
           <div class="col text-left">
-            <input
-            type="text"
-            shape="round"
-            name="searchBookInput"
-            nbInput
-            fullWidth
-            placeholder="Поиск по произведению"
-            [(ngModel)]="bookSearchTerm"
-            (input)="bookSearchInput()">
+            <input type="text" shape="round" name="searchBookInput" nbInput fullWidth placeholder="Поиск по произведению" [(ngModel)]="bookSearchTerm" (input)="bookSearchInput()">
           </div>
         </div>
       </div>

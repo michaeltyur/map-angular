@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { MapNavigationService } from 'src/app/shared/services/map-navigation.service';
-import { Place } from 'src/app/shared/models/coordinates';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { filter, switchMap } from 'rxjs/operators';
 import { NbSidebarService } from '@nebular/theme';
 import { FireBaseService } from 'src/app/shared/services/fire-base.service';
 import { SearchService } from 'src/app/shared/services/search.service';
+import { Place } from 'src/app/shared/models/firebase-collection-models';
 
 @Component({
   selector: 'app-google-map',
@@ -46,7 +46,7 @@ export class GoogleMapComponent implements OnInit {
 
     this.latitude = +this.route.snapshot.paramMap.get('latitude') ? +this.route.snapshot.paramMap.get('latitude') : this.latitude;
     this.longitude = +this.route.snapshot.paramMap.get('longitude') ? +this.route.snapshot.paramMap.get('longitude') : this.longitude;
-    this.sidebarService.expand();
+    //this.sidebarService.expand();
 
   }
 

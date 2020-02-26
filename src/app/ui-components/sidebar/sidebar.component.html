@@ -4,7 +4,7 @@
   </nb-card-body> -->
   <nb-accordion *ngIf="!place">
 
-    <nb-accordion-item *ngFor="let item of places | SearchBookFilter: placeSearchTerm" (collapsedChange)="collapsedChange(item)">
+    <nb-accordion-item *ngFor="let item of places | SearchBookFilter: placeSearchTerm" (click)="collapsedChange(item)">
       <nb-accordion-item-header>{{item.name}}</nb-accordion-item-header>
       <nb-accordion-item-body>
 
@@ -31,7 +31,7 @@
       style="color: crimson;position: absolute;right: 27px;top: 32px;cursor: pointer;z-index: 10000;">
       <i class="fas fa-times-circle fa-2x"></i>
    </div>
-    <app-place-detail class="h-100" [place]="place">
+    <app-place-detail class="h-100" [place]="place" [placeImages]="placeImages">
     </app-place-detail>
   </div>
 

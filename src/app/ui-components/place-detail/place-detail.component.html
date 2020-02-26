@@ -11,9 +11,12 @@
         <hr>
         {{ place.comment }}
       </div>
-      <div *ngFor="let image of place.images; let i = index" class="col text-center mt-2">
-        <img style="width: 11rem;height: auto;cursor: pointer;" [src]="image | String64ToImage" (error)="imageLoadError($event)" alt="image" (click)="openImageWindow(place,i, dialog)" />
+      <div *ngIf="placeImages">
+        <div *ngFor="let image of placeImages.images; let i = index" class="col text-center mt-2">
+          <img style="width: 11rem;height: auto;cursor: pointer;" [src]="image | String64ToImage" (error)="imageLoadError($event)" alt="image" (click)="openImageWindow(place,i, dialog)" />
+        </div>
       </div>
+
     </div>
   </nb-card-body>
 </nb-card>
@@ -26,7 +29,7 @@
           {{ data.name }}
         </div>
         <div class="col text-center">
-          {{selectedImageIndex+1}} из {{place.images.length}}
+          <span *ngIf="placeImages">{{selectedImageIndex+1}} из {{placeImages.images.length}}</span>
         </div>
         <div class="col">
           <div style="color: crimson;cursor: pointer;" (click)="ref.close()" class="float-right">

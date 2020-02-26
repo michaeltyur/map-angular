@@ -1,12 +1,11 @@
 import { Component, OnInit, Inject, OnDestroy } from '@angular/core';
-import { Place } from 'src/app/shared/models/coordinates';
 import { FireBaseService } from 'src/app/shared/services/fire-base.service';
 import { NbToastrService, NbMenuService, NB_WINDOW, NbSidebarService } from '@nebular/theme';
 import { filter, map } from 'rxjs/operators';
-import { Book } from 'src/app/shared/models/book-model';
 import { SearchService } from 'src/app/shared/services/search.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Subscription } from 'rxjs';
+import { Place, Book, PlaceImages, BookImages } from 'src/app/shared/models/firebase-collection-models';
 
 @Component({
   selector: 'app-admin',
@@ -23,6 +22,12 @@ export class AdminComponent implements OnInit, OnDestroy {
   placeFiltred: Place;
   placeFilesToUpload: File;
   bookFilesToUpload: File;
+
+  // PlaceImages
+  placeImages:PlaceImages = new PlaceImages();
+
+  // BookImages
+  bookImages:BookImages = new BookImages();
 
   // Books
   book: Book;
@@ -45,28 +50,31 @@ export class AdminComponent implements OnInit, OnDestroy {
   ) {
     this.place = new Place();
     this.book = new Book();
+    this.placeImages  = new PlaceImages();
+    this.bookImages = new BookImages();
   }
 
   ngOnInit(): void {
     this.getPlaces();
     this.getBooks();
     this.sidebarService.expand();
-
     // Close Details Menu
     this.searchService.placeDetailsEmitter$.emit(null);
 
     // Place Selected
-    this.subscription.add(this.searchService.sideBarSelectItemEmitter$.subscribe(res => {
+    this.subscription.add(this.searchService.sideBarSelectItemEmitter$.subscribe((res:Place) => {
       if (res) {
         this.place = res;
+        // get images
+        this.getPlaceImages(res.id);
       }
     }));
 
     // Search in Book
-    this.subscription.add();
-    this.searchService.searchTextInBookTermEmitter$.subscribe(res => {
+    this.subscription.add(this.searchService.searchTextInBookTermEmitter$.subscribe(res => {
       this.searchInBookTerm = res;
-    })
+    }));
+
 
   }
 
@@ -74,19 +82,31 @@ export class AdminComponent implements OnInit, OnDestroy {
     this.subscription.unsubscribe();
   }
 
+  getPlaceImages(docID:string):void{
+    this.fireBaseService.getPlaceImagesByDocID(docID).subscribe(data=>{
+      this.placeImages = data as PlaceImages;
+    })
+  }
+
+
   savePlace(): void {
 
-   if(this.isPlaceExist(this.place)){
-    this.nbToastrService.warning("", "The place already exists");
-     return;
-   }
+    if (this.isPlaceExist(this.place)) {
+      this.nbToastrService.warning("", "The place already exists");
+      return;
+    }
 
     if (this.isPlaceValid()) {
       this.loading = true;
       this.fireBaseService.createPlace(this.place).then(data => {
-        this.nbToastrService.success("", "Added!!!");
-        this.loading = false;
-        this.place = new Place();
+        let clearName = this.place.name.replace(/\s+/g, '').toLowerCase();
+        this.placeImages.id = clearName;
+        this.fireBaseService.createPlaceImages(this.placeImages).then(()=>{
+          this.nbToastrService.success("", "Added!!!");
+          this.loading = false;
+          //this.place = new Place();
+        });
+
       }).catch((error) => {
         this.loading = false;
         this.nbToastrService.danger("", error);
@@ -158,8 +178,10 @@ export class AdminComponent implements OnInit, OnDestroy {
     if (this.isPlaceValid()) {
       this.loading = true;
       this.fireBaseService.updatePlace(this.place).then(() => {
+        this.fireBaseService.updatePlaceImages(this.placeImages).then(()=>{
         this.nbToastrService.success("", "Updated");
         this.loading = false;
+        });
       }).catch((error) => {
         this.loading = false;
         console.error(error);
@@ -258,8 +280,8 @@ export class AdminComponent implements OnInit, OnDestroy {
         }
         this.nbToastrService.warning("", `File ${file.name} too big`);
       }
-      else if (this.isPlaceTab && this.place.images.length >= this.maxNumberOfImages
-        || !this.isPlaceTab && this.book.images.length >= this.maxNumberOfImages) {
+      else if (this.isPlaceTab && this.placeImages.images.length >= this.maxNumberOfImages
+        || !this.isPlaceTab && this.bookImages.images.length >= this.maxNumberOfImages) {
         this.nbToastrService.warning("", `Maximun number of images is ${this.maxNumberOfImages}`);
         return;
       }
@@ -281,10 +303,10 @@ export class AdminComponent implements OnInit, OnDestroy {
     if (base64textString) {
 
       if (this.isPlaceTab) {
-        this.place.images.unshift(base64textString);
+        this.placeImages.images.unshift(base64textString);
       }
       else {
-        this.book.images.unshift(base64textString);
+        this.bookImages.images.unshift(base64textString);
       }
       this.nbToastrService.success("", "Image added");
     }
@@ -294,18 +316,28 @@ export class AdminComponent implements OnInit, OnDestroy {
   }
 
   deleteFromImageArray(index: number): void {
-    if (this.place.images) {
-      this.place.images.splice(index, 1);
+    if (this.placeImages.images) {
+      this.placeImages.images.splice(index, 1);
     }
   }
 
   deleteFromBookImageArray(index: number): void {
-    if (this.book.images.length) {
-      this.book.images.splice(index, 1);
+    if (this.bookImages.images.length) {
+      this.bookImages.images.splice(index, 1);
     }
 
   }
 
+  addNew():void{
+    if (this.isPlaceTab) {
+       this.place = new Place();
+       this.placeImages = new PlaceImages();
+    }
+    else{
+      this.book = new Book();
+      this.bookImages = new BookImages();
+    }
+  }
 
 }
 

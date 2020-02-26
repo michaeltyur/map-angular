@@ -23,6 +23,8 @@ import { TextFormatPipe } from './shared/pipe/text-format-pipe';
 import { ColorTextSearchPipe } from './shared/pipe/color-text-search-pipe';
 import { PlaceDetailComponent } from './ui-components/place-detail/place-detail.component';
 import { String64ToImagePipe } from './shared/pipe/string64-to-image-pipe';
+import { AngularEditorModule } from '@kolkov/angular-editor';
+import { HttpClientModule} from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -65,6 +67,8 @@ import { String64ToImagePipe } from './shared/pipe/string64-to-image-pipe';
     NbTooltipModule,
     NbDialogModule.forRoot(),
     NbSpinnerModule,
+    AngularEditorModule,
+    HttpClientModule,
     // firebase
     AngularFireModule.initializeApp(environment.firebaseConfig),
     AngularFirestoreModule,

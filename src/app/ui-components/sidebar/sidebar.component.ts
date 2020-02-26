@@ -1,10 +1,10 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { MapNavigationService } from 'src/app/shared/services/map-navigation.service';
-import { Place } from 'src/app/shared/models/coordinates';
 import { FireBaseService } from 'src/app/shared/services/fire-base.service';
 import { Router } from '@angular/router';
 import { SearchService } from 'src/app/shared/services/search.service';
 import { NbSidebarService } from '@nebular/theme';
+import { Place, PlaceImages } from 'src/app/shared/models/firebase-collection-models';
 
 @Component({
   selector: 'app-sidebar',
@@ -16,6 +16,7 @@ export class SidebarComponent implements OnInit {
   places: Place[] = [];
   place: Place;
   placeDetail: Place;
+  placeImages :PlaceImages;
 
   @Input() placeSearchTerm: string = "";
   @Input() bookSearchTerm: string = "";
@@ -33,6 +34,8 @@ export class SidebarComponent implements OnInit {
     this.getPlaces();
     this.searchService.placeDetailsEmitter$.subscribe(data => {
       this.place = data;
+      if(data)
+        this.getPlaceImages(this.place.id);
     })
   }
 
@@ -57,7 +60,7 @@ export class SidebarComponent implements OnInit {
       })
     });
   }
-  collapsedChange(item: Place): void {
+  collapsedChange( item: Place): void {
     this.searchService.sideBarSelectItemEmitter$.emit(item);
   }
   openDetails(place: Place): void {
@@ -65,4 +68,11 @@ export class SidebarComponent implements OnInit {
     this.place = place;
     this.sidebarService.expand();
   }
+
+  getPlaceImages(docID: string): void {
+    this.fireBaseService.getPlaceImagesByDocID(docID).subscribe(data => {
+      this.placeImages = data;
+    })
+  }
+
 }
