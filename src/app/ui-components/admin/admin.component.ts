@@ -24,10 +24,10 @@ export class AdminComponent implements OnInit, OnDestroy {
   bookFilesToUpload: File;
 
   // PlaceImages
-  placeImages:PlaceImages = new PlaceImages();
+  placeImages: PlaceImages = new PlaceImages();
 
   // BookImages
-  bookImages:BookImages = new BookImages();
+  bookImages: BookImages = new BookImages();
 
   // Books
   book: Book;
@@ -50,7 +50,7 @@ export class AdminComponent implements OnInit, OnDestroy {
   ) {
     this.place = new Place();
     this.book = new Book();
-    this.placeImages  = new PlaceImages();
+    this.placeImages = new PlaceImages();
     this.bookImages = new BookImages();
   }
 
@@ -62,7 +62,7 @@ export class AdminComponent implements OnInit, OnDestroy {
     this.searchService.placeDetailsEmitter$.emit(null);
 
     // Place Selected
-    this.subscription.add(this.searchService.sideBarSelectItemEmitter$.subscribe((res:Place) => {
+    this.subscription.add(this.searchService.sideBarSelectItemEmitter$.subscribe((res: Place) => {
       if (res) {
         this.place = res;
         // get images
@@ -75,19 +75,24 @@ export class AdminComponent implements OnInit, OnDestroy {
       this.searchInBookTerm = res;
     }));
 
-
   }
 
   ngOnDestroy() {
     this.subscription.unsubscribe();
   }
 
-  getPlaceImages(docID:string):void{
-    this.fireBaseService.getPlaceImagesByDocID(docID).subscribe(data=>{
+  getPlaceImages(docID: string): void {
+    this.subscription.add(this.fireBaseService.getPlaceImagesByDocID(docID).subscribe(data => {
       this.placeImages = data as PlaceImages;
-    })
+    }));
+
   }
 
+  getBookImages(docID: string): void {
+    this.fireBaseService.getBookImagesByDocID(docID).subscribe(data => {
+      this.bookImages = data.data() as BookImages;
+    })
+  }
 
   savePlace(): void {
 
@@ -98,10 +103,10 @@ export class AdminComponent implements OnInit, OnDestroy {
 
     if (this.isPlaceValid()) {
       this.loading = true;
-      this.fireBaseService.createPlace(this.place).then(data => {
+      this.fireBaseService.createPlace(this.place, this.placeImages).then(data => {
         let clearName = this.place.name.replace(/\s+/g, '').toLowerCase();
         this.placeImages.id = clearName;
-        this.fireBaseService.createPlaceImages(this.placeImages).then(()=>{
+        this.fireBaseService.createPlaceImages(this.placeImages).then(() => {
           this.nbToastrService.success("", "Added!!!");
           this.loading = false;
           //this.place = new Place();
@@ -118,7 +123,7 @@ export class AdminComponent implements OnInit, OnDestroy {
     if (this.isBookValid()) {
 
       this.loading = true;
-      this.fireBaseService.createBook(this.book).then(data => {
+      this.fireBaseService.createBook(this.book, this.bookImages).then(data => {
         this.nbToastrService.success("", "Added!!!");
         this.loading = false;
       }).catch((error) => {
@@ -163,24 +168,25 @@ export class AdminComponent implements OnInit, OnDestroy {
   }
 
   getPlaces(): void {
-    this.fireBaseService.getPlaces().subscribe(data => {
+    this.subscription.add(this.fireBaseService.getPlaces().subscribe(data => {
       this.places = data.map(e => {
         return {
           id: e.payload.doc.id,
           ...e.payload.doc.data()
         } as Place;
       })
-    });
+    }));
+
   }
 
   updatePlace(): void {
 
     if (this.isPlaceValid()) {
       this.loading = true;
-      this.fireBaseService.updatePlace(this.place).then(() => {
-        this.fireBaseService.updatePlaceImages(this.placeImages).then(()=>{
-        this.nbToastrService.success("", "Updated");
-        this.loading = false;
+      this.fireBaseService.updatePlace(this.place, this.placeImages).then(() => {
+        this.fireBaseService.updatePlaceImages(this.placeImages).then(() => {
+          this.nbToastrService.success("", "Updated");
+          this.loading = false;
         });
       }).catch((error) => {
         this.loading = false;
@@ -194,7 +200,7 @@ export class AdminComponent implements OnInit, OnDestroy {
 
     if (this.isBookValid()) {
       this.loading = true;
-      this.fireBaseService.updateBook(this.book).then(() => {
+      this.fireBaseService.updateBook(this.book, this.bookImages).then(() => {
         this.nbToastrService.success("", "Updated");
         this.loading = false;
       }).catch((error) => {
@@ -210,7 +216,7 @@ export class AdminComponent implements OnInit, OnDestroy {
   }
 
   getBooks(): void {
-    this.fireBaseService.getBooks().subscribe(data => {
+    this.subscription.add(this.fireBaseService.getBooks().subscribe(data => {
       this.books = data.map(e => {
         return {
           id: e.payload.doc.id,
@@ -218,7 +224,9 @@ export class AdminComponent implements OnInit, OnDestroy {
         } as Book;
       })
       this.book = this.books[0];
-    });
+      this.getBookImages(this.book.id);
+    }));
+
   }
 
   tabChanged(event): void {
@@ -251,6 +259,7 @@ export class AdminComponent implements OnInit, OnDestroy {
     if (this.place) {
       this.fireBaseService.deletePlace(this.place.id).then(() => {
         this.place = new Place();
+        this.placeImages = new PlaceImages();
         this.nbToastrService.success("", "Deleted");
       }).catch(err => console.error(err))
     }
@@ -328,12 +337,12 @@ export class AdminComponent implements OnInit, OnDestroy {
 
   }
 
-  addNew():void{
+  addNew(): void {
     if (this.isPlaceTab) {
-       this.place = new Place();
-       this.placeImages = new PlaceImages();
+      this.place = new Place();
+      this.placeImages = new PlaceImages();
     }
-    else{
+    else {
       this.book = new Book();
       this.bookImages = new BookImages();
     }

@@ -7,7 +7,8 @@
           <h6>
             Details
           </h6>
-          <button nbButton outline status="success" class="float-right" (click)="addNew()">Добавить</button>
+          <button [disabled]="!place.id" *ngIf="isPlaceTab" nbButton outline status="success" class="float-right" (click)="addNew()">Новое Место</button>
+          <button [disabled]="!book.id" nbButton *ngIf="!isPlaceTab" outline status="success" class="float-right" (click)="addNew()">Новая Книга</button>
         </div>
       </div>
     </nb-card-header>

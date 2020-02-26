@@ -1,17 +1,18 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FireBaseService } from 'src/app/shared/services/fire-base.service';
 import { Router } from '@angular/router';
 import { NbSidebarService } from '@nebular/theme';
 import { SearchService } from 'src/app/shared/services/search.service';
 import { Place, Book, BookImages } from 'src/app/shared/models/firebase-collection-models';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss']
 })
-export class HomeComponent implements OnInit {
-
+export class HomeComponent implements OnInit, OnDestroy {
+  subscription = new Subscription();
   places: Place[];
   books: Book[];
   bookImages: BookImages;
@@ -35,19 +36,23 @@ export class HomeComponent implements OnInit {
 
     this.searchService.placeDetailsEmitter$.emit(null);
 
-    this.searchService.searchTextInBookTermEmitter$.subscribe((data) => {
+    this.subscription.add(this.searchService.searchTextInBookTermEmitter$.subscribe((data) => {
       this.searchTerm = data;
-    })
+    }));
+
+  }
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 
   getBookImages(docID: string): void {
-    this.fireBaseService.getBookImagesByDocID(docID).subscribe(data => {
+    this.subscription.add(this.fireBaseService.getBookImagesByDocID(docID).subscribe(data => {
       this.bookImages = data.data();
-    })
+    }));
   }
 
   getPlaces(): void {
-    this.fireBaseService.getPlaces().subscribe(data => {
+    this.subscription.add(this.fireBaseService.getPlaces().subscribe(data => {
       this.places = data.map(e => {
         return {
           id: e.payload.doc.id,
@@ -55,11 +60,11 @@ export class HomeComponent implements OnInit {
         } as Place;
       })
 
-    });
+    }));
   }
 
   getBooks(): void {
-    this.fireBaseService.getBooks().subscribe(data => {
+    this.subscription.add(this.fireBaseService.getBooks().subscribe(data => {
       this.books = data.map(e => {
         return {
           id: e.payload.doc.id,
@@ -68,12 +73,10 @@ export class HomeComponent implements OnInit {
       });
       this.book = this.books[0];
       this.getBookImages(this.book.id);
-    });
+    }));
   }
 
   goToMap(place: Place): void {
-    // this.router.navigate(['/google-map'],{queryParams:{latitude:place.latitude,longitude:place.longitude}});
-
     this.router.navigate(['/google-map', place.latitude, place.longitude]);
   }
 

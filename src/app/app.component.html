@@ -13,7 +13,7 @@
       <div *ngIf="isSideBarCollapsed" class="col-1 text-center text-warning my-auto" style="cursor: pointer;" (click)="expandSideBar()">
         <i class="fas fa-bars fa-2x"></i>
       </div>
-      <div class="col-2 text-center">
+      <div class="col-3 text-center">
         <nb-select outline placeholder="Select Theme" (selectedChange)="changeTheme($event)">
           <nb-option value="corporate">Corporate</nb-option>
           <nb-option value="default">Light</nb-option>
@@ -33,13 +33,13 @@
         </div>
       </div>
       <div class="col-1 text-center">
-        <button nbButton hero status="info" (click)="navigateTo('/home')"><i class="fa fa-home fa-lg" aria-hidden="true"></i></button>
+        <button nbButton hero status="info" (click)="navigateTo('/home')"><i class="fa fa-home fa-lg" alt="Домашняя страница"></i></button>
       </div>
       <div class="col-1 text-center">
-        <button nbButton hero status="success" (click)="navigateTo('/google-map/0/0')"><i class="fa fa-map fa-lg" aria-hidden="true"></i></button>
+        <button nbButton hero status="success" (click)="navigateTo('/google-map/0/0')"><i class="fa fa-map fa-lg" alt="Карта"></i></button>
       </div>
       <div class="col-1 text-center">
-        <button nbButton hero status="warning" (click)="navigateTo('/admin')"><i class="fas fa-tools fa-lg"></i></button>
+        <button nbButton hero status="warning" (click)="navigateTo('/admin')"><i class="fas fa-tools fa-lg" alt="Админ страница"></i></button>
       </div>
     </div>
 
