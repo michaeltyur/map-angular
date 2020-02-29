@@ -1,3 +1,6 @@
+<!-- <button  nbButton hero status="success" (click)="copyToSQL()">Action</button> -->
+
+
 <div class="container d-flex h-100 w-100">
 
   <nb-card [nbSpinner]="loading" nbSpinnerSize="giant" class="mb-0 ml-auto mr-auto align-self-center" style="width: 90%;max-height: 90%;">
@@ -84,8 +87,9 @@
             </div>
             <div class="col-9">
               <div class="row d-flex flex-column">
-                <div class="col">
-                  <input type="file" name="imagesPlaceInput" multiple [(ngModel)]="placeFilesToUpload" (change)="handleFileSelect($event)" nbInput fullWidth placeholder="path">
+                <div class="col d-flex flex-row">
+                  <input type="file" name="imagesPlaceInput" multiple (change)="handleFileSelect($event)" nbInput fullWidth placeholder="path">
+                  <!-- <button nbButton outline status="info"(click)="uploadFiles($event,place)">Upload Image</button> -->
                 </div>
               </div>
             </div>
@@ -93,14 +97,14 @@
 
           <!-- Place Images  -->
           <div class="row form-group d-flex">
-            <div class="col-5 m-2 ml-auto mr-auto d-flex justify-content-center" *ngFor="let image64 of placeImages.images; let i = index">
-              <!-- Delete Button -->
+            <!-- <div class="col-5 m-2 ml-auto mr-auto d-flex justify-content-center" *ngFor="let image64 of placeImages.images; let i = index">
+
               <div style="color: crimson;position: absolute;right: 0px;top: -11px;cursor: pointer;" (click)="deleteFromImageArray(i)">
                 <i class="fas fa-times-circle fa-2x"></i>
               </div>
               <img [src]="image64 | String64ToImage" alt="image" style="width: 100%;
                   height: auto;">
-            </div>
+            </div> -->
           </div>
 
         </nb-tab>
@@ -120,10 +124,10 @@
           <!-- Autor -->
           <div class="row form-group">
             <div class="col-3">
-              <label for="bookNAutorInput" class="col-form-label">book autor:</label>
+              <label for="bookAutorInput" class="col-form-label">book autor:</label>
             </div>
             <div class="col-9">
-              <input type="text" name="bookNAutorInput" [(ngModel)]="book.autor" nbInput fullWidth status="basic" placeholder="book autor">
+              <input type="text" name="bookAutorInput" [(ngModel)]="book.autor" nbInput fullWidth status="basic" placeholder="book autor">
             </div>
           </div>
 
@@ -152,6 +156,7 @@
               <div class="row d-flex flex-column">
                 <div class="col">
                   <input type="file" name="bookImagePathInput" multiple [(ngModel)]="bookFilesToUpload" (change)="handleFileSelect($event)" nbInput fullWidth placeholder="path">
+                  <button nbButton outline status="info"(click)="uploadFiles($event,book)">Upload Image</button>
                 </div>
               </div>
             </div>
@@ -159,14 +164,13 @@
 
           <!-- Images  -->
           <div class="row form-group d-flex">
-            <div class="col-5 m-2 ml-auto mr-auto d-flex justify-content-center" *ngFor="let image64 of bookImages.images; let i = index">
-              <!-- Delete Button -->
+            <!-- <div class="col-5 m-2 ml-auto mr-auto d-flex justify-content-center" *ngFor="let image64 of bookImages.images; let i = index">
               <div style="color: crimson;position: absolute;right: 0px;top: -11px;cursor: pointer;" (click)="deleteFromBookImageArray(i)">
                 <i class="fas fa-times-circle fa-2x"></i>
               </div>
               <img [src]="image64 | String64ToImage" alt="image" style="width: 100%;
                           height: auto;">
-            </div>
+            </div> -->
           </div>
 
         </nb-tab>

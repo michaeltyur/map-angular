@@ -1,12 +1,12 @@
 export class Place {
-  id: string;
+  placeID: number;
   name: string;
   text: string;
   comment: string;
   latitude: number;
   longitude: number;
   zoom: number;
- // images: string[];
+  images: PlaceImages[];
 
   constructor() {
     this.name = "";
@@ -19,28 +19,44 @@ export class Place {
 }
 
 export class PlaceImages {
-  id: string = "";
+  placeImagesID: number;
   name: string = "";
-  images: string[] = [];
+  imagePath: string = "";
+  fileName: string = "";
 }
 
 export class Book {
-  id: string;
+  bookID: number;
   name: string;
   autor: string;
   text: string;
- // images: string[];
+
   constructor() {
     this.name = "";
     this.autor = "";
     this.text = "";
-   // this.images = [];
   }
 }
 
 export class BookImages {
-  id: string = "";
+  bookImagesID: number;
   name: string = "";
-  images: string[] = [];
+  imagePath: string = "";
+  fileName: string = "";
 }
 
+export interface ServerResponse {
+  ID: number;
+  Error: string;
+  Message: string;
+}
+
+export class ImagesRequest {
+  ParentID: number;
+  ParentName: string;
+  ParentType:string;
+  Files: any[];
+  constructor(){
+
+  }
+}

@@ -14,7 +14,9 @@ export class FireBaseService {
   places$: Observable<Place[]>;
   places: Place[] = [];
   //places:Place[] = [];
-  constructor(private firestore: AngularFirestore, private nb: NbToastrService) {
+  constructor(
+    private firestore: AngularFirestore,
+     private nb: NbToastrService) {
     this.places$ = this.getPlaces();
   }
   // Test
@@ -62,19 +64,19 @@ export class FireBaseService {
 
   }
 
-  createPlace(place: Place, images: PlaceImages): Promise<any> {
-    let clearName = place.name.replace(/\s+/g, '').toLowerCase();
-    return this.firestore.collection(FireBaseCollection.places).doc(clearName).set({ ...place }).then(() => {
-      images.id = clearName;
-      this.updatePlaceImages(images).then();
-    });
-  }
-  updatePlace(place: Place, images: PlaceImages): Promise<any> {
-    return this.firestore.collection(FireBaseCollection.places).doc(place.id).set({ ...place }).then(() => {
-      images.id = place.id;
-      this.updatePlaceImages(images).then();
-    });
-  }
+ // createPlace(place: Place, images: PlaceImages): Promise<any> {
+    // let clearName = place.name.replace(/\s+/g, '').toLowerCase();
+    // return this.firestore.collection(FireBaseCollection.places).doc(clearName).set({ ...place }).then(() => {
+    //   images.id = clearName;
+    //   this.updatePlaceImages(images).then();
+    // });
+  //}
+ // updatePlace(place: Place, images: PlaceImages): Promise<any> {
+    // return this.firestore.collection(FireBaseCollection.places).doc(place.id).set({ ...place }).then(() => {
+    //   images.id = place.id;
+    //   this.updatePlaceImages(images).then();
+    // });
+ // }
   deletePlace(placeID: string): Promise<any> {
     return this.firestore.doc(FireBaseCollection.places + '/' + placeID).delete().then(()=>{
       this.deletePlaceImages(placeID).then();
@@ -86,53 +88,55 @@ export class FireBaseService {
     return this.firestore.collection(FireBaseCollection.books).snapshotChanges();
   }
 
-  createBook(book: Book, images: BookImages): Promise<any> {
-    let clearName = book.name.replace(/\s+/g, '').toLowerCase();
-    return this.firestore.collection(FireBaseCollection.books).doc(clearName).set({ ...book }).then(()=>{
-      images.id = clearName;
-      this.createBookImages(images).then();
-    });
-  }
-  updateBook(book: Book, images: BookImages): Promise<any> {
-    return this.firestore.collection(FireBaseCollection.books).doc(book.id).set({ ...book }).then(()=>{
-      images.id = book.id;
-      debugger;
-      this.updateBookImages(images).then();
-    });
-  }
-  deleteBook(bookID:string):Promise<any>{
-    return this.firestore.doc(FireBaseCollection.books + '/' + bookID).delete().then(()=>{
-      this.deleteBookImages(bookID).then();
-    });
-  }
+  // createBook(book: Book, images: BookImages): Promise<any> {
+  //   let clearName = book.name.replace(/\s+/g, '').toLowerCase();
+  //   return this.firestore.collection(FireBaseCollection.books).doc(clearName).set({ ...book }).then(()=>{
+  //     images.id = clearName;
+  //     this.createBookImages(images).then();
+  //   });
+  // }
+  // updateBook(book: Book, images: BookImages): Promise<any> {
+  //   return this.firestore.collection(FireBaseCollection.books).doc(book.id).set({ ...book }).then(()=>{
+  //     images.id = book.id;
+  //     debugger;
+  //     this.updateBookImages(images).then();
+  //   });
+  //}
+  // deleteBook(bookID:string):Promise<any>{
+  //   return this.firestore.doc(FireBaseCollection.books + '/' + bookID).delete().then(()=>{
+  //     this.deleteBookImages(bookID).then();
+  //   });
+  // }
 
   // Place Images
-  createPlaceImages(placeImages: PlaceImages): Promise<any> {
-    return this.firestore.collection(FireBaseCollection.placesImages).doc(placeImages.id).set({ ...placeImages });
-  }
+  // createPlaceImages(placeImages: PlaceImages): Promise<any> {
+  //   return this.firestore.collection(FireBaseCollection.placesImages).doc(placeImages.id).set({ ...placeImages });
+  // }
   getPlaceImagesByDocID(placeImagesDocID: string): Observable<any> {
-    return this.firestore.collection(FireBaseCollection.placesImages).doc(placeImagesDocID).get()
-      .pipe(map(data => {
-        return data.data();
-      }));
+    return Observable.throw("");
+    // return this.firestore.collection(FireBaseCollection.placesImages).doc(placeImagesDocID).get()
+    //   .pipe(map(data => {
+    //     return data.data();
+    //   }));
   }
-  updatePlaceImages(placeImages: PlaceImages): Promise<any> {
-    return this.firestore.collection(FireBaseCollection.placesImages).doc(placeImages.id).set({ ...placeImages });
-  }
+  // updatePlaceImages(placeImages: PlaceImages): Promise<any> {
+  //   return this.firestore.collection(FireBaseCollection.placesImages).doc(placeImages.id).set({ ...placeImages });
+  // }
   deletePlaceImages(placeImagesID: string): Promise<any> {
     return this.firestore.doc(FireBaseCollection.placesImages + '/' + placeImagesID).delete();
   }
 
   // Book Images
-  createBookImages(bookImages: BookImages): Promise<any> {
-    return this.firestore.collection(FireBaseCollection.booksImages).doc(bookImages.id).set({ ...bookImages });
-  }
+  // createBookImages(bookImages: BookImages): Promise<any> {
+  //   return this.firestore.collection(FireBaseCollection.booksImages).doc(bookImages.id).set({ ...bookImages });
+  // }
   getBookImagesByDocID(bookImagesDocID: string): Observable<any> {
-    return this.firestore.collection(FireBaseCollection.booksImages).doc(bookImagesDocID).get();
+    return Observable.throw("");
+    // return this.firestore.collection(FireBaseCollection.booksImages).doc(bookImagesDocID).get();
   }
-  updateBookImages(bookImages: BookImages): Promise<any> {
-    return this.firestore.collection(FireBaseCollection.booksImages).doc(bookImages.id).set({ ...bookImages });
-  }
+  // updateBookImages(bookImages: BookImages): Promise<any> {
+  //   return this.firestore.collection(FireBaseCollection.booksImages).doc(bookImages.id).set({ ...bookImages });
+  // }
   deleteBookImages(bookImagesID: string): Promise<any> {
     return this.firestore.doc(FireBaseCollection.booksImages + '/' + bookImagesID).delete();
   }

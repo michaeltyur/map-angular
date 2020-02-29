@@ -39,21 +39,21 @@ export class PlaceDetailComponent implements OnInit {
   openImageWindow(place: Place, index: number, dialog: TemplateRef<any>): void {
     let dialogRef = this.dialogService.open(dialog, { context: place });
     this.selectedImageIndex = index;
-    this.frontImagePath = this.placeImages.images[this.selectedImageIndex];
+   // this.frontImagePath = this.placeImages.images[this.selectedImageIndex];
   }
   sliceRight(): void {
-    this.selectedImageIndex++;
-    if (this.selectedImageIndex >= this.placeImages.images.length) {
-      this.selectedImageIndex = 0;
-    }
-    this.frontImagePath = this.placeImages.images[this.selectedImageIndex];
+    // this.selectedImageIndex++;
+    // if (this.selectedImageIndex >= this.placeImages.images.length) {
+    //   this.selectedImageIndex = 0;
+    // }
+   // this.frontImagePath = this.placeImages.images[this.selectedImageIndex];
   }
   sliceLeft(): void {
-    this.selectedImageIndex--;
-    if (this.selectedImageIndex < 0) {
-      this.selectedImageIndex = this.placeImages.images.length - 1;
-    }
-    this.frontImagePath = this.placeImages.images[this.selectedImageIndex];
+    // this.selectedImageIndex--;
+    // if (this.selectedImageIndex < 0) {
+    //   this.selectedImageIndex = this.placeImages.images.length - 1;
+    // }
+    // this.frontImagePath = this.placeImages.images[this.selectedImageIndex];
   }
 
 }

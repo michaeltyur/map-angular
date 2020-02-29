@@ -5,7 +5,10 @@ import { filter, map } from 'rxjs/operators';
 import { SearchService } from 'src/app/shared/services/search.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Subscription } from 'rxjs';
-import { Place, Book, PlaceImages, BookImages } from 'src/app/shared/models/firebase-collection-models';
+import { Place, Book, PlaceImages, BookImages, ServerResponse, ImagesRequest } from 'src/app/shared/models/firebase-collection-models';
+import { AspService } from 'src/app/shared/services/asp.service';
+import { error } from 'protractor';
+import { PlaceDetailComponent } from '../place-detail/place-detail.component';
 
 @Component({
   selector: 'app-admin',
@@ -22,6 +25,7 @@ export class AdminComponent implements OnInit, OnDestroy {
   placeFiltred: Place;
   placeFilesToUpload: File;
   bookFilesToUpload: File;
+  selectedFiles: File[];
 
   // PlaceImages
   placeImages: PlaceImages = new PlaceImages();
@@ -42,11 +46,11 @@ export class AdminComponent implements OnInit, OnDestroy {
   maxNumberOfImages = 5;
 
   constructor(
-    private fireBaseService: FireBaseService,
     private nbToastrService: NbToastrService,
     private sidebarService: NbSidebarService,
     @Inject(NB_WINDOW) private window,
     private searchService: SearchService,
+    private aspService: AspService
   ) {
     this.place = new Place();
     this.book = new Book();
@@ -66,7 +70,7 @@ export class AdminComponent implements OnInit, OnDestroy {
       if (res) {
         this.place = res;
         // get images
-        this.getPlaceImages(res.id);
+        //this.getPlaceImages(res.id);
       }
     }));
 
@@ -82,18 +86,19 @@ export class AdminComponent implements OnInit, OnDestroy {
   }
 
   getPlaceImages(docID: string): void {
-    this.subscription.add(this.fireBaseService.getPlaceImagesByDocID(docID).subscribe(data => {
-      this.placeImages = data as PlaceImages;
-    }));
+    // this.subscription.add(this.fireBaseService.getPlaceImagesByDocID(docID).subscribe(data => {
+    //   this.placeImages = data as PlaceImages;
+    // }));
 
   }
 
   getBookImages(docID: string): void {
-    this.fireBaseService.getBookImagesByDocID(docID).subscribe(data => {
-      this.bookImages = data.data() as BookImages;
-    })
+    // this.fireBaseService.getBookImagesByDocID(docID).subscribe(data => {
+    //   this.bookImages = data.data() as BookImages;
+    // })
   }
 
+  // Place
   savePlace(): void {
 
     if (this.isPlaceExist(this.place)) {
@@ -103,55 +108,39 @@ export class AdminComponent implements OnInit, OnDestroy {
 
     if (this.isPlaceValid()) {
       this.loading = true;
-      this.fireBaseService.createPlace(this.place, this.placeImages).then(data => {
-        let clearName = this.place.name.replace(/\s+/g, '').toLowerCase();
-        this.placeImages.id = clearName;
-        this.fireBaseService.createPlaceImages(this.placeImages).then(() => {
+      this.subscription.add(this.aspService.addPlace(this.place).subscribe((res: ServerResponse) => {
+        if (res) {
+          this.place.placeID = res.ID;
+          this.places.unshift(this.place);
           this.nbToastrService.success("", "Added!!!");
           this.loading = false;
-          //this.place = new Place();
-        });
-
-      }).catch((error) => {
+          this.uploadFiles(this.selectedFiles, this.place);
+        }
+        else {
+          this.nbToastrService.danger("", "Not added!!!");
+          this.loading = false;
+        }
+      }, error => {
         this.loading = false;
         this.nbToastrService.danger("", error);
-      });
+      }));
+
     }
   }
-
-  saveBook(): void {
-    if (this.isBookValid()) {
-
-      this.loading = true;
-      this.fireBaseService.createBook(this.book, this.bookImages).then(data => {
-        this.nbToastrService.success("", "Added!!!");
-        this.loading = false;
-      }).catch((error) => {
-        this.loading = false;
-        this.nbToastrService.danger("", error);
-      });
-    }
-  }
-
   isPlaceValid(): boolean {
     let result = true;
+
+    if (!this.place) {
+      this.nbToastrService.warning("", "Place is null");
+      return false;
+    }
+
     if (!this.place.name) {
       this.nbToastrService.warning("", "Please enter place name");
       return false;
     }
     return result;
   }
-
-  isBookValid(): boolean {
-    let result = true;
-    if (!this.book.name) {
-      this.nbToastrService.warning("", "Please enter book name");
-      return false;
-    }
-
-    return result;
-  }
-
   searchPlace(): void {
     this.placeFiltred = this.places.filter(el => el.name.toLowerCase() === this.searchTerm.toLowerCase())[0];
     if (this.placeFiltred) {
@@ -162,72 +151,115 @@ export class AdminComponent implements OnInit, OnDestroy {
       this.searchStatus = "danger";
     }
   }
-
-  searchBook(): void {
-
-  }
-
   getPlaces(): void {
-    this.subscription.add(this.fireBaseService.getPlaces().subscribe(data => {
-      this.places = data.map(e => {
-        return {
-          id: e.payload.doc.id,
-          ...e.payload.doc.data()
-        } as Place;
-      })
+    this.subscription.add(this.aspService.getAllPlaces().subscribe((places: Place[]) => {
+      if (places && places.length) {
+        this.places = places;
+      }
+    }, error => {
+      console.error(error);
     }));
-
   }
-
   updatePlace(): void {
 
     if (this.isPlaceValid()) {
       this.loading = true;
-      this.fireBaseService.updatePlace(this.place, this.placeImages).then(() => {
-        this.fireBaseService.updatePlaceImages(this.placeImages).then(() => {
+
+      this.subscription.add(this.aspService.updatePlace(this.place).subscribe((res: ServerResponse) => {
+        if (res && !res.Error) {
           this.nbToastrService.success("", "Updated");
-          this.loading = false;
-        });
-      }).catch((error) => {
+        }
+        else {
+          this.nbToastrService.warning("", res.Error);
+        }
+        this.loading = false;
+      }, error => {
         this.loading = false;
         console.error(error);
-        this.nbToastrService.danger("", "Error")
-      })
+      }));
+
+      this.uploadFiles(this.selectedFiles, this.place);
+
     }
   }
-
-  updateBook(): void {
-
-    if (this.isBookValid()) {
-      this.loading = true;
-      this.fireBaseService.updateBook(this.book, this.bookImages).then(() => {
-        this.nbToastrService.success("", "Updated");
-        this.loading = false;
-      }).catch((error) => {
-        this.loading = false;
-        console.error(error);
-        this.nbToastrService.danger("", "Error");
-      })
-    }
-  }
-
   private isPlaceExist(place: Place): boolean {
     return this.places.filter(el => el.name === place.name).length > 0;
   }
-
   getBooks(): void {
-    this.subscription.add(this.fireBaseService.getBooks().subscribe(data => {
-      this.books = data.map(e => {
-        return {
-          id: e.payload.doc.id,
-          ...e.payload.doc.data()
-        } as Book;
-      })
-      this.book = this.books[0];
-      this.getBookImages(this.book.id);
+
+    this.subscription.add(this.aspService.getAllBooks().subscribe((books: Book[]) => {
+      if (books && books.length) {
+        this.books = books;
+        this.book = books.filter(el => el.name === "Кижские Рассказы")[0];
+      }
+    }, error => {
+      console.error(error);
     }));
 
   }
+  deletePlace(): void {
+
+    if (this.place) {
+      this.aspService.deletePlace(this.place.placeID)
+    }
+  }
+
+
+
+  // Book
+  saveBook(): void {
+    if (this.isBookValid()) {
+
+      this.loading = true;
+      this.subscription.add(this.aspService.addBook(this.book).subscribe((id) => {
+        if (id) {
+          this.nbToastrService.success("", "Added!!!");
+          this.loading = false;
+        }
+        else {
+          this.nbToastrService.danger("", "Not added!!!");
+          this.loading = false;
+        }
+      }, error => {
+        this.loading = false;
+        this.nbToastrService.danger("", error);
+      }));
+    }
+  }
+  isBookValid(): boolean {
+    let result = true;
+    if (!this.book.name) {
+      this.nbToastrService.warning("", "Please enter book name");
+      return false;
+    }
+
+    return result;
+  }
+  searchBook(): void {
+
+  }
+  updateBook(): void {
+
+    if (this.isBookValid()) {
+
+      this.loading = true;
+
+      this.subscription.add(this.aspService.updateBook(this.book).subscribe((res: ServerResponse) => {
+        if (res && !res.Error) {
+          this.nbToastrService.success("", "Updated");
+        }
+        else {
+          this.nbToastrService.warning("", res.Error);
+        }
+        this.loading = false;
+      }, error => {
+        this.loading = false;
+        console.error(error);
+      }));
+    }
+
+  }
+
 
   tabChanged(event): void {
     if (event.tabTitle === "Place") {
@@ -242,7 +274,7 @@ export class AdminComponent implements OnInit, OnDestroy {
 
   actionSaveSelect(): void {
     if (this.isPlaceTab) {
-      if (this.place.id) {
+      if (this.place.placeID) {
         this.updatePlace();
       }
       else {
@@ -255,85 +287,48 @@ export class AdminComponent implements OnInit, OnDestroy {
     }
   }
 
-  deletePlace(): void {
-    if (this.place) {
-      this.fireBaseService.deletePlace(this.place.id).then(() => {
-        this.place = new Place();
-        this.placeImages = new PlaceImages();
-        this.nbToastrService.success("", "Deleted");
-      }).catch(err => console.error(err))
-    }
+  // Files
+
+  handleFileSelect(event): void {
+    this.selectedFiles = event.target.files;
   }
+  uploadFiles(imagesInput: File[], place?: Place, book?: Book): void {
+    if (imagesInput && imagesInput.length) {
+      let formData = new FormData();
 
-  handleFileSelect(evt) {
-
-    let files = evt.target.files;
-
-    if (!files.length) {
-      this.nbToastrService.warning("", "Please select image");
-      return;
-    }
-
-    Object.keys(files).forEach(key => {
-
-      const file = files[key];
-
-      let sizeKb = file.size / 1024;
-
-      if (sizeKb > 500) {
-        if (this.isPlaceTab) {
-          this.placeFilesToUpload = null;
-        }
-        else {
-          this.bookFilesToUpload = null;
-        }
-        this.nbToastrService.warning("", `File ${file.name} too big`);
+      Object.keys(imagesInput).forEach(key => {
+        formData.append("Files", imagesInput[key]);
+      });
+      if (place) {
+        formData.append("ParentID", place.placeID.toString());
+        formData.append("ParentName", place.name);
+        formData.append("ParentType", "place");
       }
-      else if (this.isPlaceTab && this.placeImages.images.length >= this.maxNumberOfImages
-        || !this.isPlaceTab && this.bookImages.images.length >= this.maxNumberOfImages) {
-        this.nbToastrService.warning("", `Maximun number of images is ${this.maxNumberOfImages}`);
-        return;
-      }
-      else {
-        if (files && file) {
-          var reader = new FileReader();
-          reader.onload = this.handleReaderLoaded.bind(this);
-          reader.readAsBinaryString(file);
-        }
+      if (book) {
+        formData.append("ParentID", book.bookID.toString());
+        formData.append("ParentName", book.name);
+        formData.append("ParentType", "book");
       }
 
+      this.aspService.uploadFiles(formData).subscribe((res) => {
+      debugger;
+      });
+      // form.append();
+      // formData.append("name", this.form.get('name').value);
 
-    })
-  }
-
-  private handleReaderLoaded(readerEvt) {
-    let binaryString = readerEvt.target.result;
-    let base64textString = btoa(binaryString);
-    if (base64textString) {
-
-      if (this.isPlaceTab) {
-        this.placeImages.images.unshift(base64textString);
-      }
-      else {
-        this.bookImages.images.unshift(base64textString);
-      }
-      this.nbToastrService.success("", "Image added");
-    }
-    else {
-      this.nbToastrService.warning("", "Error loading image");
     }
   }
 
   deleteFromImageArray(index: number): void {
-    if (this.placeImages.images) {
-      this.placeImages.images.splice(index, 1);
-    }
+    // if (this.placeImages.images) {
+    //   this.placeImages.images.splice(index, 1);
+    // }
   }
 
   deleteFromBookImageArray(index: number): void {
-    if (this.bookImages.images.length) {
-      this.bookImages.images.splice(index, 1);
-    }
+    // if (this.bookImages.images.length) {
+    //   this.bookImages.images.splice(index, 1);
+    // }
 
   }
 
@@ -346,6 +341,21 @@ export class AdminComponent implements OnInit, OnDestroy {
       this.book = new Book();
       this.bookImages = new BookImages();
     }
+  }
+
+  copyToSQL(): void {
+    this.places.forEach(el => {
+      this.aspService.addPlace(el).subscribe(res => {
+        console.log(res);
+      })
+    }, error => console.error(error))
+
+    this.books.forEach(el => {
+      this.aspService.addBook(el).subscribe(res => {
+        console.log(res)
+      })
+    }, error => console.error(error))
+
   }
 
 }

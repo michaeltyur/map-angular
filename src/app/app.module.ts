@@ -25,6 +25,7 @@ import { PlaceDetailComponent } from './ui-components/place-detail/place-detail.
 import { String64ToImagePipe } from './shared/pipe/string64-to-image-pipe';
 import { AngularEditorModule } from '@kolkov/angular-editor';
 import { HttpClientModule} from '@angular/common/http';
+import { DeviceDetectorModule } from 'ngx-device-detector';
 
 @NgModule({
   declarations: [
@@ -69,6 +70,7 @@ import { HttpClientModule} from '@angular/common/http';
     NbSpinnerModule,
     AngularEditorModule,
     HttpClientModule,
+    DeviceDetectorModule.forRoot(),
     // firebase
     AngularFireModule.initializeApp(environment.firebaseConfig),
     AngularFirestoreModule,

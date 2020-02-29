@@ -5,6 +5,8 @@ import { NbSidebarService } from '@nebular/theme';
 import { SearchService } from 'src/app/shared/services/search.service';
 import { Place, Book, BookImages } from 'src/app/shared/models/firebase-collection-models';
 import { Subscription } from 'rxjs';
+import { DeviceDetectorService } from 'ngx-device-detector';
+import { AspService } from 'src/app/shared/services/asp.service';
 
 @Component({
   selector: 'app-home',
@@ -18,19 +20,29 @@ export class HomeComponent implements OnInit, OnDestroy {
   bookImages: BookImages;
   book: Book;
   searchTerm: string;
+  isMobile:boolean ;
 
   constructor(
-    private fireBaseService: FireBaseService,
+    private aspService:AspService,
     private sidebarService: NbSidebarService,
     private router: Router,
-    private searchService: SearchService
+    private searchService: SearchService,
+    private deviceService: DeviceDetectorService,
+
   ) {
     this.book = new Book();
     this.bookImages = new BookImages();
   }
 
   ngOnInit(): void {
-    this.sidebarService.expand();
+    this.isMobile = this.deviceService.isMobile();
+    if(!this.isMobile){
+      this.sidebarService.expand();
+    }
+    else{
+      this.sidebarService.collapse();
+    }
+
     this.getPlaces();
     this.getBooks();
 
@@ -46,34 +58,40 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   getBookImages(docID: string): void {
-    this.subscription.add(this.fireBaseService.getBookImagesByDocID(docID).subscribe(data => {
-      this.bookImages = data.data();
-    }));
+    // this.subscription.add(this.fireBaseService.getBookImagesByDocID(docID).subscribe(data => {
+    //   this.bookImages = data.data();
+    // }));
   }
 
   getPlaces(): void {
-    this.subscription.add(this.fireBaseService.getPlaces().subscribe(data => {
-      this.places = data.map(e => {
-        return {
-          id: e.payload.doc.id,
-          ...e.payload.doc.data()
-        } as Place;
-      })
+    // this.subscription.add(this.fireBaseService.getPlaces().subscribe(data => {
+    //   this.places = data.map(e => {
+    //     return {
+    //       id: e.payload.doc.id,
+    //       ...e.payload.doc.data()
+    //     } as Place;
+    //   })
 
-    }));
+    // }));
   }
 
   getBooks(): void {
-    this.subscription.add(this.fireBaseService.getBooks().subscribe(data => {
-      this.books = data.map(e => {
-        return {
-          id: e.payload.doc.id,
-          ...e.payload.doc.data()
-        } as Book;
-      });
-      this.book = this.books[0];
-      this.getBookImages(this.book.id);
-    }));
+    this.subscription.add();
+    this.aspService.getAllBooks().subscribe((books:Book[])=>{
+       if (books && books.length) {
+          this.book= books.filter(el=>el.name==="Кижские Рассказы")[0];
+       }
+    })
+    // this.subscription.add(this.fireBaseService.getBooks().subscribe(data => {
+    //   this.books = data.map(e => {
+    //     return {
+    //       id: e.payload.doc.id,
+    //       ...e.payload.doc.data()
+    //     } as Book;
+    //   });
+    //   this.book = this.books[0];
+    //   this.getBookImages(this.book.id);
+    // }));
   }
 
   goToMap(place: Place): void {

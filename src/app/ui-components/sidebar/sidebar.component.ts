@@ -6,6 +6,8 @@ import { SearchService } from 'src/app/shared/services/search.service';
 import { NbSidebarService } from '@nebular/theme';
 import { Place, PlaceImages } from 'src/app/shared/models/firebase-collection-models';
 import { Subscription } from 'rxjs';
+import { DeviceDetectorService } from 'ngx-device-detector';
+import { AspService } from 'src/app/shared/services/asp.service';
 
 @Component({
   selector: 'app-sidebar',
@@ -25,19 +27,19 @@ export class SidebarComponent implements OnInit, OnDestroy {
 
   constructor(
     private mapNavigationService: MapNavigationService,
-    private fireBaseService: FireBaseService,
+    // private fireBaseService: FireBaseService,
     private router: Router,
     private searchService: SearchService,
-    private sidebarService: NbSidebarService
+    private sidebarService: NbSidebarService,
+    private deviceService: DeviceDetectorService,
+    private aspService: AspService
   ) { }
 
   ngOnInit(): void {
-    //this.places = Places;
     this.getPlaces();
     this.subscription.add(this.searchService.placeDetailsEmitter$.subscribe(data => {
       this.place = data;
     }));
-
   }
 
   ngOnDestroy() {
@@ -56,14 +58,19 @@ export class SidebarComponent implements OnInit, OnDestroy {
   }
 
   getPlaces(): void {
-    this.subscription.add(this.fireBaseService.getPlaces().subscribe(data => {
-      this.places = data.map(e => {
-        return {
-          id: e.payload.doc.id,
-          ...e.payload.doc.data()
-        } as Place;
-      })
-    }));
+    // this.subscription.add(this.fireBaseService.getPlaces().subscribe(data => {
+    //   this.places = data.map(e => {
+    //     return {
+    //       id: e.payload.doc.id,
+    //       ...e.payload.doc.data()
+    //     } as Place;
+    //   })
+    // }));
+    this.aspService.getAllPlaces().subscribe((places:Place[])=>{
+      if(places){
+        this.places = places;
+      }
+    })
 
   }
   collapsedChange(item: Place): void {
@@ -71,17 +78,16 @@ export class SidebarComponent implements OnInit, OnDestroy {
     this.searchService.sideBarSelectItemEmitter$.emit(item);
   }
   openDetails(place: Place): void {
-    this.getPlaceImages(place.id);
-    this.sidebarService.collapse();
-    this.place = place;
-    this.sidebarService.expand();
+    // this.getPlaceImages(place.id);
+    // this.sidebarService.collapse();
+    // this.place = place;
+    // this.sidebarService.expand();
   }
 
   getPlaceImages(docID: string): void {
-    this.subscription.add(this.fireBaseService.getPlaceImagesByDocID(docID).subscribe(data => {
-      this.placeImages = data;
-    }));
-
+    // this.subscription.add(this.fireBaseService.getPlaceImagesByDocID(docID).subscribe(data => {
+    //   this.placeImages = data;
+    // }));
   }
 
 }

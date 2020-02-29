@@ -1,29 +1,32 @@
 <nb-layout>
 
   <nb-layout-header fixed>
+
     <div class="row w-100">
-      <div *ngIf="false" class="col-1 text-center">
-        <button nbButton hero status="danger" (click)="fireBaseAction()">
-          <i class="fas fa-radiation-alt fa-lg"></i>
-        </button>
-      </div>
       <div *ngIf="!isSideBarCollapsed" class="col-1 text-center text-danger my-auto" style="cursor: pointer;" (click)="collapseSideBar()">
         <i class="far fa-window-close fa-2x"></i>
       </div>
       <div *ngIf="isSideBarCollapsed" class="col-1 text-center text-warning my-auto" style="cursor: pointer;" (click)="expandSideBar()">
         <i class="fas fa-bars fa-2x"></i>
       </div>
-      <div class="col-3 text-center">
-        <nb-select outline placeholder="Select Theme" (selectedChange)="changeTheme($event)">
+      <div class="col-1 text-center">
+        <button nbButton hero status="info" [nbContextMenu]="themeMenuItems" nbContextMenuTag="theme-context-menu">
+          <i class="fas fa-palette fa-lg"></i>
+        </button>
+
+        <!-- <nb-select  shape="round" outline status="info" (selectedChange)="changeTheme($event)">
+          <nb-select-label>
+            <i class="fas fa-palette"></i>
+          </nb-select-label>
           <nb-option value="corporate">Corporate</nb-option>
           <nb-option value="default">Light</nb-option>
           <nb-option value="dark">Dark</nb-option>
           <nb-option value="cosmic">Cosmic</nb-option>
-        </nb-select>
+        </nb-select> -->
       </div>
       <div class="col text-center">
         <!-- <h3 class="header-title">Tedious literature it can be interesting !!!</h3> -->
-        <div class="row">
+        <div *ngIf="!isMobile" class="row">
           <div class="col text-right">
             <input type="text" shape="round" name="searchPlaceInput" nbInput fullWidth placeholder="Поиск по географическому названию" (input)="placeSearchInput()" [(ngModel)]="placeSearchTerm">
           </div>
@@ -43,17 +46,28 @@
       </div>
     </div>
 
+
   </nb-layout-header>
 
-  <nb-sidebar left="true">
-    <app-sidebar [placeSearchTerm]="placeSearchTerm"></app-sidebar>
-  </nb-sidebar>
+
 
   <nb-layout-column>
+
+    <!-- Search Input Mobile  -->
+    <div *ngIf="isMobile" class="row w-100 mb-2 mr-0">
+      <div class="col pl-1 pr-0">
+        <input type="text" shape="round" name="searchPlaceInput" nbInput fullWidth placeholder="Поиск по географическому названию" (input)="placeSearchInput()" [(ngModel)]="placeSearchTerm">
+      </div>
+      <div class="col pl-0 pr-1">
+        <input type="text" shape="round" name="searchBookInput" nbInput fullWidth placeholder="Поиск по произведению" [(ngModel)]="bookSearchTerm" (input)="bookSearchInput()">
+      </div>
+    </div>
+
     <router-outlet></router-outlet>
   </nb-layout-column>
 
-  <!-- <nb-layout-footer fixed>
-  </nb-layout-footer> -->
+  <nb-sidebar left="true" [fixed]="isMobile">
+    <app-sidebar  [placeSearchTerm]="placeSearchTerm"></app-sidebar>
+  </nb-sidebar>
 
 </nb-layout>
