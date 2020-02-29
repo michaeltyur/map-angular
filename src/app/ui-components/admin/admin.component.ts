@@ -28,7 +28,7 @@ export class AdminComponent implements OnInit, OnDestroy {
   selectedFiles: File[];
 
   // PlaceImages
-  placeImages: PlaceImages = new PlaceImages();
+  placesImages: PlaceImages[] = [];
 
   // BookImages
   bookImages: BookImages = new BookImages();
@@ -54,7 +54,7 @@ export class AdminComponent implements OnInit, OnDestroy {
   ) {
     this.place = new Place();
     this.book = new Book();
-    this.placeImages = new PlaceImages();
+   // this.placeImages = new PlaceImages();
     this.bookImages = new BookImages();
   }
 
@@ -335,7 +335,7 @@ export class AdminComponent implements OnInit, OnDestroy {
   addNew(): void {
     if (this.isPlaceTab) {
       this.place = new Place();
-      this.placeImages = new PlaceImages();
+      this.placesImages = [];
     }
     else {
       this.book = new Book();

@@ -97,14 +97,14 @@
 
           <!-- Place Images  -->
           <div class="row form-group d-flex">
-            <!-- <div class="col-5 m-2 ml-auto mr-auto d-flex justify-content-center" *ngFor="let image64 of placeImages.images; let i = index">
+            <div class="col-5 m-2 ml-auto mr-auto d-flex justify-content-center" *ngFor="let item of placesImages.images; let i = index">
 
               <div style="color: crimson;position: absolute;right: 0px;top: -11px;cursor: pointer;" (click)="deleteFromImageArray(i)">
                 <i class="fas fa-times-circle fa-2x"></i>
               </div>
-              <img [src]="image64 | String64ToImage" alt="image" style="width: 100%;
+              <img [src]="item.imagePath" alt="image" style="width: 100%;
                   height: auto;">
-            </div> -->
+            </div>
           </div>
 
         </nb-tab>
