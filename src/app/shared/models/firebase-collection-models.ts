@@ -49,6 +49,7 @@ export interface ServerResponse {
   ID: number;
   Error: string;
   Message: string;
+  ImagesData:any[];
 }
 
 export class ImagesRequest {

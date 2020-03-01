@@ -26,6 +26,7 @@ import { String64ToImagePipe } from './shared/pipe/string64-to-image-pipe';
 import { AngularEditorModule } from '@kolkov/angular-editor';
 import { HttpClientModule} from '@angular/common/http';
 import { DeviceDetectorModule } from 'ngx-device-detector';
+import { ImageSrcDomsanitizationPipe } from './shared/pipe/image-src-domsanitization-pipe';
 
 @NgModule({
   declarations: [
@@ -40,7 +41,8 @@ import { DeviceDetectorModule } from 'ngx-device-detector';
     TextFormatPipe,
     ColorTextSearchPipe,
     PlaceDetailComponent,
-    String64ToImagePipe
+    String64ToImagePipe,
+    ImageSrcDomsanitizationPipe
 
   ],
   imports: [

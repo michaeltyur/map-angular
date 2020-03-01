@@ -10,8 +10,8 @@
           <h6>
             Details
           </h6>
-          <button [disabled]="!place.id" *ngIf="isPlaceTab" nbButton outline status="success" class="float-right" (click)="addNew()">Новое Место</button>
-          <button [disabled]="!book.id" nbButton *ngIf="!isPlaceTab" outline status="success" class="float-right" (click)="addNew()">Новая Книга</button>
+          <button [disabled]="!place.placeID" *ngIf="isPlaceTab" nbButton outline status="success" class="float-right" (click)="addNew()">Новое Место</button>
+          <button [disabled]="!book.bookID" nbButton *ngIf="!isPlaceTab" outline status="success" class="float-right" (click)="addNew()">Новая Книга</button>
         </div>
       </div>
     </nb-card-header>
@@ -97,12 +97,12 @@
 
           <!-- Place Images  -->
           <div class="row form-group d-flex">
-            <div class="col-5 m-2 ml-auto mr-auto d-flex justify-content-center" *ngFor="let item of placesImages.images; let i = index">
+            <div class="col-5 m-2 ml-auto mr-auto d-flex justify-content-center" *ngFor="let item of placeImagesArray; let i = index">
 
-              <div style="color: crimson;position: absolute;right: 0px;top: -11px;cursor: pointer;" (click)="deleteFromImageArray(i)">
+              <div style="color: crimson;position: absolute;right: 0px;top: -11px;cursor: pointer;" (click)="deleteFromPlaceImageArray(item)">
                 <i class="fas fa-times-circle fa-2x"></i>
               </div>
-              <img [src]="item.imagePath" alt="image" style="width: 100%;
+              <img [src]="item.imagePath | ImageSrcDomsanitization" alt="image" style="width: 100%;
                   height: auto;">
             </div>
           </div>
@@ -156,7 +156,6 @@
               <div class="row d-flex flex-column">
                 <div class="col">
                   <input type="file" name="bookImagePathInput" multiple [(ngModel)]="bookFilesToUpload" (change)="handleFileSelect($event)" nbInput fullWidth placeholder="path">
-                  <button nbButton outline status="info"(click)="uploadFiles($event,book)">Upload Image</button>
                 </div>
               </div>
             </div>
@@ -164,13 +163,13 @@
 
           <!-- Images  -->
           <div class="row form-group d-flex">
-            <!-- <div class="col-5 m-2 ml-auto mr-auto d-flex justify-content-center" *ngFor="let image64 of bookImages.images; let i = index">
-              <div style="color: crimson;position: absolute;right: 0px;top: -11px;cursor: pointer;" (click)="deleteFromBookImageArray(i)">
+            <div class="col-5 m-2 ml-auto mr-auto d-flex justify-content-center" *ngFor="let item of bookImagesArray; let i = index">
+              <div style="color: crimson;position: absolute;right: 0px;top: -11px;cursor: pointer;" (click)="deleteFromBookImageArray(item)">
                 <i class="fas fa-times-circle fa-2x"></i>
               </div>
-              <img [src]="image64 | String64ToImage" alt="image" style="width: 100%;
+              <img [src]="item.imagePath | ImageSrcDomsanitization" alt="image" style="width: 100%;
                           height: auto;">
-            </div> -->
+            </div>
           </div>
 
         </nb-tab>
@@ -181,7 +180,7 @@
       <!-- Save Button -->
       <div class="row form-group">
         <div class="col text-center">
-          <button [disabled]="!place.id" *ngIf="isPlaceTab" nbButton hero status="danger" (click)="deletePlace()">Delete</button>
+          <button [disabled]="!place.placeID" *ngIf="isPlaceTab" nbButton hero status="danger" (click)="deletePlace()">Delete</button>
         </div>
         <div class="col text-center">
           <button nbButton hero status="success" (click)="actionSaveSelect()">Save</button>

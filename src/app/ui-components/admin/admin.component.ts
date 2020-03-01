@@ -28,10 +28,10 @@ export class AdminComponent implements OnInit, OnDestroy {
   selectedFiles: File[];
 
   // PlaceImages
-  placesImages: PlaceImages[] = [];
+  placeImagesArray: PlaceImages[] = [];
 
   // BookImages
-  bookImages: BookImages = new BookImages();
+  bookImagesArray: BookImages[] = [];
 
   // Books
   book: Book;
@@ -54,8 +54,6 @@ export class AdminComponent implements OnInit, OnDestroy {
   ) {
     this.place = new Place();
     this.book = new Book();
-   // this.placeImages = new PlaceImages();
-    this.bookImages = new BookImages();
   }
 
   ngOnInit(): void {
@@ -70,7 +68,7 @@ export class AdminComponent implements OnInit, OnDestroy {
       if (res) {
         this.place = res;
         // get images
-        //this.getPlaceImages(res.id);
+        this.getPlaceImages(res);
       }
     }));
 
@@ -85,17 +83,21 @@ export class AdminComponent implements OnInit, OnDestroy {
     this.subscription.unsubscribe();
   }
 
-  getPlaceImages(docID: string): void {
-    // this.subscription.add(this.fireBaseService.getPlaceImagesByDocID(docID).subscribe(data => {
-    //   this.placeImages = data as PlaceImages;
-    // }));
+  getPlaceImages(place: Place): void {
+    this.subscription.add(this.aspService.getPlaceImagesByParentID(place.placeID).subscribe((res: PlaceImages[]) => {
+      if (res) {
+        this.placeImagesArray = res;
+      }
+    }));
 
   }
 
-  getBookImages(docID: string): void {
-    // this.fireBaseService.getBookImagesByDocID(docID).subscribe(data => {
-    //   this.bookImages = data.data() as BookImages;
-    // })
+  getBookImages(book: Book): void {
+    this.subscription.add(this.aspService.getBookImagesByParentID(book.bookID).subscribe((res: BookImages[]) => {
+      if (res) {
+        this.bookImagesArray = res;
+      }
+    }));
   }
 
   // Place
@@ -191,6 +193,7 @@ export class AdminComponent implements OnInit, OnDestroy {
       if (books && books.length) {
         this.books = books;
         this.book = books.filter(el => el.name === "Кижские Рассказы")[0];
+        this.getBookImages(this.book);
       }
     }, error => {
       console.error(error);
@@ -311,7 +314,7 @@ export class AdminComponent implements OnInit, OnDestroy {
       }
 
       this.aspService.uploadFiles(formData).subscribe((res) => {
-      debugger;
+        this.placeImagesArray = res.ImagesData as PlaceImages[];
       });
       // form.append();
       // formData.append("name", this.form.get('name').value);
@@ -319,27 +322,33 @@ export class AdminComponent implements OnInit, OnDestroy {
     }
   }
 
-  deleteFromImageArray(index: number): void {
+  deleteFromPlaceImageArray(item:PlaceImages): void {
+    this.aspService.deleteFile(item.placeImagesID,"place").subscribe((res)=>{
+      if(res){
+        this.placeImagesArray = this.placeImagesArray.filter(el=>el.placeImagesID!==item.placeImagesID);
+      }
+    })
     // if (this.placeImages.images) {
     //   this.placeImages.images.splice(index, 1);
     // }
   }
 
-  deleteFromBookImageArray(index: number): void {
-    // if (this.bookImages.images.length) {
-    //   this.bookImages.images.splice(index, 1);
-    // }
-
+  deleteFromBookImageArray(item:BookImages): void {
+    this.aspService.deleteFile(item.bookImagesID,"book").subscribe((res)=>{
+      if(res){
+        this.bookImagesArray = this.bookImagesArray.filter(el=>el.bookImagesID!==item.bookImagesID);
+      }
+    })
   }
 
   addNew(): void {
     if (this.isPlaceTab) {
       this.place = new Place();
-      this.placesImages = [];
+      this.placeImagesArray = [];
     }
     else {
       this.book = new Book();
-      this.bookImages = new BookImages();
+      this.bookImagesArray = [];
     }
   }
 
