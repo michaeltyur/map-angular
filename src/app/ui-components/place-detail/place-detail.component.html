@@ -11,10 +11,10 @@
         <hr>
         {{ place.comment }}
       </div>
-      <div *ngIf="placeImages">
-        <!-- <div *ngFor="let image of placeImages.images; let i = index" class="col text-center mt-2">
-          <img style="width: 11rem;height: auto;cursor: pointer;" [src]="image | String64ToImage" (error)="imageLoadError($event)" alt="image" (click)="openImageWindow(place,i, dialog)" />
-        </div> -->
+      <div *ngIf="placeImagesArray">
+        <div *ngFor="let image of placeImagesArray; let i = index" class="col text-center mt-2">
+          <img style="width: 11rem;height: auto;cursor: pointer;" [src]="image.imagePath" (error)="imageLoadError($event)" alt="image" (click)="openImageWindow(image ,i, dialog)" />
+        </div>
       </div>
 
     </div>
@@ -22,14 +22,14 @@
 </nb-card>
 
 <ng-template #dialog let-data let-ref="dialogRef">
-  <nb-card>
+  <nb-card class="w-100 w-sm-75 mb-0">
     <nb-card-header class="pb-2">
       <div class="row">
         <div class="col">
           {{ data.name }}
         </div>
         <div class="col text-center">
-          <!-- <span *ngIf="placeImages">{{selectedImageIndex+1}} из {{placeImages.images.length}}</span> -->
+          <span *ngIf="placeImagesArray">{{selectedImageIndex+1}} из {{placeImagesArray.length}}</span>
         </div>
         <div class="col">
           <div style="color: crimson;cursor: pointer;" (click)="ref.close()" class="float-right">
@@ -39,10 +39,10 @@
       </div>
 
     </nb-card-header>
-    <nb-card-body>
+    <nb-card-body class="p-1 p-sm-3">
       <div class="row">
         <div class="col">
-          <img style="width: 35rem;height: auto;" [src]="frontImagePath | String64ToImage" (error)="imageLoadError($event)" alt="image" />
+          <img style="width: 100%; height: auto;" [src]="frontImagePath" (error)="imageLoadError($event)" alt="image" />
         </div>
       </div>
     </nb-card-body>

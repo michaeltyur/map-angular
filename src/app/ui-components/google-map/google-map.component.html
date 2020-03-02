@@ -2,8 +2,8 @@
   <!-- <nb-card-header>
 
   </nb-card-header> -->
-  <nb-card-body>
-    <agm-map style="height: 100%;background-origin: 10px;" [latitude]='latitude' [longitude]='longitude' [mapTypeId]='mapType' [zoom]='zoom'>
+  <nb-card-body class="map-container p-0 p-sm-2">
+    <agm-map style="min-width: 100%; ;height: 100%;background-origin: 10px;" [latitude]='latitude' [longitude]='longitude' [mapTypeId]='mapType' [zoom]='zoom'>
 
       <agm-marker *ngFor="let place of places" [latitude]="place.latitude" [longitude]="place.longitude" (mouseOver)="onMouseOver(infoWindow,$event)" (mouseOut)="onMouseOut(infoWindow, $event)" (markerClick)="onMapMarkerClick(place)">
 

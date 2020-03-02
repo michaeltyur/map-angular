@@ -2,59 +2,50 @@
 
   <nb-layout-header fixed>
 
-    <div class="row w-100">
-      <div *ngIf="!isSideBarCollapsed" class="col-1 text-center text-danger my-auto" style="cursor: pointer;" (click)="collapseSideBar()">
-        <i class="far fa-window-close fa-2x"></i>
+    <div class="row main-header-div">
+      <div *ngIf="!isSideBarCollapsed" class="col-3 col-sm-1 text-left text-danger my-auto" style="cursor: pointer;" (click)="collapseSideBar()">
+        <i class="far fa-window-close fa-3x"></i>
       </div>
-      <div *ngIf="isSideBarCollapsed" class="col-1 text-center text-warning my-auto" style="cursor: pointer;" (click)="expandSideBar()">
-        <i class="fas fa-bars fa-2x"></i>
+      <div *ngIf="isSideBarCollapsed" class="col-3 col-sm-1 text-left text-warning my-auto" style="cursor: pointer;" (click)="expandSideBar()">
+        <i class="fas fa-bars fa-3x"></i>
       </div>
-      <div class="col-1 text-center">
+      <div class="col-3 col-sm-1  text-right my-auto">
         <button nbButton hero status="info" [nbContextMenu]="themeMenuItems" nbContextMenuTag="theme-context-menu">
           <i class="fas fa-palette fa-lg"></i>
         </button>
 
-        <!-- <nb-select  shape="round" outline status="info" (selectedChange)="changeTheme($event)">
-          <nb-select-label>
-            <i class="fas fa-palette"></i>
-          </nb-select-label>
-          <nb-option value="corporate">Corporate</nb-option>
-          <nb-option value="default">Light</nb-option>
-          <nb-option value="dark">Dark</nb-option>
-          <nb-option value="cosmic">Cosmic</nb-option>
-        </nb-select> -->
       </div>
-      <div class="col text-center">
+      <div class="col-sm-7 text-center" *ngIf="!isMobile">
         <!-- <h3 class="header-title">Tedious literature it can be interesting !!!</h3> -->
         <div *ngIf="!isMobile" class="row">
-          <div class="col text-right">
+          <div class="col text-right my-auto">
             <input type="text" shape="round" name="searchPlaceInput" nbInput fullWidth placeholder="Поиск по географическому названию" (input)="placeSearchInput()" [(ngModel)]="placeSearchTerm">
           </div>
-          <div class="col text-left">
+          <div class="col text-left my-auto">
             <input type="text" shape="round" name="searchBookInput" nbInput fullWidth placeholder="Поиск по произведению" [(ngModel)]="bookSearchTerm" (input)="bookSearchInput()">
           </div>
         </div>
       </div>
-      <div class="col-1 text-center">
-        <button nbButton hero status="info" (click)="navigateTo('/home')"><i class="fa fa-home fa-lg" alt="Домашняя страница"></i></button>
+
+      <div class="col-2 col-sm-1  text-center pl-1 pr-0 my-auto">
+        <button nbButton hero status="info" fullWidth (click)="navigateTo('/home')"><i class="fa fa-home fa-lg" alt="Домашняя страница"></i></button>
       </div>
-      <div class="col-1 text-center">
-        <button nbButton hero status="success" (click)="navigateTo('/google-map/0/0')"><i class="fa fa-map fa-lg" alt="Карта"></i></button>
+      <div class="col-2 col-sm-1 col text-center pl-1 pr-0 my-auto">
+        <button nbButton hero status="success" fullWidth (click)="navigateTo('/google-map/0/0')"><i class="fa fa-map fa-lg" alt="Карта"></i></button>
       </div>
-      <div class="col-1 text-center">
-        <button nbButton hero status="warning" (click)="navigateTo('/admin')"><i class="fas fa-tools fa-lg" alt="Админ страница"></i></button>
+      <div class="col-2 col-sm-1 col text-center pl-1 pr-0 my-auto">
+        <button nbButton hero status="warning" fullWidth (click)="navigateTo('/admin')"><i class="fas fa-tools fa-lg" alt="Админ страница"></i></button>
       </div>
     </div>
-
 
   </nb-layout-header>
 
 
 
-  <nb-layout-column>
+  <nb-layout-column style="overflow-y: hidden;">
 
     <!-- Search Input Mobile  -->
-    <div *ngIf="isMobile" class="row w-100 mb-2 mr-0">
+    <div *ngIf="isMobile" class="row mb-2 mr-0 pr-0" style="min-width: 108%;">
       <div class="col pl-1 pr-0">
         <input type="text" shape="round" name="searchPlaceInput" nbInput fullWidth placeholder="Поиск по географическому названию" (input)="placeSearchInput()" [(ngModel)]="placeSearchTerm">
       </div>

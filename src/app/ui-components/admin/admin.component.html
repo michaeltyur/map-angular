@@ -1,186 +1,213 @@
 <!-- <button  nbButton hero status="success" (click)="copyToSQL()">Action</button> -->
 
 
-<div class="container d-flex h-100 w-100">
-
-  <nb-card [nbSpinner]="loading" nbSpinnerSize="giant" class="mb-0 ml-auto mr-auto align-self-center" style="width: 90%;max-height: 90%;">
+  <nb-card [nbSpinner]="loading" nbSpinnerSize="giant" class="mb-0 ml-auto mr-auto my-auto">
     <nb-card-header>
-      <div class="row">
-        <div class="col">
+      <!-- Desktop  -->
+      <div class="row" *ngIf="!isMobile" style="min-width: 103%;">
+        <div class="col my-auto">
           <h6>
             Details
           </h6>
-          <button [disabled]="!place.placeID" *ngIf="isPlaceTab" nbButton outline status="success" class="float-right" (click)="addNew()">Новое Место</button>
-          <button [disabled]="!book.bookID" nbButton *ngIf="!isPlaceTab" outline status="success" class="float-right" (click)="addNew()">Новая Книга</button>
+        </div>
+        <div class="col text-center" >
+          <button [class.active]="isPlaceTab" [disabled]="isPlaceTab" nbButton fullWidth outline status="warning" class="" (click)="isPlaceTab=true">Место</button>
+        </div>
+        <div class="col text-center">
+          <button [class.active]="!isPlaceTab" [disabled]="!isPlaceTab" nbButton fullWidth outline status="warning" class="" (click)="isPlaceTab=false">Произведение</button>
+        </div>
+        <div class="col text-center">
+          <button [disabled]="!place.placeID" *ngIf="isPlaceTab" fullWidth nbButton outline status="success" class="" (click)="addNew()">Новое Место</button>
+          <button [disabled]="!book.bookID" *ngIf="!isPlaceTab" fullWidth nbButton outline status="success" class="" (click)="addNew()">Новая Книга</button>
         </div>
       </div>
+
+      <!-- Mobile  -->
+      <div class="row mr-0 pr-0" *ngIf="isMobile">
+        <div class="row mr-0 pr-0 mb-2">
+          <div class="col my-auto">
+            <h6>
+              Details
+            </h6>
+          </div>
+        </div>
+        <div class="row mr-0 pr-0" style="min-width: 113%;">
+          <div class="col-4 text-center pr-1">
+            <button [class.active]="isPlaceTab" [disabled]="isPlaceTab" nbButton fullWidth outline status="warning" class="" (click)="isPlaceTab=true">Место</button>
+          </div>
+          <div class="col-4 text-center pl-0 pr-0">
+            <button [class.active]="!isPlaceTab" [disabled]="!isPlaceTab" nbButton fullWidth outline status="warning" class="" (click)="isPlaceTab=false">Книга</button>
+          </div>
+          <div class="col-4 text-center pl-1">
+            <button [disabled]="!place.placeID" nbButton outline status="success" fullWidth class="" (click)="addNew()">Доб</button>
+          </div>
+        </div>
+      </div>
+
     </nb-card-header>
     <nb-card-body class="">
 
-
-      <nb-tabset (changeTab)="tabChanged($event)">
-        <nb-tab tabTitle="Place" [badgeText]="places.length" badgeStatus="success">
-          <!-- Name -->
-          <div class="row form-group">
-            <div class="col-3">
-              <label for="nameInput" class="col-form-label">place name:</label>
-            </div>
-            <div class="col-9">
-              <input type="text" name="nameInput" [(ngModel)]="place.name" nbInput fullWidth status="basic" placeholder="название географического места">
-            </div>
+      <!-- Place  -->
+      <section *ngIf="isPlaceTab">
+        <!-- Name -->
+        <div class="row form-group">
+          <div class="col-3">
+            <label for="nameInput" class="col-form-label">place name:</label>
           </div>
-
-          <!-- Text -->
-          <div class="row form-group">
-            <div class="col-3">
-              <label for="descriptionInput" class="col-form-label">text:</label>
-            </div>
-            <div class="col-9">
-              <textarea rows="6" type="text" name="descriptionInput" [(ngModel)]="place.text" nbInput fullWidth status="basic" placeholder="текст из произведения"></textarea>
-            </div>
+          <div class="col-9">
+            <input type="text" name="nameInput" [(ngModel)]="place.name" nbInput fullWidth status="basic" placeholder="название географического места">
           </div>
+        </div>
 
-          <!-- Comment  -->
-          <div class="row form-group">
-            <div class="col-3">
-              <label for="commentInput" class="col-form-label">comment:</label>
-            </div>
-            <div class="col-9">
-              <input type="text" name="commentInput" [(ngModel)]="place.comment" nbInput fullWidth status="basic" placeholder="комментарий">
-            </div>
+        <!-- Text -->
+        <div class="row form-group">
+          <div class="col-3">
+            <label for="descriptionInput" class="col-form-label">text:</label>
           </div>
-
-          <!-- Latitude -->
-          <div class="row form-group">
-            <div class="col-3">
-              <label for="latitudeInput" class="col-form-label">latitude:</label>
-            </div>
-            <div class="col-9">
-              <input type="number" name="latitudeInput" [(ngModel)]="place.latitude" nbInput fullWidth status="basic" placeholder="latitude">
-            </div>
+          <div class="col-9">
+            <textarea rows="6" type="text" name="descriptionInput" [(ngModel)]="place.text" nbInput fullWidth status="basic" placeholder="текст из произведения"></textarea>
           </div>
+        </div>
 
-          <!-- Longitude -->
-          <div class="row form-group">
-            <div class="col-3">
-              <label for="longitudeInput" class="col-form-label">longitude:</label>
-            </div>
-            <div class="col-9">
-              <input type="number" name="longitudeInput" [(ngModel)]="place.longitude" nbInput fullWidth status="basic" placeholder="longitude">
-            </div>
+        <!-- Comment  -->
+        <div class="row form-group">
+          <div class="col-3">
+            <label for="commentInput" class="col-form-label">comment:</label>
           </div>
-
-          <!-- Zoom -->
-          <div class="row form-group">
-            <div class="col-3">
-              <label for="zoomInput" class="col-form-label">zoom:</label>
-            </div>
-            <div class="col-9">
-              <input type="text" name="zoomInput" [(ngModel)]="place.zoom" nbInput fullWidth status="basic" placeholder="zoom">
-            </div>
+          <div class="col-9">
+            <input type="text" name="commentInput" [(ngModel)]="place.comment" nbInput fullWidth status="basic" placeholder="комментарий">
           </div>
+        </div>
 
-          <!-- Images Input -->
-          <div class="row form-group">
-            <div class="col-3">
-              <label for="imagesPlaceInput" class="col-form-label">images:</label>
-            </div>
-            <div class="col-9">
-              <div class="row d-flex flex-column">
-                <div class="col d-flex flex-row">
-                  <input type="file" name="imagesPlaceInput" multiple (change)="handleFileSelect($event)" nbInput fullWidth placeholder="path">
-                  <!-- <button nbButton outline status="info"(click)="uploadFiles($event,place)">Upload Image</button> -->
-                </div>
+        <!-- Latitude -->
+        <div class="row form-group">
+          <div class="col-3">
+            <label for="latitudeInput" class="col-form-label">latitude:</label>
+          </div>
+          <div class="col-9">
+            <input type="number" name="latitudeInput" [(ngModel)]="place.latitude" nbInput fullWidth status="basic" placeholder="latitude">
+          </div>
+        </div>
+
+        <!-- Longitude -->
+        <div class="row form-group">
+          <div class="col-3">
+            <label for="longitudeInput" class="col-form-label">longitude:</label>
+          </div>
+          <div class="col-9">
+            <input type="number" name="longitudeInput" [(ngModel)]="place.longitude" nbInput fullWidth status="basic" placeholder="longitude">
+          </div>
+        </div>
+
+        <!-- Zoom -->
+        <div class="row form-group">
+          <div class="col-3">
+            <label for="zoomInput" class="col-form-label">zoom:</label>
+          </div>
+          <div class="col-9">
+            <input type="text" name="zoomInput" [(ngModel)]="place.zoom" nbInput fullWidth status="basic" placeholder="zoom">
+          </div>
+        </div>
+
+        <!-- Images Input -->
+        <div class="row form-group">
+          <div class="col-3">
+            <label for="imagesPlaceInput" class="col-form-label">images:</label>
+          </div>
+          <div class="col-9">
+            <div class="row d-flex flex-column">
+              <div class="col d-flex flex-row">
+                <input type="file" name="imagesPlaceInput" multiple (change)="handleFileSelect($event)" nbInput fullWidth placeholder="path">
+                <!-- <button nbButton outline status="info"(click)="uploadFiles($event,place)">Upload Image</button> -->
               </div>
             </div>
           </div>
+        </div>
 
-          <!-- Place Images  -->
-          <div class="row form-group d-flex">
-            <div class="col-5 m-2 ml-auto mr-auto d-flex justify-content-center" *ngFor="let item of placeImagesArray; let i = index">
+        <!-- Place Images  -->
+        <div class="row form-group d-flex">
+          <div class="col-5 m-2 ml-auto mr-auto d-flex justify-content-center" *ngFor="let item of placeImagesArray; let i = index">
 
-              <div style="color: crimson;position: absolute;right: 0px;top: -11px;cursor: pointer;" (click)="deleteFromPlaceImageArray(item)">
-                <i class="fas fa-times-circle fa-2x"></i>
+            <div style="color: crimson;position: absolute;right: 0px;top: -11px;cursor: pointer;" (click)="deleteFromPlaceImageArray(item)">
+              <i class="fas fa-times-circle fa-2x"></i>
+            </div>
+            <img [src]="item.imagePath | ImageSrcDomsanitization" alt="image" style="width: 100%;
+                  height: auto;" (error)="imageLoadError($event)">
+          </div>
+        </div>
+      </section>
+
+      <!-- Book -->
+      <section *ngIf="!isPlaceTab">
+        <!-- Name -->
+        <div class="row form-group">
+          <div class="col-3">
+            <label for="bookNameInput" class="col-form-label">book name:</label>
+          </div>
+          <div class="col-9">
+            <input type="text" name="bookNameInput" [(ngModel)]="book.name" nbInput fullWidth status="basic" placeholder="book name">
+          </div>
+        </div>
+
+        <!-- Autor -->
+        <div class="row form-group">
+          <div class="col-3">
+            <label for="bookAutorInput" class="col-form-label">book autor:</label>
+          </div>
+          <div class="col-9">
+            <input type="text" name="bookAutorInput" [(ngModel)]="book.autor" nbInput fullWidth status="basic" placeholder="book autor">
+          </div>
+        </div>
+
+        <!-- Description -->
+        <div class="row form-group">
+          <div class="col-1">
+            <label for="bookDescriptionInput" class="col-form-label">text:</label>
+          </div>
+          <div class="col-11">
+          </div>
+        </div>
+
+        <!-- Text  -->
+        <div class="row form-group">
+          <div class="col">
+            <angular-editor [placeholder]="'Enter text here...'" [(ngModel)]="book.text"></angular-editor>
+          </div>
+        </div>
+
+        <!-- Images Input -->
+        <div class="row form-group">
+          <div class="col-3">
+            <label for="bookImagePathInput" class="col-form-label">images:</label>
+          </div>
+          <div class="col-9">
+            <div class="row d-flex flex-column">
+              <div class="col">
+                <input type="file" name="bookImagePathInput" multiple [(ngModel)]="bookFilesToUpload" (change)="handleFileSelect($event)" nbInput fullWidth placeholder="path">
               </div>
-              <img [src]="item.imagePath | ImageSrcDomsanitization" alt="image" style="width: 100%;
-                  height: auto;">
             </div>
           </div>
+        </div>
 
-        </nb-tab>
-
-        <!-- Book -->
-        <nb-tab tabTitle="Book" [badgeText]="books.length" badgeStatus="success">
-          <!-- Name -->
-          <div class="row form-group">
-            <div class="col-3">
-              <label for="bookNameInput" class="col-form-label">book name:</label>
+        <!-- Images  -->
+        <div class="row form-group d-flex">
+          <div class="col-5 m-2 ml-auto mr-auto d-flex justify-content-center" *ngFor="let item of bookImagesArray; let i = index">
+            <div style="color: crimson;position: absolute;right: 0px;top: -11px;cursor: pointer;" (click)="deleteFromBookImageArray(item)">
+              <i class="fas fa-times-circle fa-2x"></i>
             </div>
-            <div class="col-9">
-              <input type="text" name="bookNameInput" [(ngModel)]="book.name" nbInput fullWidth status="basic" placeholder="book name">
-            </div>
-          </div>
-
-          <!-- Autor -->
-          <div class="row form-group">
-            <div class="col-3">
-              <label for="bookAutorInput" class="col-form-label">book autor:</label>
-            </div>
-            <div class="col-9">
-              <input type="text" name="bookAutorInput" [(ngModel)]="book.autor" nbInput fullWidth status="basic" placeholder="book autor">
-            </div>
-          </div>
-
-          <!-- Description -->
-          <div class="row form-group">
-            <div class="col-1">
-              <label for="bookDescriptionInput" class="col-form-label">text:</label>
-            </div>
-            <div class="col-11">
-            </div>
-          </div>
-
-          <!-- Text  -->
-          <div class="row form-group">
-            <div class="col">
-              <angular-editor [placeholder]="'Enter text here...'" [(ngModel)]="book.text"></angular-editor>
-            </div>
-          </div>
-
-          <!-- Images Input -->
-          <div class="row form-group">
-            <div class="col-3">
-              <label for="bookImagePathInput" class="col-form-label">images:</label>
-            </div>
-            <div class="col-9">
-              <div class="row d-flex flex-column">
-                <div class="col">
-                  <input type="file" name="bookImagePathInput" multiple [(ngModel)]="bookFilesToUpload" (change)="handleFileSelect($event)" nbInput fullWidth placeholder="path">
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Images  -->
-          <div class="row form-group d-flex">
-            <div class="col-5 m-2 ml-auto mr-auto d-flex justify-content-center" *ngFor="let item of bookImagesArray; let i = index">
-              <div style="color: crimson;position: absolute;right: 0px;top: -11px;cursor: pointer;" (click)="deleteFromBookImageArray(item)">
-                <i class="fas fa-times-circle fa-2x"></i>
-              </div>
-              <img [src]="item.imagePath | ImageSrcDomsanitization" alt="image" style="width: 100%;
+            <img [src]="item.imagePath | ImageSrcDomsanitization" alt="image" style="width: 100%;
                           height: auto;">
-            </div>
           </div>
-
-        </nb-tab>
-      </nb-tabset>
+        </div>
+      </section>
 
     </nb-card-body>
     <nb-card-footer>
       <!-- Save Button -->
       <div class="row form-group">
         <div class="col text-center">
-          <button [disabled]="!place.placeID" *ngIf="isPlaceTab" nbButton hero status="danger" (click)="deletePlace()">Delete</button>
+          <button [disabled]="!place.placeID" *ngIf="isPlaceTab" nbButton hero status="danger" (click)="deletePlace()">Delete Place</button>
+          <button [disabled]="!book.bookID" *ngIf="!isPlaceTab" nbButton hero status="danger" (click)="deleteBook()">Delete Book</button>
         </div>
         <div class="col text-center">
           <button nbButton hero status="success" (click)="actionSaveSelect()">Save</button>
@@ -189,4 +216,4 @@
     </nb-card-footer>
   </nb-card>
 
-</div>
+

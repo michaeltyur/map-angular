@@ -8,6 +8,7 @@ import { Place, PlaceImages } from 'src/app/shared/models/firebase-collection-mo
 import { Subscription } from 'rxjs';
 import { DeviceDetectorService } from 'ngx-device-detector';
 import { AspService } from 'src/app/shared/services/asp.service';
+import { CrudService } from 'src/app/shared/services/crud.service';
 
 @Component({
   selector: 'app-sidebar',
@@ -20,8 +21,8 @@ export class SidebarComponent implements OnInit, OnDestroy {
   places: Place[] = [];
   place: Place;
   placeDetail: Place;
-  placeImages: PlaceImages;
-
+  placeImagesArray: PlaceImages[];
+  isMobile: boolean;
   @Input() placeSearchTerm: string = "";
   @Input() bookSearchTerm: string = "";
 
@@ -32,14 +33,38 @@ export class SidebarComponent implements OnInit, OnDestroy {
     private searchService: SearchService,
     private sidebarService: NbSidebarService,
     private deviceService: DeviceDetectorService,
-    private aspService: AspService
+    private aspService: AspService,
+    private crudService: CrudService
   ) { }
 
   ngOnInit(): void {
+    this.isMobile = this.deviceService.isMobile();
+    if (!this.isMobile) {
+      this.sidebarService.expand();
+    }
+    else {
+      this.sidebarService.collapse();
+    }
+    this.emitterSubscribtions();
     this.getPlaces();
+  }
+
+  emitterSubscribtions(): void {
+    // Place Updated
+    this.subscription.add(this.crudService.updatePlaceEmitter$.subscribe((place: Place) => {
+      this.places.filter(el => el.placeID === place.placeID)[0] = place;
+    }));
+
+    //Place Added
+    this.subscription.add(this.crudService.newPlaceAddedEmitter$.subscribe((place: Place) => {
+      this.places.unshift(place);
+    }));
+
+    //Place Details
     this.subscription.add(this.searchService.placeDetailsEmitter$.subscribe(data => {
       this.place = data;
     }));
+
   }
 
   ngOnDestroy() {
@@ -58,36 +83,36 @@ export class SidebarComponent implements OnInit, OnDestroy {
   }
 
   getPlaces(): void {
-    // this.subscription.add(this.fireBaseService.getPlaces().subscribe(data => {
-    //   this.places = data.map(e => {
-    //     return {
-    //       id: e.payload.doc.id,
-    //       ...e.payload.doc.data()
-    //     } as Place;
-    //   })
-    // }));
-    this.aspService.getAllPlaces().subscribe((places:Place[])=>{
-      if(places){
+    this.subscription.add(this.aspService.getAllPlaces().subscribe((places: Place[]) => {
+      if (places) {
         this.places = places;
       }
-    })
-
+    }));
   }
+
   collapsedChange(item: Place): void {
-    //this.getPlaceImages(this.place.id);
     this.searchService.sideBarSelectItemEmitter$.emit(item);
   }
   openDetails(place: Place): void {
-    // this.getPlaceImages(place.id);
-    // this.sidebarService.collapse();
-    // this.place = place;
-    // this.sidebarService.expand();
+    this.getPlaceImages(place.placeID);
+    this.sidebarService.collapse();
+    this.place = place;
+    this.sidebarService.expand();
   }
 
-  getPlaceImages(docID: string): void {
-    // this.subscription.add(this.fireBaseService.getPlaceImagesByDocID(docID).subscribe(data => {
-    //   this.placeImages = data;
-    // }));
+  getPlaceImages(id: number): void {
+    this.subscription.add(this.aspService.getPlaceImagesByParentID(id).subscribe((res: PlaceImages[]) => {
+      if (res) {
+        this.placeImagesArray = res;
+      }
+    }));
+  }
+
+  closeDetails():void{
+    if(this.isMobile){
+      this.sidebarService.collapse();
+    }
+    this.place = null;
   }
 
 }

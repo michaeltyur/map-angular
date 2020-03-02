@@ -68,8 +68,8 @@ export class AspService {
     let url = this.remoteUrl + `/api/PlaceBook/UploadFiles`;
     return this.http.post<ServerResponse>(url, formData);
   }
-  deleteFile(imageId:number,parentType:string):Observable<any>{
-    let url = this.remoteUrl + `/api/PlaceBook/DeleteImageFile?imageID=${imageId}&${parentType}`;
-    return this.http.get(url);
+  deleteFile(imageId: number, parentType: string): Observable<ServerResponse> {
+    let url = this.remoteUrl + `/api/PlaceBook/DeleteImageFile?imageID=${imageId}&parentType=${parentType}`;
+    return this.http.get<ServerResponse>(url);
   }
 }

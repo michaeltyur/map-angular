@@ -46,10 +46,10 @@ export class BookImages {
 }
 
 export interface ServerResponse {
-  ID: number;
-  Error: string;
-  Message: string;
-  ImagesData:any[];
+  id: number;
+  error: string;
+  message: string;
+  imagesData:any[];
 }
 
 export class ImagesRequest {

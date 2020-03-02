@@ -1,22 +1,22 @@
-<div class="container d-flex flex-column h-100 w-100">
-  <nb-card style="height: 13rem;width: 90%;" class="mb-0 ml-auto mr-auto mb-2">
+
+  <nb-card style="height: 13rem;"  class="mb-0 ml-auto mr-auto mb-2 ">
     <nb-card-body>
       <div class="row d-flex flex-row justify-content-center flex-nowrap">
-        <!-- <div class="col text-center" *ngFor="let image64 of bookImages.images; let i = index">
-          <img [src]="image64 | String64ToImage" alt="image" style="width: auto;
+        <div class="col text-center" *ngFor="let item of bookImagesArray; let i = index">
+          <img [src]="item.imagePath" alt="image" style="width: auto;
                     height: 11rem;">
-        </div> -->
+        </div>
       </div>
 
     </nb-card-body>
   </nb-card>
-  <nb-card class="mb-0 ml-auto mr-auto" style="width: 90%;">
+  <nb-card class="mb-0 ml-auto mr-auto">
     <nb-card-header>
       <h6>
         {{book.name}}
       </h6>
     </nb-card-header>
-    <nb-card-body style="height: 45rem;">
+    <nb-card-body>
 
       <div class="row h-100">
         <div class="col">
@@ -28,4 +28,4 @@
 
     </nb-card-body>
   </nb-card>
-</div>
+

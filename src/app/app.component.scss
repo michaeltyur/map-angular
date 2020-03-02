@@ -3,3 +3,11 @@
   font-family: "Harlow Solid";
   font-style: italic;
 }
+.main-header-div{
+  min-width: 100%;
+}
+@media screen and (max-width: 576px){
+.main-header-div{
+  min-width: 106%;
+}
+}

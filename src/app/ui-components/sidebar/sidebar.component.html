@@ -13,11 +13,11 @@
         </p>
 
         <p style="cursor: pointer;color: lime;" (click)="openDetails(item)">
-          <i class="fas fa-info-circle fa-lg"></i>
+          <i class="fas fa-info-circle fa-2x"></i>
         </p>
 
         <div style="cursor: pointer;color: crimson;" (click)="mapNavigateTo(item)">
-          <i class="far fa-map fa-lg"></i>
+          <i class="far fa-map fa-2x"></i>
         </div>
 
       </nb-accordion-item-body>
@@ -27,11 +27,11 @@
   <div *ngIf="place" class="h-100">
     <!-- Delete Button -->
     <div
-      (click)="place=null"
+      (click)="closeDetails()"
       style="color: crimson;position: absolute;right: 27px;top: 32px;cursor: pointer;z-index: 10000;">
       <i class="fas fa-times-circle fa-2x"></i>
    </div>
-    <app-place-detail class="h-100" [place]="place" [placeImages]="placeImages">
+    <app-place-detail class="h-100" [place]="place" [placeImagesArray]="placeImagesArray">
     </app-place-detail>
   </div>
 

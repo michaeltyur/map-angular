@@ -9,6 +9,8 @@ import { Place, Book, PlaceImages, BookImages, ServerResponse, ImagesRequest } f
 import { AspService } from 'src/app/shared/services/asp.service';
 import { error } from 'protractor';
 import { PlaceDetailComponent } from '../place-detail/place-detail.component';
+import { ParentType } from 'src/app/shared/models/enums';
+import { DeviceDetectorService } from 'ngx-device-detector';
 
 @Component({
   selector: 'app-admin',
@@ -19,6 +21,8 @@ export class AdminComponent implements OnInit, OnDestroy {
 
   subscription = new Subscription();
   searchInBookTerm: string;
+  imageNotAvalibleSrc = "https://live-project.space/Images/PlaceBookImages/no-image.png";
+
   // Places
   place: Place;
   places: Place[] = [];
@@ -26,7 +30,7 @@ export class AdminComponent implements OnInit, OnDestroy {
   placeFilesToUpload: File;
   bookFilesToUpload: File;
   selectedFiles: File[];
-
+  isMobile: boolean;
   // PlaceImages
   placeImagesArray: PlaceImages[] = [];
 
@@ -50,16 +54,26 @@ export class AdminComponent implements OnInit, OnDestroy {
     private sidebarService: NbSidebarService,
     @Inject(NB_WINDOW) private window,
     private searchService: SearchService,
-    private aspService: AspService
+    private aspService: AspService,
+    private deviceService: DeviceDetectorService,
   ) {
     this.place = new Place();
     this.book = new Book();
   }
 
   ngOnInit(): void {
+
+    this.isMobile = this.deviceService.isMobile();
+    if (!this.isMobile) {
+      this.sidebarService.expand();
+    }
+    else {
+      this.sidebarService.collapse();
+    }
+
+
     this.getPlaces();
     this.getBooks();
-    this.sidebarService.expand();
     // Close Details Menu
     this.searchService.placeDetailsEmitter$.emit(null);
 
@@ -112,11 +126,11 @@ export class AdminComponent implements OnInit, OnDestroy {
       this.loading = true;
       this.subscription.add(this.aspService.addPlace(this.place).subscribe((res: ServerResponse) => {
         if (res) {
-          this.place.placeID = res.ID;
+          this.place.placeID = res.id;
           this.places.unshift(this.place);
           this.nbToastrService.success("", "Added!!!");
           this.loading = false;
-          this.uploadFiles(this.selectedFiles, this.place);
+          this.uploadFiles(this.selectedFiles, ParentType.place, this.place);
         }
         else {
           this.nbToastrService.danger("", "Not added!!!");
@@ -168,11 +182,12 @@ export class AdminComponent implements OnInit, OnDestroy {
       this.loading = true;
 
       this.subscription.add(this.aspService.updatePlace(this.place).subscribe((res: ServerResponse) => {
-        if (res && !res.Error) {
+        if (res && !res.error) {
           this.nbToastrService.success("", "Updated");
+          this.uploadFiles(this.selectedFiles, ParentType.place, this.place);
         }
         else {
-          this.nbToastrService.warning("", res.Error);
+          this.nbToastrService.warning("", res.error);
         }
         this.loading = false;
       }, error => {
@@ -180,7 +195,6 @@ export class AdminComponent implements OnInit, OnDestroy {
         console.error(error);
       }));
 
-      this.uploadFiles(this.selectedFiles, this.place);
 
     }
   }
@@ -203,11 +217,14 @@ export class AdminComponent implements OnInit, OnDestroy {
   deletePlace(): void {
 
     if (this.place) {
-      this.aspService.deletePlace(this.place.placeID)
+      this.aspService.deletePlace(this.place.placeID).subscribe(res => {
+        if (res) {
+          this.place = new Place();
+          this.placeImagesArray = [];
+        }
+      })
     }
   }
-
-
 
   // Book
   saveBook(): void {
@@ -216,6 +233,7 @@ export class AdminComponent implements OnInit, OnDestroy {
       this.loading = true;
       this.subscription.add(this.aspService.addBook(this.book).subscribe((id) => {
         if (id) {
+          this.uploadFiles(this.selectedFiles, ParentType.book, this.book);
           this.nbToastrService.success("", "Added!!!");
           this.loading = false;
         }
@@ -248,11 +266,12 @@ export class AdminComponent implements OnInit, OnDestroy {
       this.loading = true;
 
       this.subscription.add(this.aspService.updateBook(this.book).subscribe((res: ServerResponse) => {
-        if (res && !res.Error) {
+        if (res && !res.error) {
+          this.uploadFiles(this.selectedFiles, ParentType.book, this.book);
           this.nbToastrService.success("", "Updated");
         }
         else {
-          this.nbToastrService.warning("", res.Error);
+          this.nbToastrService.warning("", res.error);
         }
         this.loading = false;
       }, error => {
@@ -262,7 +281,16 @@ export class AdminComponent implements OnInit, OnDestroy {
     }
 
   }
-
+  deleteBook(): void {
+    if (this.book) {
+      this.aspService.deleteBook(this.book.bookID).subscribe(res => {
+        if (res) {
+          this.book = null;
+          this.bookImagesArray = [];
+        }
+      })
+    }
+  }
 
   tabChanged(event): void {
     if (event.tabTitle === "Place") {
@@ -286,57 +314,84 @@ export class AdminComponent implements OnInit, OnDestroy {
 
     }
     else {
-      this.saveBook();
+      if (this.book.bookID) {
+        this.updateBook();
+      }
+      else {
+        this.saveBook();
+      }
+
     }
   }
 
   // Files
-
   handleFileSelect(event): void {
+debugger;
+    if (this.isPlaceTab && this.placeImagesArray.length > 5) {
+      this.nbToastrService.warning("", "максимальное количество картинок 5");
+      return;
+    }
+    else if (this.bookImagesArray.length > 5) {
+      this.nbToastrService.warning("", "максимальное количество картинок 5");
+      return;
+    }
+  Object.keys(event.target.files).forEach(key=>{
+      if (event.target.files[key].size/1024>500) {
+         this.nbToastrService.warning("",`File ${event.target.files[key].name} too big`);
+         delete event.target.files[key];
+      }
+    })
+
     this.selectedFiles = event.target.files;
   }
-  uploadFiles(imagesInput: File[], place?: Place, book?: Book): void {
+
+  uploadFiles(imagesInput: File[], parentType: ParentType, object: Place | Book): void {
     if (imagesInput && imagesInput.length) {
+
+
       let formData = new FormData();
 
       Object.keys(imagesInput).forEach(key => {
         formData.append("Files", imagesInput[key]);
       });
-      if (place) {
-        formData.append("ParentID", place.placeID.toString());
-        formData.append("ParentName", place.name);
+      if (parentType === ParentType.place) {
+        formData.append("ParentID", object['placeID'].toString());
+        formData.append("ParentName", object.name);
         formData.append("ParentType", "place");
       }
-      if (book) {
-        formData.append("ParentID", book.bookID.toString());
-        formData.append("ParentName", book.name);
+      if (parentType === ParentType.book) {
+        formData.append("ParentID", object['bookID'].toString());
+        formData.append("ParentName", object.name);
         formData.append("ParentType", "book");
       }
 
       this.aspService.uploadFiles(formData).subscribe((res) => {
-        this.placeImagesArray = res.ImagesData as PlaceImages[];
+        if (parentType === ParentType.place) {
+          this.placeImagesArray = res.imagesData;
+        }
+        if (parentType === ParentType.book) {
+          this.bookImagesArray = res.imagesData;
+        }
+
       });
-      // form.append();
-      // formData.append("name", this.form.get('name').value);
 
     }
   }
 
-  deleteFromPlaceImageArray(item:PlaceImages): void {
-    this.aspService.deleteFile(item.placeImagesID,"place").subscribe((res)=>{
-      if(res){
-        this.placeImagesArray = this.placeImagesArray.filter(el=>el.placeImagesID!==item.placeImagesID);
+  deleteFromPlaceImageArray(item: PlaceImages): void {
+    this.aspService.deleteFile(item.placeImagesID, "place").subscribe((res) => {
+      if (res) {
+        this.nbToastrService.success("", "Удалено");
+        this.placeImagesArray = this.placeImagesArray.filter(el => el.placeImagesID !== item.placeImagesID);
       }
     })
-    // if (this.placeImages.images) {
-    //   this.placeImages.images.splice(index, 1);
-    // }
   }
 
-  deleteFromBookImageArray(item:BookImages): void {
-    this.aspService.deleteFile(item.bookImagesID,"book").subscribe((res)=>{
-      if(res){
-        this.bookImagesArray = this.bookImagesArray.filter(el=>el.bookImagesID!==item.bookImagesID);
+  deleteFromBookImageArray(item: BookImages): void {
+    this.aspService.deleteFile(item.bookImagesID, "book").subscribe((res) => {
+      if (res) {
+        this.nbToastrService.success("", "Удалено");
+        this.bookImagesArray = this.bookImagesArray.filter(el => el.bookImagesID !== item.bookImagesID);
       }
     })
   }
@@ -351,20 +406,8 @@ export class AdminComponent implements OnInit, OnDestroy {
       this.bookImagesArray = [];
     }
   }
-
-  copyToSQL(): void {
-    this.places.forEach(el => {
-      this.aspService.addPlace(el).subscribe(res => {
-        console.log(res);
-      })
-    }, error => console.error(error))
-
-    this.books.forEach(el => {
-      this.aspService.addBook(el).subscribe(res => {
-        console.log(res)
-      })
-    }, error => console.error(error))
-
+  imageLoadError(event): void {
+    event.target.src = this.imageNotAvalibleSrc;
   }
 
 }

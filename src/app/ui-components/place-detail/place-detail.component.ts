@@ -12,8 +12,8 @@ import { FireBaseService } from 'src/app/shared/services/fire-base.service';
 export class PlaceDetailComponent implements OnInit {
 
   @Input() place: Place;
-  @Input() placeImages: PlaceImages ;
-  imageNotAvalibleSrc = "/assets/photo/no-image.png";
+  @Input() placeImagesArray: PlaceImages[] ;
+  imageNotAvalibleSrc = "https://live-project.space/Images/PlaceBookImages/no-image.png";
   frontImagePath: string;
   selectedImageIndex: number = 0;
 
@@ -36,24 +36,25 @@ export class PlaceDetailComponent implements OnInit {
     event.target.src = this.imageNotAvalibleSrc;
   }
 
-  openImageWindow(place: Place, index: number, dialog: TemplateRef<any>): void {
-    let dialogRef = this.dialogService.open(dialog, { context: place });
+  openImageWindow(image : PlaceImages, index: number, dialog: TemplateRef<any>): void {
+    let dialogRef = this.dialogService.open(dialog, { context: image });
     this.selectedImageIndex = index;
-   // this.frontImagePath = this.placeImages.images[this.selectedImageIndex];
+    this.frontImagePath = image.imagePath;
   }
   sliceRight(): void {
-    // this.selectedImageIndex++;
-    // if (this.selectedImageIndex >= this.placeImages.images.length) {
-    //   this.selectedImageIndex = 0;
-    // }
-   // this.frontImagePath = this.placeImages.images[this.selectedImageIndex];
+    this.selectedImageIndex++;
+
+    if (this.selectedImageIndex >= this.placeImagesArray.length) {
+      this.selectedImageIndex = 0;
+    }
+   this.frontImagePath = this.placeImagesArray[this.selectedImageIndex].imagePath;
   }
   sliceLeft(): void {
-    // this.selectedImageIndex--;
-    // if (this.selectedImageIndex < 0) {
-    //   this.selectedImageIndex = this.placeImages.images.length - 1;
-    // }
-    // this.frontImagePath = this.placeImages.images[this.selectedImageIndex];
+    this.selectedImageIndex--;
+    if (this.selectedImageIndex < 0) {
+      this.selectedImageIndex = this.placeImagesArray.length - 1;
+    }
+    this.frontImagePath = this.placeImagesArray[this.selectedImageIndex].imagePath;
   }
 
 }

@@ -7,6 +7,7 @@ import { FireBaseService } from 'src/app/shared/services/fire-base.service';
 import { SearchService } from 'src/app/shared/services/search.service';
 import { Place } from 'src/app/shared/models/firebase-collection-models';
 import { Subscription } from 'rxjs';
+import { DeviceDetectorService } from 'ngx-device-detector';
 
 @Component({
   selector: 'app-google-map',
@@ -20,16 +21,26 @@ export class GoogleMapComponent implements OnInit, OnDestroy {
   longitude = 35.2148;
   mapType = 'hybrid';
   zoom = 8;
+  isMobile: boolean;
   constructor(
     private fireBaseService: FireBaseService,
     private mapNavigationService: MapNavigationService,
     private route: ActivatedRoute,
     private sidebarService: NbSidebarService,
-    private searchService: SearchService
+    private searchService: SearchService,
+    private deviceService: DeviceDetectorService,
   ) { }
 
   ngOnInit(): void {
-    this.sidebarService.expand();
+
+    this.isMobile = this.deviceService.isMobile();
+    if (!this.isMobile) {
+      this.sidebarService.expand();
+    }
+    else {
+      this.sidebarService.collapse();
+    }
+
     if (this.fireBaseService.places.length) {
       this.places = this.fireBaseService.places
     }

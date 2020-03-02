@@ -4,3 +4,8 @@ export enum FireBaseCollection{
   placesImages="placesImages",
   booksImages="booksImages"
 }
+
+export enum ParentType{
+  place="place",
+  book="book"
+}

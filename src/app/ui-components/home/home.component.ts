@@ -17,13 +17,13 @@ export class HomeComponent implements OnInit, OnDestroy {
   subscription = new Subscription();
   places: Place[];
   books: Book[];
-  bookImages: BookImages;
+  bookImagesArray: BookImages[];
   book: Book;
   searchTerm: string;
-  isMobile:boolean ;
+  isMobile: boolean;
 
   constructor(
-    private aspService:AspService,
+    private aspService: AspService,
     private sidebarService: NbSidebarService,
     private router: Router,
     private searchService: SearchService,
@@ -31,15 +31,16 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   ) {
     this.book = new Book();
-    this.bookImages = new BookImages();
+    this.bookImagesArray = [];
   }
 
   ngOnInit(): void {
+    
     this.isMobile = this.deviceService.isMobile();
-    if(!this.isMobile){
+    if (!this.isMobile) {
       this.sidebarService.expand();
     }
-    else{
+    else {
       this.sidebarService.collapse();
     }
 
@@ -57,10 +58,12 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.subscription.unsubscribe();
   }
 
-  getBookImages(docID: string): void {
-    // this.subscription.add(this.fireBaseService.getBookImagesByDocID(docID).subscribe(data => {
-    //   this.bookImages = data.data();
-    // }));
+  getBookImages(id: number): void {
+    this.subscription.add(this.aspService.getBookImagesByParentID(id).subscribe((res: BookImages[]) => {
+      if (res) {
+        this.bookImagesArray = res;
+      }
+    }));
   }
 
   getPlaces(): void {
@@ -77,21 +80,12 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   getBooks(): void {
     this.subscription.add();
-    this.aspService.getAllBooks().subscribe((books:Book[])=>{
-       if (books && books.length) {
-          this.book= books.filter(el=>el.name==="Кижские Рассказы")[0];
-       }
+    this.aspService.getAllBooks().subscribe((books: Book[]) => {
+      if (books && books.length) {
+        this.book = books.filter(el => el.name === "Кижские Рассказы")[0];
+        this.getBookImages(this.book.bookID);
+      }
     })
-    // this.subscription.add(this.fireBaseService.getBooks().subscribe(data => {
-    //   this.books = data.map(e => {
-    //     return {
-    //       id: e.payload.doc.id,
-    //       ...e.payload.doc.data()
-    //     } as Book;
-    //   });
-    //   this.book = this.books[0];
-    //   this.getBookImages(this.book.id);
-    // }));
   }
 
   goToMap(place: Place): void {
