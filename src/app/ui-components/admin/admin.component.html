@@ -204,13 +204,13 @@
     </nb-card-body>
     <nb-card-footer>
       <!-- Save Button -->
-      <div class="row form-group">
+      <div class="row">
         <div class="col text-center">
-          <button [disabled]="!place.placeID" *ngIf="isPlaceTab" nbButton hero status="danger" (click)="deletePlace()">Delete Place</button>
-          <button [disabled]="!book.bookID" *ngIf="!isPlaceTab" nbButton hero status="danger" (click)="deleteBook()">Delete Book</button>
+          <button [disabled]="!place.placeID" *ngIf="isPlaceTab" class="footer-buttons" nbButton hero status="danger" (click)="deletePlace()">Delete Place</button>
+          <button [disabled]="!book.bookID" *ngIf="!isPlaceTab" class="footer-buttons" nbButton hero status="danger" (click)="deleteBook()">Delete Book</button>
         </div>
         <div class="col text-center">
-          <button nbButton hero status="success" (click)="actionSaveSelect()">Save</button>
+          <button nbButton hero status="success" class="footer-buttons" (click)="actionSaveSelect()">Save</button>
         </div>
       </div>
     </nb-card-footer>
