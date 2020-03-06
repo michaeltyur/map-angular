@@ -1,5 +1,4 @@
 import { Component, OnInit, Inject, OnDestroy } from '@angular/core';
-import { FireBaseService } from 'src/app/shared/services/fire-base.service';
 import { NbToastrService, NbMenuService, NB_WINDOW, NbSidebarService } from '@nebular/theme';
 import { filter, map } from 'rxjs/operators';
 import { SearchService } from 'src/app/shared/services/search.service';
@@ -11,6 +10,7 @@ import { error } from 'protractor';
 import { PlaceDetailComponent } from '../place-detail/place-detail.component';
 import { ParentType } from 'src/app/shared/models/enums';
 import { DeviceDetectorService } from 'ngx-device-detector';
+import { CrudService } from 'src/app/shared/services/crud.service';
 
 @Component({
   selector: 'app-admin',
@@ -39,6 +39,7 @@ export class AdminComponent implements OnInit, OnDestroy {
 
   // Books
   book: Book;
+  bookHtml:string;
   books: Book[] = [];
   booksFiltred: Book;
 
@@ -56,6 +57,7 @@ export class AdminComponent implements OnInit, OnDestroy {
     private searchService: SearchService,
     private aspService: AspService,
     private deviceService: DeviceDetectorService,
+    private crudService:CrudService
   ) {
     this.place = new Place();
     this.book = new Book();
@@ -130,6 +132,7 @@ export class AdminComponent implements OnInit, OnDestroy {
           this.places.unshift(this.place);
           this.nbToastrService.success("", "Added!!!");
           this.loading = false;
+          this.crudService.newPlaceAddedEmitter$.emit(this.place);
           this.uploadFiles(this.selectedFiles, ParentType.place, this.place);
         }
         else {
@@ -207,6 +210,7 @@ export class AdminComponent implements OnInit, OnDestroy {
       if (books && books.length) {
         this.books = books;
         this.book = books.filter(el => el.name === "Кижские Рассказы")[0];
+        this.bookHtml = this.book.text;
         this.getBookImages(this.book);
       }
     }, error => {
@@ -219,6 +223,7 @@ export class AdminComponent implements OnInit, OnDestroy {
     if (this.place) {
       this.aspService.deletePlace(this.place.placeID).subscribe(res => {
         if (res) {
+          this.crudService.deletePlaceEmitter$.emit(this.place);
           this.place = new Place();
           this.placeImagesArray = [];
         }
@@ -231,6 +236,7 @@ export class AdminComponent implements OnInit, OnDestroy {
     if (this.isBookValid()) {
 
       this.loading = true;
+      this.book.text = this.decodeHtml(this.bookHtml);
       this.subscription.add(this.aspService.addBook(this.book).subscribe((id) => {
         if (id) {
           this.uploadFiles(this.selectedFiles, ParentType.book, this.book);
@@ -264,7 +270,7 @@ export class AdminComponent implements OnInit, OnDestroy {
     if (this.isBookValid()) {
 
       this.loading = true;
-
+      this.book.text = this.decodeHtml(this.bookHtml);
       this.subscription.add(this.aspService.updateBook(this.book).subscribe((res: ServerResponse) => {
         if (res && !res.error) {
           this.uploadFiles(this.selectedFiles, ParentType.book, this.book);
@@ -408,6 +414,11 @@ debugger;
   }
   imageLoadError(event): void {
     event.target.src = this.imageNotAvalibleSrc;
+  }
+  private decodeHtml(html) {
+    var txt = document.createElement("textarea");
+    txt.innerHTML = html;
+    return txt.value;
   }
 
 }

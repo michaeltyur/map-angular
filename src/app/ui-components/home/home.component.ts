@@ -1,5 +1,4 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { FireBaseService } from 'src/app/shared/services/fire-base.service';
 import { Router } from '@angular/router';
 import { NbSidebarService } from '@nebular/theme';
 import { SearchService } from 'src/app/shared/services/search.service';
@@ -35,7 +34,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    
+
     this.isMobile = this.deviceService.isMobile();
     if (!this.isMobile) {
       this.sidebarService.expand();
@@ -44,7 +43,6 @@ export class HomeComponent implements OnInit, OnDestroy {
       this.sidebarService.collapse();
     }
 
-    this.getPlaces();
     this.getBooks();
 
     this.searchService.placeDetailsEmitter$.emit(null);
@@ -64,18 +62,6 @@ export class HomeComponent implements OnInit, OnDestroy {
         this.bookImagesArray = res;
       }
     }));
-  }
-
-  getPlaces(): void {
-    // this.subscription.add(this.fireBaseService.getPlaces().subscribe(data => {
-    //   this.places = data.map(e => {
-    //     return {
-    //       id: e.payload.doc.id,
-    //       ...e.payload.doc.data()
-    //     } as Place;
-    //   })
-
-    // }));
   }
 
   getBooks(): void {

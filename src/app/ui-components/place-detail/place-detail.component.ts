@@ -2,7 +2,6 @@ import { Component, OnInit, Input, TemplateRef } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { NbDialogService } from '@nebular/theme';
 import { Place, PlaceImages } from 'src/app/shared/models/firebase-collection-models';
-import { FireBaseService } from 'src/app/shared/services/fire-base.service';
 
 @Component({
   selector: 'app-place-detail',
@@ -19,8 +18,7 @@ export class PlaceDetailComponent implements OnInit {
 
   constructor(
     private sanitizer: DomSanitizer,
-    private dialogService: NbDialogService,
-    private fireBaseService: FireBaseService) { }
+    private dialogService: NbDialogService) { }
 
   ngOnInit(): void {
     // this.getPlaceImages(this.place.id);

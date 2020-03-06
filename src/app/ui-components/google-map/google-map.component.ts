@@ -3,7 +3,6 @@ import { MapNavigationService } from 'src/app/shared/services/map-navigation.ser
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { filter, switchMap } from 'rxjs/operators';
 import { NbSidebarService } from '@nebular/theme';
-import { FireBaseService } from 'src/app/shared/services/fire-base.service';
 import { SearchService } from 'src/app/shared/services/search.service';
 import { Place } from 'src/app/shared/models/firebase-collection-models';
 import { Subscription } from 'rxjs';
@@ -23,7 +22,6 @@ export class GoogleMapComponent implements OnInit, OnDestroy {
   zoom = 8;
   isMobile: boolean;
   constructor(
-    private fireBaseService: FireBaseService,
     private mapNavigationService: MapNavigationService,
     private route: ActivatedRoute,
     private sidebarService: NbSidebarService,
@@ -39,13 +37,6 @@ export class GoogleMapComponent implements OnInit, OnDestroy {
     }
     else {
       this.sidebarService.collapse();
-    }
-
-    if (this.fireBaseService.places.length) {
-      this.places = this.fireBaseService.places
-    }
-    else {
-      this.getPlaces();
     }
 
     this.searchService.placeDetailsEmitter$.emit(null);
@@ -67,16 +58,6 @@ export class GoogleMapComponent implements OnInit, OnDestroy {
     this.subscription.unsubscribe();
   }
 
-  getPlaces(): void {
-    this.subscription.add(this.fireBaseService.getPlaces().subscribe(data => {
-      this.places = data.map(e => {
-        return {
-          id: e.payload.doc.id,
-          ...e.payload.doc.data()
-        } as Place;
-      })
-    }));
-  }
 
   toggle() {
     this.sidebarService.toggle();

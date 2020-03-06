@@ -1,6 +1,5 @@
 import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 import { MapNavigationService } from 'src/app/shared/services/map-navigation.service';
-import { FireBaseService } from 'src/app/shared/services/fire-base.service';
 import { Router } from '@angular/router';
 import { SearchService } from 'src/app/shared/services/search.service';
 import { NbSidebarService } from '@nebular/theme';
@@ -28,7 +27,6 @@ export class SidebarComponent implements OnInit, OnDestroy {
 
   constructor(
     private mapNavigationService: MapNavigationService,
-    // private fireBaseService: FireBaseService,
     private router: Router,
     private searchService: SearchService,
     private sidebarService: NbSidebarService,
@@ -60,6 +58,11 @@ export class SidebarComponent implements OnInit, OnDestroy {
       this.places.unshift(place);
     }));
 
+    //Place Deleted
+    this.subscription.add(this.crudService.deletePlaceEmitter$.subscribe((place: Place) => {
+      this.places = this.places.filter(el => el.placeID !== place.placeID);
+    }));
+
     //Place Details
     this.subscription.add(this.searchService.placeDetailsEmitter$.subscribe(data => {
       this.place = data;
@@ -79,6 +82,9 @@ export class SidebarComponent implements OnInit, OnDestroy {
     }
     else {
       this.mapNavigationService.mapNavigateTo(place);
+    }
+    if (this.isMobile) {
+     this.sidebarService.collapse();
     }
   }
 
@@ -108,11 +114,12 @@ export class SidebarComponent implements OnInit, OnDestroy {
     }));
   }
 
-  closeDetails():void{
-    if(this.isMobile){
+  closeDetails(): void {
+    if (this.isMobile) {
       this.sidebarService.collapse();
     }
     this.place = null;
+    this.searchService.placeDetailsClosedEmitter$.emit(true);
   }
 
 }

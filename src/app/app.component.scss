@@ -1,13 +1,29 @@
-.header-title
-{
+.header-title {
   font-family: "Harlow Solid";
   font-style: italic;
 }
-.main-header-div{
+.main-header-div {
   min-width: 100%;
 }
-@media screen and (max-width: 576px){
-.main-header-div{
-  min-width: 106%;
+.clear-search-text-input {
+  position: absolute;
+  right: 12px;
+  top: 5px;
+  border-radius: 50%;
 }
+
+@media screen and (max-width: 576px) {
+  .main-header-div {
+    min-width: 106%;
+  }
+  :host ::ng-deep nb-layout-header .fixed {
+    height: 6rem;
+    padding-top: 5px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+  }
+  .clear-search-text-input {
+    right: -3px;
+  }
 }

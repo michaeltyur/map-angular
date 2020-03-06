@@ -3,12 +3,12 @@ import { MenuItem } from 'primeng/api';
 import { Router } from '@angular/router';
 import { NbSidebarService, NbThemeService, NbMenuService } from '@nebular/theme';
 import { Observable } from 'rxjs';
-import { FireBaseService } from './shared/services/fire-base.service';
 import { SearchService } from './shared/services/search.service';
 import { Place } from './shared/models/firebase-collection-models';
 import { DeviceDetectorService } from 'ngx-device-detector';
 import { filter, map } from 'rxjs/operators';
 import { AspService } from './shared/services/asp.service';
+import { ParentType } from './shared/models/enums';
 
 @Component({
   selector: 'app-root',
@@ -22,12 +22,11 @@ export class AppComponent implements OnInit {
   bookSearchTerm: string = "";
   isSideBarCollapsed:boolean = false;
   isMobile:boolean ;
-  plases$: Observable<Place>;
   themeMenuItems = [{ title:  'default' }, { title: 'corporate' },{ title: 'dark' }, { title: 'cosmic' }];
+
   constructor(
     private router: Router,
     private sidebarService: NbSidebarService,
-    private fireBaseService: FireBaseService,
     private themeService: NbThemeService,
     private searchService:SearchService,
     private nbMenuService:NbMenuService,
@@ -38,12 +37,8 @@ export class AppComponent implements OnInit {
   }
   ngOnInit() {
     this.isMobile = this.deviceService.isMobile();
-    this.plases$ = this.fireBaseService.getPlaces();
-    this.searchService.placeDetailsEmitter$.subscribe((data)=>{
-      if (data) {
-        this.isSideBarCollapsed = false;
-      }
-    })
+
+    this.emitterSubscription();
 
     this.nbMenuService.onItemClick()
     .pipe(
@@ -53,6 +48,20 @@ export class AppComponent implements OnInit {
     this.sidebarService.onCollapse().subscribe(()=>this.isSideBarCollapsed = true)
     this.sidebarService.onExpand().subscribe(()=>this.isSideBarCollapsed = false)
   }
+
+  emitterSubscription():void{
+    this.searchService.placeDetailsEmitter$.subscribe((data)=>{
+      if (data) {
+        this.isSideBarCollapsed = false;
+      }
+    })
+
+    // Details closed
+    this.searchService.placeDetailsClosedEmitter$.subscribe(()=>{
+      this.placeSearchTerm = "";
+    })
+  }
+
   navigateTo(path): void {
     this.router.navigate([path]);
   }
@@ -75,8 +84,16 @@ export class AppComponent implements OnInit {
   }
   bookSearchInput():void{
     this.searchService.searchTextInBookTermEmitter$.emit(this.bookSearchTerm);
+    this.router.navigate(['/home']);
   }
-  fireBaseAction():void{
-    this.fireBaseService.actionWithFireBase();
+
+  clearInputText(objectType:string):void{
+     if (objectType === ParentType.place) {
+      this.placeSearchTerm = "";
+     }
+     else if (objectType === ParentType.book){
+      this.bookSearchTerm = "";
+      this.searchService.searchTextInBookTermEmitter$.emit(this.bookSearchTerm);
+     }
   }
 }

@@ -8,6 +8,7 @@ export class CrudService {
 
   newPlaceAddedEmitter$ = new EventEmitter<Place>();
   updatePlaceEmitter$ = new EventEmitter<Place>();
+  deletePlaceEmitter$ = new EventEmitter<Place>();
 
   constructor() { }
 }

@@ -14,7 +14,7 @@ export class BookComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
-    this.searchTerm;
+
   }
 
 }
