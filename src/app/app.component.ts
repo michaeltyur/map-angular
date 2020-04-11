@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { MenuItem } from 'primeng/api';
 import { Router } from '@angular/router';
 import { NbSidebarService, NbThemeService, NbMenuService } from '@nebular/theme';
 import { Observable } from 'rxjs';
