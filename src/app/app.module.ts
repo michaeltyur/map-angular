@@ -27,6 +27,7 @@ import { AngularEditorModule } from '@kolkov/angular-editor';
 import { HttpClientModule} from '@angular/common/http';
 import { DeviceDetectorModule } from 'ngx-device-detector';
 import { ImageSrcDomsanitizationPipe } from './shared/pipe/image-src-domsanitization-pipe';
+import { WelcomePageComponent } from './ui-components/welcome-page/welcome-page.component';
 
 @NgModule({
   declarations: [
@@ -42,7 +43,8 @@ import { ImageSrcDomsanitizationPipe } from './shared/pipe/image-src-domsanitiza
     ColorTextSearchPipe,
     PlaceDetailComponent,
     String64ToImagePipe,
-    ImageSrcDomsanitizationPipe
+    ImageSrcDomsanitizationPipe,
+    WelcomePageComponent
 
   ],
   imports: [

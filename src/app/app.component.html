@@ -19,12 +19,40 @@
       <div class="col-sm-7 text-center">
         <div *ngIf="!isMobile" class="row">
           <div class="col text-right my-auto">
-            <input type="text" shape="round" name="searchPlaceInput" nbInput fullWidth placeholder="Поиск по географическому названию" (input)="placeSearchInput()" [(ngModel)]="placeSearchTerm">
-            <button nbButton ghost (click)="clearInputText('place')" status="control" shape="round" size="tiny" class="clear-search-text-input"><i class="fas fa-times fa-2x"></i></button>
+            <input
+            type="text"
+            shape="round"
+            name="searchPlaceInput"
+            nbInput
+            fullWidth
+            placeholder="Поиск по географическому названию"
+            (input)="placeSearchInput()"
+            [(ngModel)]="placeSearchTerm">
+            <button
+            *ngIf="placeSearchTerm"
+            nbButton
+            ghost
+            (click)="clearInputText('place')"
+            status="control"
+            shape="round"
+            size="tiny"
+            class="clear-search-text-input">
+            <i class="fas fa-times fa-2x"></i>
+          </button>
           </div>
           <div class="col text-left my-auto">
             <input type="text" shape="round" name="searchBookInput" nbInput fullWidth placeholder="Поиск по произведению" [(ngModel)]="bookSearchTerm" (input)="bookSearchInput()">
-            <button nbButton ghost (click)="clearInputText('book')" status="control" shape="round" size="tiny" class="clear-search-text-input"><i class="fas fa-times fa-2x"></i></button>
+            <button
+            *ngIf="bookSearchTerm"
+            nbButton
+            ghost
+            (click)="clearInputText('book')"
+            status="control"
+            shape="round"
+            size="tiny"
+            class="clear-search-text-input">
+            <i class="fas fa-times fa-2x"></i>
+          </button>
           </div>
         </div>
       </div>
