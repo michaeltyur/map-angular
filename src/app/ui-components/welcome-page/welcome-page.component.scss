@@ -1,0 +1,87 @@
+.image-card {
+  position: absolute;
+  animation-iteration-count: infinite;
+}
+
+#image-card_0{
+  animation-name: example_0;
+  animation-duration: 14s;
+}
+#image-card_mobile_0{
+  animation-name: example_mobile_0;
+  animation-duration: 14s;
+}
+#image_0{
+  width: 19rem;
+  height: auto;
+  border-radius: 10%;
+}
+
+#image-card_1{
+  animation-name: example_1;
+  animation-duration: 9s;
+}
+#image-card_mobile_1{
+  animation-name: example_mobile_1;
+  animation-duration: 9s;
+}
+#image_1{
+  width: 15rem;
+  height: auto;
+  border-radius: 10%;
+}
+
+#image-card_2 {
+  animation-name: example_2;
+  animation-duration: 12s;
+}
+#image-card_mobile_2 {
+  animation-name: example_2;
+  animation-duration: 12s;
+}
+#image_2{
+  width: 17rem;
+  height: auto;
+  border-radius: 10%;
+}
+
+@keyframes example_0 {
+  0% {left: 10%;top: 10%;}
+  25% {left: 65%;top: 10%;}
+  50% {left: 65%;top: 65%;}
+  75% {left: 10%;top: 65%;}
+  100% {left: 10%;top: 10%;}
+}
+
+@keyframes example_1 {
+  0% {left: 70%;top: 10%;}
+  50% {left: 10%;top: 70%;}
+  100% {left: 70%;top: 10%;}
+}
+
+@keyframes example_2 {
+  0% {left: 50%;top: 5%;}
+  25% {left: 70%;top: 40%;}
+  50% {left: 30%;top: 70%;}
+  75% {left: 5%;top: 30%;}
+  100% {left: 50%;top: 5%;}
+}
+
+// Mobile
+@keyframes example_mobile_0 {
+  0% {left: 2%;top: 10%;}
+  25% {left: 20%;top: 10%;}
+  50% {left: 20%;top: 62%;}
+  75% {left: 2%;top: 62%;}
+  100% {left: 2%;top: 10%;}
+}
+@keyframes example_mobile_1 {
+  0% {left: 33%;top: 5%;}
+  50% {left: 2%;top: 65%;}
+  100% {left: 33%;top: 5%;}
+}
+@keyframes example_2 {
+  0% {left: 10%;top: 60%;}
+  50% {left: 22%;top: 5%;}
+  100% {left: 10%;top: 60%;}
+}

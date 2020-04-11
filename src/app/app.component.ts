@@ -21,6 +21,9 @@ export class AppComponent implements OnInit {
   bookSearchTerm: string = "";
   isSideBarCollapsed:boolean = false;
   isMobile:boolean ;
+  isLayoutHeaderVisible:boolean = false;
+  isLayoutFooterVisible:boolean = false;
+  footerContent:string="Добро пожаловать на историко-литературный сайт";
   themeMenuItems = [{ title:  'default' }, { title: 'corporate' },{ title: 'dark' }, { title: 'cosmic' }];
 
   constructor(
@@ -35,7 +38,11 @@ export class AppComponent implements OnInit {
     sidebarService.expand();
   }
   ngOnInit() {
+
     this.isMobile = this.deviceService.isMobile();
+    if(this.isMobile){
+      this.footerContent = "";
+    }
 
     this.emitterSubscription();
 
@@ -58,6 +65,11 @@ export class AppComponent implements OnInit {
     // Details closed
     this.searchService.placeDetailsClosedEmitter$.subscribe(()=>{
       this.placeSearchTerm = "";
+    })
+
+    // Layout Header Visiblite
+    this.searchService.isLayoutHeaderVisibleEmitter$.subscribe(res=>{
+      this.isLayoutHeaderVisible = res;
     })
   }
 

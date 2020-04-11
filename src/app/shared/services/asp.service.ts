@@ -40,6 +40,10 @@ export class AspService {
     let url = this.remoteUrl + `/api/PlaceBook/GetPlaceImagesByParentID?parentID=${parentID}`;
     return this.http.get<PlaceImages[]>(url);
   }
+  getRandomPlaceImages():Observable<PlaceImages[]>{
+    let url  =this.remoteUrl + `/api/PlaceBook/GetRandomPlaceImages`;
+    return this.http.get<PlaceImages[]>(url);
+  }
 
   // Book
   addBook(book: Book): Observable<ServerResponse> {
@@ -72,4 +76,5 @@ export class AspService {
     let url = this.remoteUrl + `/api/PlaceBook/DeleteImageFile?imageID=${imageId}&parentType=${parentType}`;
     return this.http.get<ServerResponse>(url);
   }
+
 }

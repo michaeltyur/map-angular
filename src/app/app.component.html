@@ -1,6 +1,6 @@
 <nb-layout>
 
-  <nb-layout-header fixed *ngIf="!isMobile">
+  <nb-layout-header fixed *ngIf="!isMobile && isLayoutHeaderVisible" >
 
     <div class="row main-header-div">
       <div *ngIf="!isSideBarCollapsed" class="col-3 col-sm-1 text-left text-danger my-auto" style="cursor: pointer;" (click)="collapseSideBar()">
@@ -71,7 +71,7 @@
   </nb-layout-header>
 
   <!-- Mobile Header  -->
-  <nb-layout-header fixed *ngIf="isMobile">
+  <nb-layout-header fixed *ngIf="isMobile && isLayoutHeaderVisible">
 
     <div class="row main-header-div">
       <div *ngIf="!isSideBarCollapsed" class="col-3 text-left text-danger my-auto" style="cursor: pointer;" (click)="collapseSideBar()">

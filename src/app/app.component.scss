@@ -27,3 +27,9 @@
     right: -3px;
   }
 }
+
+:host ::ng-deep nb-layout-footer .fixed{
+  padding: 2px !important;
+}
+
+

@@ -9,6 +9,7 @@ export class SearchService {
   searchTextInBookTermEmitter$ = new EventEmitter();
   placeDetailsEmitter$ = new EventEmitter();
   placeDetailsClosedEmitter$ = new EventEmitter<boolean>();
+  isLayoutHeaderVisibleEmitter$ = new EventEmitter<boolean>();
 
   constructor() { }
 }
