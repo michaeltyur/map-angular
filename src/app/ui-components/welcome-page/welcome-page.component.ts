@@ -29,9 +29,9 @@ export class WelcomePageComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
 
     this.isMobile = this.deviceService.isMobile();
-    if(this.isMobile){
-      this.welcomeTitle = "Добро пожаловать";
-    }
+    // if (this.isMobile) {
+    //   this.welcomeTitle = "Добро пожаловать";
+    // }
 
     this.sidebarService.collapse();
     this.searchService.isLayoutHeaderVisibleEmitter$.emit(false);
@@ -61,7 +61,11 @@ export class WelcomePageComponent implements OnInit, OnDestroy {
 
   changeImagesContent(res: PlaceImages[]): void {
 
-    for (let index = 0; index < this.placeImages.length; index++) {
+    if (this.placeImages.length < res.length) {
+      this.placeImages[2] = res[2];
+    }
+
+    for (let index = 0; index < res.length; index++) {
 
       this.placeImages[index].fileName = res[index].fileName;
       this.placeImages[index].imagePath = res[index].imagePath;
