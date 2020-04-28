@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { NbSidebarService, NbThemeService, NbMenuService } from '@nebular/theme';
 import { Observable } from 'rxjs';
@@ -14,24 +14,24 @@ import { ParentType } from './shared/models/enums';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, AfterViewInit {
   display;
   title = 'map';
   placeSearchTerm: string = "";
   bookSearchTerm: string = "";
-  isSideBarCollapsed:boolean = false;
-  isMobile:boolean ;
-  isLayoutHeaderVisible:boolean = false;
-  isLayoutFooterVisible:boolean = false;
-  footerContent:string="Добро пожаловать на историко-литературный сайт";
-  themeMenuItems = [{ title:  'default' }, { title: 'corporate' },{ title: 'dark' }, { title: 'cosmic' }];
+  isSideBarCollapsed: boolean = false;
+  isMobile: boolean;
+  isLayoutHeaderVisible: boolean = true;
+  isLayoutFooterVisible: boolean = false;
+  footerContent: string = "Добро пожаловать на историко-литературный сайт";
+  themeMenuItems = [{ title: 'default' }, { title: 'corporate' }, { title: 'dark' }, { title: 'cosmic' }];
 
   constructor(
     private router: Router,
     private sidebarService: NbSidebarService,
     private themeService: NbThemeService,
-    private searchService:SearchService,
-    private nbMenuService:NbMenuService,
+    private searchService: SearchService,
+    private nbMenuService: NbMenuService,
     private deviceService: DeviceDetectorService,
     private aspService: AspService
   ) {
@@ -39,36 +39,36 @@ export class AppComponent implements OnInit {
   }
   ngOnInit() {
 
-    this.isMobile = this.deviceService.isMobile();
-    if(this.isMobile){
-      this.footerContent = "";
-    }
-
-    this.emitterSubscription();
-
     this.nbMenuService.onItemClick()
-    .pipe(
-      filter(({ tag }) => tag === 'theme-context-menu'),
-      map(({ item: { title } }) => title)).subscribe((title)=>this.changeTheme(title))
-
-    this.sidebarService.onCollapse().subscribe(()=>this.isSideBarCollapsed = true)
-    this.sidebarService.onExpand().subscribe(()=>this.isSideBarCollapsed = false)
+      .pipe(
+        filter(({ tag }) => tag === 'theme-context-menu'),
+        map(({ item: { title } }) => title)).subscribe((title) => this.changeTheme(title))
   }
 
-  emitterSubscription():void{
-    this.searchService.placeDetailsEmitter$.subscribe((data)=>{
+  ngAfterViewInit() {
+    this.isMobile = this.deviceService.isMobile();
+    if (this.isMobile) {
+      this.footerContent = "";
+    }
+    this.emitterSubscription();
+    this.sidebarService.onCollapse().subscribe(() => this.isSideBarCollapsed = true);
+    this.sidebarService.onExpand().subscribe(() => this.isSideBarCollapsed = false);
+  }
+
+  emitterSubscription(): void {
+    this.searchService.placeDetailsEmitter$.subscribe((data) => {
       if (data) {
         this.isSideBarCollapsed = false;
       }
     })
 
     // Details closed
-    this.searchService.placeDetailsClosedEmitter$.subscribe(()=>{
+    this.searchService.placeDetailsClosedEmitter$.subscribe(() => {
       this.placeSearchTerm = "";
     })
 
     // Layout Header Visiblite
-    this.searchService.isLayoutHeaderVisibleEmitter$.subscribe(res=>{
+    this.searchService.isLayoutHeaderVisibleEmitter$.subscribe(res => {
       this.isLayoutHeaderVisible = res;
     })
   }
@@ -90,21 +90,21 @@ export class AppComponent implements OnInit {
   changeTheme(event): void {
     this.themeService.changeTheme(event);
   }
-  placeSearchInput():void{
+  placeSearchInput(): void {
     this.sidebarService.expand();
   }
-  bookSearchInput():void{
+  bookSearchInput(): void {
     this.searchService.searchTextInBookTermEmitter$.emit(this.bookSearchTerm);
     this.router.navigate(['/home']);
   }
 
-  clearInputText(objectType:string):void{
-     if (objectType === ParentType.place) {
+  clearInputText(objectType: string): void {
+    if (objectType === ParentType.place) {
       this.placeSearchTerm = "";
-     }
-     else if (objectType === ParentType.book){
+    }
+    else if (objectType === ParentType.book) {
       this.bookSearchTerm = "";
       this.searchService.searchTextInBookTermEmitter$.emit(this.bookSearchTerm);
-     }
+    }
   }
 }
