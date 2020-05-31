@@ -5,21 +5,42 @@
   <nb-card-body class="map-container p-0 p-sm-2">
     <agm-map style="min-width: 100%;height: 100%;background-origin: 10px;" [latitude]='latitude' [longitude]='longitude' [mapTypeId]='mapType' [zoom]='zoom'>
 
-      <agm-marker *ngFor="let place of places" [latitude]="place.latitude" [longitude]="place.longitude" (mouseOver)="onMouseOver(infoWindow,$event)" (mouseOut)="onMouseOut(infoWindow, $event)" (markerClick)="onMapMarkerClick(place)">
+      <agm-marker
+      *ngFor="let place of places"
+      [latitude]="place.latitude"
+      [longitude]="place.longitude"
+      (mouseOver)="onMouseOver(infoWindow,$event,place)"
+      (mouseOut)="onMouseOut(infoWindow, $event)"
+      (markerClick)="onMapMarkerClick(place)">
 
         <agm-info-window [disableAutoPan]="false" #infoWindow>
 
-          <p class="text-dark" style="font-weight: bold;">
+          <!-- <p class="text-dark" style="font-weight: bold;">
             {{place.name | titlecase}}
-          </p>
+          </p> -->
+
+          <!-- Header -->
+          <div class="row">
+            <div class="col-8">
+              <p class="text-dark mb-0" style="font-weight: bold;">
+                {{place.name | titlecase}}
+              </p>
+            </div>
+            <div class="col-4 text-right">
+              <img
+              *ngIf="markerImageSrc"
+              style="width: 80px; height: auto;"
+              [src]="markerImageSrc"
+              (error)="imageLoadError($event)"
+              alt="place image" />
+            </div>
+          </div>
 
           <p class="agm-info-window-text text-dark">
             {{place.text | BookTextConcater }}
           </p>
 
-          <div>
-            <!-- <a (click)="onClickInfoView({id:place.id})" class="btn btn-attention pull-right">Daje <i class="fa fa-angle-double-right"></i></a> -->
-          </div>
+
         </agm-info-window>
       </agm-marker>
 
