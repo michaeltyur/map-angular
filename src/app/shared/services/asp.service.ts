@@ -15,7 +15,7 @@ export class AspService {
   ) {
 
     if (!window.location.href.includes("localhost")) {
-      this.remoteUrl = "https://live-project.space";
+      this.remoteUrl = "https://live-project.site";
     }
   }
 
