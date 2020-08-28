@@ -12,8 +12,8 @@
         {{ place.comment }}
       </div>
       <div *ngIf="placeImagesArray">
-        <div *ngFor="let image of placeImagesArray; let i = index" class="col text-center mt-2">
-          <img style="width: 11rem;height: auto;cursor: pointer;" [src]="image.imagePath" (error)="imageLoadError($event)" alt="image" (click)="openImageWindow(image ,i, dialog)" />
+        <div *ngFor="let image of placeImagesArray; let i = index" class="col text-center mt-2 pl-0 pr-0">
+          <img class="small-img" [src]="image.imagePath" (error)="imageLoadError($event)" alt="image" (click)="openImageWindow(image ,i, dialog)" />
         </div>
       </div>
 
